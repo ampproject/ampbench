@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--<link rel="stylesheet"-->
+          <!--href="http://fonts.googleapis.com/css?family=Roboto:400,100,500,300italic,500italic,700italic,900,300">-->
+    <link rel="stylesheet"
+          href="http://fonts.googleapis.com/css?family=Noto:400,100,500,300italic,500italic,700italic,900,300">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="/css/ampbench-material-blue.min.css">
+    <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+    <link rel="stylesheet" href="/css/ampbench.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--<style>-->
+        <!--body { background-color: #f0f0f0; }-->
+        <!--/*h6 { color: maroon; }*/-->
+    <!--</style>-->
+    <!-- Wide card with share menu button -->
+    <style>
+        /*.mdl-card {*/
+        .ampbench-mdl-card-wide.mdl-card {
+            /*margin: 15px;*/
+            /*padding: 10px;*/
+            width: 95%;
+            /*height: auto;*/
+            /*height: 15%;*/
+            /*height: 80px;*/
+            /*background: url('https://www.ampproject.org/static/img/logo-blue.svg') center / cover;*/
+        }
+    </style>
+
+</head>
+<body>
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+    <!-- Always shows a header, even in smaller screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header" style="left: 0px; margin:0 auto;">
+            <!--<img src="/images/amp_favicon.png" class="img-circle">-->
+            <div id="id_hdr_amp" class="mdl-layout__header-row">
+            <!--<div id="id_hdr_amp" class="mdl-layout__header-row" style="position:absolute; left: 0px; margin:0 auto;">-->
+                <!--<a href="https://www.ampproject.org" target="_blank">Learn more about the AMP HTML ⚡ Project</a>-->
+                <span class="mdl-layout-title">AMPBench - AMP ⚡ Validator</span>
+            </div>
+            <!--<div class="mdl-tooltip" for="id_hdr_amp">-->
+                <!--Click to learn more about the AMP HTML ⚡ Project-->
+            <!--</div>-->
+        </header>
+
+        <div class="mdl-layout__drawer">
+            <!--<div class="mdl-layout__image">-->
+            <!--<img src="/images/amp_favicon.png" border="0" alt="">-->
+            <!--</div>-->
+            <span class="mdl-layout-title">AMPBench ⚡ </span>
+            <hr>
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="https://www.ampproject.org"
+                   target="_blank">
+                    The AMP Project Home</a>
+                <a class="mdl-navigation__link" href="https://amphtml.wordpress.com/"
+                   target="_blank">
+                    The AMP Project Blog</a>
+                <a class="mdl-navigation__link" href="https://www.ampproject.org/roadmap/"
+                   target="_blank">
+                    The AMP Project Roadmap</a>
+                <a class="mdl-navigation__link" href="https://www.ampproject.org/docs/get_started/about-amp.html"
+                   target="_blank">
+                    What Is AMP?</a>
+                <a class="mdl-navigation__link" href="https://ampbyexample.com"
+                   target="_blank">
+                    Learn AMP By Example</a>
+                <a class="mdl-navigation__link" href="https://github.com/ampproject/amphtml"
+                   target="_blank">
+                    AMP-HTML on GitHub</a>
+                <a class="mdl-navigation__link" href="http://stackoverflow.com/questions/tagged/amp-html" target="_blank">
+                    AMP-HTML on StackOverflow</a>
+                <a class="mdl-navigation__link" href="https://github.com/ampproject/amphtml/blob/master/spec/amp-html-format.md#amp-html-"
+                   target="_blank">
+                    The AMP HTML Format Specification</a>
+                <a class="mdl-navigation__link" href="https://www.ampproject.org/docs/get_started/technical_overview.html"
+                   target="_blank">
+                    How AMP Speeds Up Performance</a>
+                <a class="mdl-navigation__link" href="https://github.com/ampproject/amphtml/blob/master/spec/amp-html-components.md#amp-html-components"
+                   target="_blank">
+                    AMP HTML Components</a>
+            </nav>
+            <hr>
+            <div style="text-align: center">This is not an official Google product.</div>
+        </div>
+
+        <main class="mdl-layout__content">
+            <div class="page-content" style="width:95%; margin:0 auto; padding:20px">
+                <form method="POST" action="/valid">
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width: 80%;">
+                        <label  class="mdl-textfield__label"
+                                for="input_url">AMP URL</label>
+                        <input  class="mdl-textfield__input"
+                                name="input_url" type="url" required/>
+                    </div>
+                    <button class="mdl-button--fab mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+                            type="submit"><i class="material-icons">check</i>
+                    </button>
+                </form>
+            </div>
+            <div class="mdl-grid" style="width: 100%;" align="center">
+                <div class="mdl-cell" style="width: 100%; max-width: 1400px;">
+                    <div id="id_card_validator" class="ampbench-mdl-card-wide mdl-card mdl-shadow--2dp mdl-card__title mdl-card--border">
+                        <a href="https://github.com/ampproject/amphtml/tree/master/validator#amp-html--validator" target="_blank">
+                            Learn more about the open source AMP HTML ⚡ Validator on GitHub</a>
+                        <!--<div class="mdl-card__text">-->
+                            <!--<label class="mdl-textfield__label">   </label>-->
+                        <!--</div>-->
+                        <hr>
+                        <div class="mdl-card__media">
+                            <a href="https://github.com/ampproject/amphtml/tree/master/validator#amp-html--validator" target="_blank">
+                                <img src="/images/amp-html-markup.png" width=100% height=100% border="0" alt="">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="mdl-tooltip" for="id_card_validator">
+                        Click to learn more about the open source AMP HTML ⚡ Validator on GitHub
+                    </div>
+                </div>
+                <div class="mdl-cell" style="width: 100%; max-width: 1400px;">
+                    <div id="id_card_abe" class="ampbench-mdl-card-wide mdl-card mdl-shadow--2dp mdl-card__title mdl-card--border">
+                        <a href="https://ampbyexample.com/" target="_blank">
+                            Learn how to code AMP HTML ⚡ pages on AMP by Example</a>
+                        <!--<div class="mdl-card__text">-->
+                            <!--<label class="mdl-textfield__label">   </label>-->
+                        <!--</div>-->
+                        <hr>
+                        <div class="mdl-card__media">
+                            <a href="https://github.com/ampproject/amp-by-example#amp-by-example" target="_blank">
+                                <img src="/images/abe_preview.png" width=100% height=100% border="0" alt="">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="mdl-tooltip" for="id_card_abe">
+                        Click to learn more about AMP HTML ⚡ on AMP by Example
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

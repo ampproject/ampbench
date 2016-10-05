@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Latest compiled and minified BOOTSTRAP CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="http://fonts.googleapis.com/css?family=Noto:400,100,500,300italic,500italic,700italic,900,300">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="/css/ampbench-material-blue.min.css">
+    <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+    <link rel="stylesheet" href="/css/ampbench.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--<style>-->
+        <!--body { background-color: #f0f0f0; }-->
+        <!--/*h6 { color: maroon; }*/-->
+    <!--</style>-->
+
+</head>
+<body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <!--<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header" style="width: 98vw; height: 98vh; overflow: hidden">-->
+        <header class="mdl-layout__header" style="left: 0px; margin:0 auto;">
+            <!--<img src="/images/amp_favicon.png" class="img-circle">-->
+            <div id="id_hdr_amp" class="mdl-layout__header-row">
+                <!--<div id="id_hdr_amp" class="mdl-layout__header-row" style="position:absolute; left: 0px; margin:0 auto;">-->
+                <span class="mdl-layout-title">AMPBench - AMP ⚡ Validator</span>
+            </div>
+        </header>
+
+        <div class="mdl-layout__drawer">
+            <!--<div class="mdl-layout__image">-->
+            <!--<img src="/images/amp_favicon.png" border="0" alt="">-->
+            <!--</div>-->
+            <span class="mdl-layout-title">AMPBench ⚡ </span>
+            <hr>
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="https://www.ampproject.org"
+                   target="_blank">
+                    The AMP Project Home</a>
+                <a class="mdl-navigation__link" href="https://amphtml.wordpress.com/"
+                   target="_blank">
+                    The AMP Project Blog</a>
+                <a class="mdl-navigation__link" href="https://www.ampproject.org/roadmap/"
+                   target="_blank">
+                    The AMP Project Roadmap</a>
+                <a class="mdl-navigation__link" href="https://www.ampproject.org/docs/get_started/about-amp.html"
+                   target="_blank">
+                    What Is AMP?</a>
+                <a class="mdl-navigation__link" href="https://ampbyexample.com"
+                   target="_blank">
+                    Learn AMP By Example</a>
+                <a class="mdl-navigation__link" href="https://github.com/ampproject/amphtml"
+                   target="_blank">
+                    AMP-HTML on GitHub</a>
+                <a class="mdl-navigation__link" href="http://stackoverflow.com/questions/tagged/amp-html" target="_blank">
+                    AMP-HTML on StackOverflow</a>
+                <a class="mdl-navigation__link" href="https://github.com/ampproject/amphtml/blob/master/spec/amp-html-format.md#amp-html-"
+                   target="_blank">
+                    The AMP HTML Format Specification</a>
+                <a class="mdl-navigation__link" href="https://www.ampproject.org/docs/get_started/technical_overview.html"
+                   target="_blank">
+                    How AMP Speeds Up Performance</a>
+                <a class="mdl-navigation__link" href="https://github.com/ampproject/amphtml/blob/master/spec/amp-html-components.md#amp-html-components"
+                   target="_blank">
+                    AMP HTML Components</a>
+            </nav>
+            <hr>
+            <div style="text-align: center">This is not an official Google product.</div>
+        </div>
+
+        <main class="mdl-layout__content" style="margin: 10px;">
+        <!--<main class="mdl-layout__content" style="width: auto; height: auto; overflow: scroll">-->
+            <!--<div class="page-content" style="width:95%; margin:0 auto; padding:20px">-->
+            <div class="page-content" style="width:95%; margin:0 auto; padding:20px;">
+                <form method="POST" action="/valid">
+                    <div class="mdl-textfield mdl-js-textfield  mdl-textfield--floating-label"
+                         style="position:absolute; left: 0px; width: 80%">
+                        <input  id="id_input_url" class="mdl-textfield__input"
+                                name="input_url" type="url"
+                                value={{{amp_url}}} required/>
+                    </div>
+                    <button class="mdl-button--fab mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+                            style="position: absolute; right: 25px; padding:15px"
+                            type="submit"><i class="material-icons">check</i>
+                    </button>
+                </form>
+            </div>
+
+            <br> <!--a line break be here!!!-->
+
+            <div id="id_hdr_checks">
+                <h6><a href="https://gist.github.com/pietergreyling/460b35469d51c62a17a3#validating-amp-pages-and-enabling-discovery-by-google"
+                       target="_blank">
+                    AMP Checks</a><b> [{{{ amp_hdr_status }}}]</b>{{http_response_result}}</h6>
+            </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-condensed" style="width:98%;">
+                <thead>
+                <tr>
+                    <th class="mdl-data-table__cell--non-numeric">
+                    <a href="https://www.ampproject.org/docs/get_started/about-amp.html#amp-html" target="_blank">
+                        AMP Check</a></th>
+                    <th class="mdl-data-table__cell--non-numeric">Status</th>
+                    <th class="mdl-data-table__cell--non-numeric">Results [@{{response_timestamp}}]{{amphtml_validator_spec_revision}}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <a href="https://www.ampproject.org/docs/guides/validate.html" target="_blank">
+                            AMP URL</a></td>
+                    <td class="mdl-data-table__cell--non-numeric">{{{amp_val_status}}}</td>
+                    <td class="mdl-data-table__cell--non-numeric">{{{amp_url_href}}}</td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <a href="https://www.ampproject.org/docs/guides/discovery.html" target="_blank">
+                            Canonical Link</a></td>
+                    <td class="mdl-data-table__cell--non-numeric">{{{check_amp_links_canonical_status}}}</td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        {{{canonical_url_href}}}
+                        <!--{{check_amp_links_canonical_results}}{{check_amp_links_amphtml_results}}{{{amphtml_url_href}}}<br>-->
+                    </td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <a href="https://www.ampproject.org/docs/guides/discovery.html" target="_blank">
+                            AMP HTML Link<br>in Canonical page?</a></td>
+                    <td class="mdl-data-table__cell--non-numeric">{{{canonical_parsed_return.status}}}</td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        {{canonical_parsed_return.result}}<br>
+                        {{{canonical_parsed_return.amphtml_url}}}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <a href="https://www.ampproject.org/docs/guides/discovery.html" target="_blank">
+                            AMP HTML Link<br>in AMP page?</a></td>
+                    <td class="mdl-data-table__cell--non-numeric">{{{sniffer_raw_status_css}}}</td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        {{sniffer_raw_result_amphtml}}<br>
+                        {{sniffer.amphtmlRel}}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <a href="https://www.ampproject.org/docs/reference/spec.html#required-markup" target="_blank">
+                            AMP HTML Required<br>
+                            Markup Issues [{{amp_val_warnings.amp_val_warnings_len}}]</a></td>
+                    <td class="mdl-data-table__cell--non-numeric">{{{amp_val_warnings.amp_val_warning_status}}}</td>
+                    <td class="mdl-data-table__cell--non-numeric">{{{amp_val_warnings.amp_val_warning_lines}}}</td></td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <a href="https://ampbyexample.com/advanced/using_the_google_amp_cache" target="_blank">
+                            Indexed in Google<br>AMP Cache?</a></td>
+                    <td class="mdl-data-table__cell--non-numeric">{{{check_google_amp_cache_status_css}}}</td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        [{{check_google_amp_cache_return.check_google_amp_cache_status}}] {{check_google_amp_cache_return.check_google_amp_cache_results}}<br>
+                        <a href={{check_google_amp_cache_return.check_google_amp_cache_url}} target="_blank">
+                            {{check_google_amp_cache_return.check_google_amp_cache_url}}</a><br>
+                        [{{check_google_amp_cache_return.check_google_amp_viewer_status}}] {{check_google_amp_cache_return.check_google_amp_viewer_results}}<br>
+                        <a href={{check_google_amp_cache_return.check_google_amp_viewer_url}} target="_blank">
+                            {{check_google_amp_cache_return.check_google_amp_viewer_url}}</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <a href="https://en.wikipedia.org/wiki/Response_time_(technology)#Computing" target="_blank">
+                            Response Times<br>(milliseconds)</a></td>
+                    <td class="mdl-data-table__cell--non-numeric">{{{response_times.status}}}</td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        [{{response_times.fetch_duration_canonical}} ms] Canonical page response time<br>
+                        [{{response_times.fetch_duration_amp}} ms] AMP page response time<br>
+                        [{{response_times.fetch_duration_amp_cache}} ms] Google AMP Cache response time {{response_times.fetch_status_amp_cache}}<br>
+                        [{{response_times.fetch_compare_canonical_amp}} X] Canonical / AMP response time factor<br>
+                        [{{response_times.fetch_compare_canonical_amp_cache}} X] Canonical / Google AMP Cache response time factor
+                    </td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <a href="https://support.google.com/webmasters/answer/1061943?hl=en" target="_blank">
+                            Is access allowed for<br>Googlebots? (robots.txt)</a></td>
+                    <td class="mdl-data-table__cell--non-numeric">{{{check_robots_txt_return.check_robots_txt_status}}}</td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        {{check_robots_txt_return.check_robots_txt_results}}<br>
+                        [{{check_robots_txt_return.check_url_is_reachable_return.status}}] {{check_robots_txt_return.check_url_is_reachable_return.result}} using agent:
+                        [{{check_robots_txt_return.check_url_is_reachable_return.agent}}]<br>
+                        <a href={{check_robots_txt_return.check_robots_txt_file_url}} target="_blank">
+                            {{check_robots_txt_return.check_robots_txt_file_url}}</a></td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <a href="https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag" target="_blank">
+                            Robots Meta Tag</a></td>
+                    <td class="mdl-data-table__cell--non-numeric">{{{parse_amplinks.check_robots_meta_status}}}</td>
+                    <td class="mdl-data-table__cell--non-numeric">{{parse_amplinks.check_robots_meta_result}}</td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <a href="https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag" target="_blank">
+                            X-Robots-Tag Header</a></td>
+                    <td class="mdl-data-table__cell--non-numeric">{{{parse_amplinks.check_x_robots_tag_header_status}}}</td>
+                    <td class="mdl-data-table__cell--non-numeric">{{parse_amplinks.check_x_robots_tag_header_results}}</td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <a href="https://webmasters.googleblog.com/2016/03/updating-smartphone-user-agent-of.html" target="_blank">
+                            Redirects via User Agent<br>
+                            Googlebot Smartphone</a></td>
+                    <td class="mdl-data-table__cell--non-numeric">{{{http_redirect_status}}}</td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        HTTP Route traced (ideally there should be no redirects):<br>
+                        {{{http_redirect_route}}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="id_hdr_validator">
+            <h6><a href="https://github.com/ampproject/amphtml/tree/master/validator#amp-html--validator" target="_blank">
+                AMP Validator Output</a></h6>
+        </div>
+        <div class="mdl-tooltip" for="id_hdr_validator">
+            Click to learn more about the open source AMP HTML ⚡ Validator on GitHub
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-condensed" style="width:98%;">
+                <pre>
+{{ amp_results }}</pre>
+            </table>
+        </div>
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- conditional results - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+    {{#if metadata_is_news}}
+
+        <div id="id_hdr_top">
+            <h6><a href="https://developers.google.com/search/docs/guides/mark-up-content#use-amp-html" target="_blank">
+                Top Stories Carousel for AMP: Structured Data Items Validation</a></h6>
+        </div>
+        <div class="mdl-tooltip" for="id_hdr_top">
+            Click to learn more about Top Stories Carousel for AMP
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-condensed" style="width:98%;">
+            <tbody>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">
+                    <a href="https://www.ampproject.org/docs/guides/discovery.html" target="_blank">
+                        Structured Data (SD)<br>
+                        Markup is [{{metadata_return.kind}}]</a></td>
+                <td class="mdl-data-table__cell--non-numeric">{{{metadata_return.status}}}</td>
+                <td class="mdl-data-table__cell--non-numeric">
+                    Schema.org Type  [{{metadata_return.type}}] Supported by Top Stories with AMP? [{{metadata_return.type_is_amp}}]<br>
+                    [{{metadata_return.result}}]<br>
+                    [{{metadata_return.publisher_name}}][{{metadata_return.author_name}}][{{metadata_return.news_headline}}]
+                </td>
+            </tr>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">
+                    <a href="https://developers.google.com/search/docs/data-types/articles#amp-logo-guidelines" target="_blank">
+                        Publisher Logo<br>
+                        (Top Stories with AMP)</a></td>
+                <td class="mdl-data-table__cell--non-numeric">{{{metadata_return.image.status}}}</td>
+                <td class="mdl-data-table__cell--non-numeric">
+                    Schema.org Type [{{metadata_return.image.type}}] Image Height [{{metadata_return.image.height}}] Width [{{metadata_return.image.width}}]<br>
+                    {{metadata_return.image.result}}<br>
+                    Image URL [{{metadata_return.image.url_status}}]<br>
+                    [{{publisher_logo_url_reachable_return.status}}] {{publisher_logo_url_reachable_return.result}} using agent:
+                    [{{publisher_logo_url_reachable_return.agent}}]<br>
+                    {{{metadata_return.image.url}}}
+                </td>
+            </tr>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">
+                    <a href="https://developers.google.com/search/docs/data-types/articles#article_types" target="_blank">
+                        Article Image<br>
+                        (Top Stories with AMP)</a></td>
+                <td class="mdl-data-table__cell--non-numeric">{{{metadata_return.article_image.status}}}</td>
+                <td class="mdl-data-table__cell--non-numeric">
+                    Schema.org Type [{{metadata_return.article_image.type}}] Image Height [{{metadata_return.article_image.height}}] Width [{{metadata_return.article_image.width}}]<br>
+                    {{metadata_return.article_image.result}}<br>
+                    Image URL [{{metadata_return.article_image.url_status}}]<br>
+                    [{{article_image_url_reachable_return.status}}] {{article_image_url_reachable_return.result}} using agent:
+                    [{{article_image_url_reachable_return.agent}}]<br>
+                    {{{metadata_return.article_image.url}}}
+                </td>
+            </tr>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">
+                    <a href="https://developers.google.com/structured-data/rich-snippets/articles#article_markup_properties" target="_blank">
+                        Article Markup Guidelines<br>
+                        (Top Stories with AMP)</a></td>
+                <td class="mdl-data-table__cell--non-numeric">{{{metadata_return.article.status}}}</td>
+                <td class="mdl-data-table__cell--non-numeric">Article Attributes [{{metadata_return.article.result}}]</td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+
+    {{/if}}
+
+    {{#if metadata_is_news}}
+
+        <div id="id_hdr_sd">
+            <h6><a href="https://developers.google.com/search/docs/guides/mark-up-content#content_types" target="_blank">
+                Top Stories Carousel for AMP: Structured Data Markup Review</a></h6>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-condensed" style="width:98%;">
+                <tbody>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <a href="https://developers.google.com/search/docs/guides/mark-up-content#content_types" target="_blank">
+                            Structured Data Markup Detection:<br>
+                            JSON-LD [{{sniffer.containsJsonLd}}]<br>
+                            Microdata [{{sniffer.containsMicroData}}]
+                        </a></td>
+                    <td class="mdl-data-table__cell--non-numeric">{{{sniffer_sd_status_css}}}</td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        AMP Supported Types Found:<br>
+                        [{{sniffer_sd_types_result}} ]<br>
+                        [{{sniffer_sd_result}}]
+                    </td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <a href="https://developers.google.com/search/docs/guides/mark-up-content#content_types" target="_blank">
+                            Top Stories Carousel for AMP<br>Structured Data Markup Detection
+                        </a></td>
+                    <td class="mdl-data-table__cell--non-numeric">{{{sniffer_sd_carousel_status_css}}}</td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        Top Stories Carousel for AMP Supported Types Found:<br>
+                        [{{sd_ampCarouselStructuredDataTypesFound}} ]<br>
+                        [{{sd_containsIncompleteAmpCarouselStructuredData_result}}]
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    {{/if}}
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- services in iframes - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+        <div id="id_hdr_ampval">
+            <h6><a href="https://validator.ampproject.org/#url={{amp_url_enc}}" target="_blank">
+                AMP Project Validator Results</a></h6>
+        </div>
+        <div class="mdl-tooltip" for="id_hdr_ampval">
+            Click to see URL in the AMP Project Validator in a new, single page
+        </div>
+        <iframe src="https://validator.ampproject.org/#url={{amp_url_enc}}"
+                style="width: 95vw; height: 95vh; overflow: scroll"></iframe>
+
+        <div id="id_hdr_sdtt">
+            <h6><a href="https://search.google.com/structured-data/testing-tool#url={{amp_url_enc}}" target="_blank">
+                SDTT Structured Data Testing Tool Results</a></h6>
+        </div>
+        <div class="mdl-tooltip" for="id_hdr_sdtt">
+            Click to see the SDTT Structured Data Testing Tool Results in a new, single page
+        </div>
+        <iframe src="https://search.google.com/structured-data/testing-tool#url={{amp_url_enc}}"
+                style="width: 95vw; height: 95vh; overflow: scroll"></iframe>
+
+        </main>
+    </div>
+</body>
+</html>
