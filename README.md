@@ -43,7 +43,7 @@ Even try this from the command-line:
     $ curl http://localhost:8080/api?url=https://ampbyexample.com/
     $ curl http://localhost:8080/api2?url=https://ampbyexample.com/
 
-##Requesting an AMPHTML Validator reload from the CDN ([https://cdn.ampproject.org/v0/validator.js](https://cdn.ampproject.org/v0/validator.js))
+####Requesting an AMPHTML Validator reload from the CDN ([https://cdn.ampproject.org/v0/validator.js](https://cdn.ampproject.org/v0/validator.js))
 
 Use the following URL to ask AMPBench to reload the validator code into memory should a different (not only newer; there might have been a rollback) version be available:
 
