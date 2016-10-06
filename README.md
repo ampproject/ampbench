@@ -8,6 +8,8 @@ During AMP URL validation, it builds referable, support-friendly sharable URLs s
 
 - [https://ampbench.appspot.com/validate?url=https://ampbyexample.com/](https://ampbench.appspot.com/validate?url=https://ampbyexample.com/)
 
+![AMPBench in action](/SCREENSHOT.png?raw=true)
+
 ###License
 
 AMPBench is licensed under the [Apache 2.0 LICENSE](http://www.apache.org/licenses/LICENSE-2.0.txt).
@@ -21,7 +23,7 @@ AMPBench **is not** an official Google product.
 Install [Node.js](https://nodejs.org) version 4.X on your system. E.g., [by downloading](https://nodejs.org/en/download/) or [by using a package manager](https://nodejs.org/en/download/package-manager/) or [by using NVM](https://github.com/creationix/nvm).
 
 Now do the following from a terminal command-line session:
-
+    
     $ git clone https://github.com/ampproject/ampbench.git
     $ cd ampbench
     $ npm update
