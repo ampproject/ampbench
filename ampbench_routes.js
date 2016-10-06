@@ -77,8 +77,7 @@ const app = express();
 app.use(express.static('public'));
 
 const favicon = require('serve-favicon');
-// app.use(favicon(path.join(__dirname, 'public/images', 'favicon_checklist.png')));
-app.use(favicon(path.join(__dirname, 'public/images', 'amp-logo-black.png')));
+app.use(favicon(path.join(__dirname, 'public/images', 'AMP-Brand-Black-Icon@10x.png')));
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
