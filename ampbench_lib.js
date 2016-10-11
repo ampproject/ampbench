@@ -253,7 +253,8 @@ const UA_GOOGLEBOT_SMARTPHONE =
 
 // user agent currently in use - - - - - - - - - - - - - - - - - - - - - - - - -
 // const UA_AMPBENCH = UA_CURL;
-const UA_AMPBENCH = UA_GOOGLEBOT_SMARTPHONE;
+// const UA_AMPBENCH = UA_GOOGLEBOT_SMARTPHONE;
+const UA_AMPBENCH = UA_MOBILE_ANDROID_CHROME_52;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // HTTP response content inspector
