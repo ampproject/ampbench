@@ -781,7 +781,7 @@ function lib_load_validator(opt_force_reload) {
     // amphtml_validator_instance is a module level global, so we cache it and will
     // return it unless opt_force_reload is true.
     const validator_js_contents = fs.readFileSync(VALIDATOR_JS_FILE).toString()
-    amphtml_valdiator_signature = lib_extract_validator_signature(
+    amphtml_validator_signature = lib_extract_validator_signature(
         validator_js_contents);
     amphtml_validator_instance = amphtml_validator.newInstance(validator_js_contents);
     return amphtml_validator_instance;
