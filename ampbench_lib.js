@@ -750,29 +750,36 @@ function amphtml_validator_spec_revision() {
     return amphtml_validator_spec_file_revision;
 }
 
+// currently this simply returns the validator code content size - an MD5 checksum would be stricter
+// but this is good enough for now due to lack of official spec file revision API (as of 2016.10.13)
 function lib_extract_validator_spec_file_revision(validator_script_contents) {
-    const REVISION_STR = '.specFileRevision'; // between '.specFileRevision=' and ';'
-    let _script_contents = validator_script_contents;
-    let _validator_spec_file_revision = 0;
-        let _has_revision = false;
-    let _revision_strs = [];
-    try { //!!!hack that scans for embedded spec file revision number - NOT OFFICIAL
-        _has_revision = S(_script_contents).contains(REVISION_STR);
-        if (_has_revision) {
-            _revision_strs = _script_contents.split(REVISION_STR);
-            _revision_strs.forEach((_rev_str) => {
-                _rev_str = S(_rev_str).between('=', ';').s;
-                let _rev_int = parseInt(_rev_str, 10);
-                if (0 < _rev_int) {
-                    _validator_spec_file_revision = _rev_int;
-                }
-            });
-        }
-    } catch(err) {
-        // carry on regardless - we do not want to fail execution
-    }
+    let _validator_spec_file_revision = validator_script_contents.length;
     return _validator_spec_file_revision;
 }
+
+// function lib_extract_validator_spec_file_revision_TODO_API(validator_script_contents) {
+//     const REVISION_STR = '.specFileRevision'; // between '.specFileRevision=' and ';'
+//     let _script_contents = validator_script_contents;
+//     let _validator_spec_file_revision = 0;
+//     let _has_revision = false;
+//     let _revision_strs = [];
+//     try { //!!!hack that scans for embedded spec file revision number - NOT OFFICIAL
+//         _has_revision = S(_script_contents).contains(REVISION_STR);
+//         if (_has_revision) {
+//             _revision_strs = _script_contents.split(REVISION_STR);
+//             _revision_strs.forEach((_rev_str) => {
+//                 _rev_str = S(_rev_str).between('=', ';').s;
+//                 let _rev_int = parseInt(_rev_str, 10);
+//                 if (0 < _rev_int) {
+//                     _validator_spec_file_revision = _rev_int;
+//                 }
+//             });
+//         }
+//     } catch(err) {
+//         // carry on regardless - we do not want to fail execution
+//     }
+//     return _validator_spec_file_revision;
+// }
 
 function lib_fetch_cdn_validator_spec_file_revision(callback) {
     fetch(VALIDATOR_JS_URL)
