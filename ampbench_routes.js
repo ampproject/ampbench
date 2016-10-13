@@ -27,8 +27,8 @@ function version_msg(msg){
     return VERSION_STRING + '[' + new Date().toISOString() + '] ' + msg;
 }
 
-function validator_spec_revision() {
-    return '[validator-spec-revision:' + benchlib.amphtml_validator_spec_revision() + ']';
+function validator_signature() {
+    return '[validator-signature:' + benchlib.amphtml_validator_signature() + ']';
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -163,7 +163,7 @@ app.get('/raw/', (req, res) => {
         const on_output = (http_response, output) => {
             check_http_response = http_response;
             console.log(version_msg(
-                validator_spec_revision() +
+                validator_signature() +
                 '[HTTP:' + check_http_response.http_response_code + '] ' +
                 req.path + ' ' + amp_url)); //!!!USEFUL!!!
             res.status(200).send(output + os.EOL);
@@ -181,7 +181,7 @@ app.get('/check/', (req, res) => {
         const on_output = (http_response, output) => {
             check_http_response = http_response;
             console.log(version_msg(
-                validator_spec_revision() +
+                validator_signature() +
                 '[HTTP:' + check_http_response.http_response_code + '] ' +
                 req.path + ' ' + amp_url)); //!!!USEFUL!!!
             res.status(200).send(benchlib.multiline_to_html(output) + os.EOL);
@@ -200,7 +200,7 @@ app.get('/debug/', (req, res) => {
         const on_output = (http_response, output) => {
             check_http_response = http_response;
             console.log(version_msg(
-                validator_spec_revision() +
+                validator_signature() +
                 '[HTTP:' + check_http_response.http_response_code + '] ' +
                 req.path + ' ' + amp_url)); //!!!USEFUL!!!
             res.status(200).send(benchlib.multiline_to_html(output) + os.EOL);
@@ -213,10 +213,10 @@ app.get('/debug/', (req, res) => {
 // /command_force_validator_update API that hot swaps the latest CDN validator
 // library into a running AMPBench instance
 app.get('/command_force_validator_update', (req, res) => {
-    console.log(version_msg(validator_spec_revision()));
-    let __res = '[VALIDATOR REFRESH] BEFORE: ' + validator_spec_revision();
-    const on_refresh_complete = (amphtml_validator_spec_file_revision) => {
-        __res += ' AFTER: ' + amphtml_validator_spec_file_revision;
+    console.log(version_msg(validator_signature()));
+    let __res = '[VALIDATOR REFRESH] BEFORE: ' + validator_signature();
+    const on_refresh_complete = (amphtml_validator_signature) => {
+        __res += ' AFTER: ' + amphtml_validator_signature;
         console.log(__res);
         res.status(200).send(__res);
     };
@@ -288,7 +288,7 @@ app.get('/api/', (req, res) => {
             check_http_response = http_response;
             var status = output.shift();
             console.log(version_msg(
-                validator_spec_revision() +
+                validator_signature() +
                 '[HTTP:' + check_http_response.http_response_code + '] ' +
                 req.path + ' ' + amp_url)); //!!!USEFUL!!!
             parse_amplinks = benchlib.parse_body_for_amplinks_and_robots_metatags(check_http_response);
@@ -361,7 +361,7 @@ app.get('/api1/', (req, res) => {
     let on_api_validate_amp = (http_response, api_return) => {
         check_http_response = http_response;
         console.log(version_msg(
-            validator_spec_revision() +
+            validator_signature() +
             '[HTTP:' + check_http_response.http_response_code + '] ' +
             req.path + ' ' + amp_url)); //!!!USEFUL!!!
         api_validate_amp_return = api_return;
@@ -482,7 +482,7 @@ app.get('/api2/', (req, res) => {
     let on_api_validate_amp = (http_response, api_return) => {
         check_http_response = http_response;
         console.log(version_msg(
-            validator_spec_revision() +
+            validator_signature() +
             '[HTTP:' + check_http_response.http_response_code + '] ' +
             req.path + ' ' + amp_url)); //!!!USEFUL!!!
         api_validate_amp_return = api_return;

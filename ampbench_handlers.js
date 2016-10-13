@@ -31,7 +31,7 @@ function version_msg(msg) {
 }
 
 function validator_signature() {
-    return '[validator-signature:' + benchlib.amphtml_validator_spec_revision() + ']';
+    return '[validator-signature:' + benchlib.amphtml_validator_signature() + ']';
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
