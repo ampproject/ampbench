@@ -30,8 +30,8 @@ function version_msg(msg) {
     return VERSION_STRING + '[' + new Date().toISOString() + '] ' + msg;
 }
 
-function validator_spec_revision() {
-    return '[validator-spec-revision:' + benchlib.amphtml_validator_spec_revision() + ']';
+function validator_signature() {
+    return '[validator-signature:' + benchlib.amphtml_validator_spec_revision() + ']';
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -95,7 +95,7 @@ function validate(route, req, res, on_validate_callback) {
         const on_amp_validate = (http_response, output) => {
 
             console.log(version_msg(
-                validator_spec_revision() +
+                validator_signature() +
                 '[HTTP:' + http_response.http_response_code + '] ' +
                 req.path + ' ' + url_to_validate)); //!!!USEFUL!!!
 
@@ -384,7 +384,7 @@ function validate(route, req, res, on_validate_callback) {
                                     __ret = {
                                         // https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
                                         response_timestamp: new Date().toISOString(), // The timezone is always zero UTC offset, as per suffix "Z"
-                                        amphtml_validator_spec_revision: validator_spec_revision(),
+                                        amphtml_validator_signature: validator_signature(),
                                         // http_response: http_response,
                                         http_response_result: http_response_result,
                                         parse_amplinks: parse_amplinks,

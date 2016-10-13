@@ -229,18 +229,33 @@ const
     CHECK_NONE = 'UNKNOWN';
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// http request constants
-//
-
-const UA_CURL = 'curl/7.43.0'; //!!! we use this User-Agent for non-crawler Googlebots
-
+// HTTP User Agent constants
 // https://support.google.com/webmasters/answer/1061943?hl=en
 // https://developer.chrome.com/multidevice/user-agent
 // https://webmasters.googleblog.com/2016/03/updating-smartphone-user-agent-of.html
+// https://deviceatlas.com/blog/list-of-user-agent-strings
+// https://deviceatlas.com/blog/list-of-web-crawlers-user-agents
+//
+
+// desktop + server-side CURL
+const UA_CURL = 'curl/7.43.0'; //!!! we use this User-Agent for non-crawler Googlebots
+// mobile
+const UA_MOBILE_ANDROID_CHROME_52 =
+    'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2725.0 Mobile Safari/537.36';
+const UA_MOBILE_IPHONE_CHROME_52 =
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/52.0.2725.0 Mobile/13B143 Safari/601.1.46';
+const UA_MOBILE_IPHONE_SAFARI =
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B137 Safari/601.1';
+// googlebot search crawlers
 const UA_GOOGLEBOT =
     'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)';
 const UA_GOOGLEBOT_SMARTPHONE =
     'Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.96 Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)';
+
+// user agent currently in use - - - - - - - - - - - - - - - - - - - - - - - - -
+// const UA_AMPBENCH = UA_CURL;
+// const UA_AMPBENCH = UA_GOOGLEBOT_SMARTPHONE;
+const UA_AMPBENCH = UA_MOBILE_ANDROID_CHROME_52;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // HTTP response content inspector
@@ -735,29 +750,36 @@ function amphtml_validator_spec_revision() {
     return amphtml_validator_spec_file_revision;
 }
 
+// currently this simply returns the validator code content size - an MD5 checksum would be stricter
+// but this is good enough for now due to lack of official spec file revision API (as of 2016.10.13)
 function lib_extract_validator_spec_file_revision(validator_script_contents) {
-    const REVISION_STR = '.specFileRevision'; // between '.specFileRevision=' and ';'
-    let _script_contents = validator_script_contents;
-    let _validator_spec_file_revision = 0;
-        let _has_revision = false;
-    let _revision_strs = [];
-    try { //!!!hack that scans for embedded spec file revision number - NOT OFFICIAL
-        _has_revision = S(_script_contents).contains(REVISION_STR);
-        if (_has_revision) {
-            _revision_strs = _script_contents.split(REVISION_STR);
-            _revision_strs.forEach((_rev_str) => {
-                _rev_str = S(_rev_str).between('=', ';').s;
-                let _rev_int = parseInt(_rev_str, 10);
-                if (0 < _rev_int) {
-                    _validator_spec_file_revision = _rev_int;
-                }
-            });
-        }
-    } catch(err) {
-        // carry on regardless - we do not want to fail execution
-    }
+    let _validator_spec_file_revision = validator_script_contents.length;
     return _validator_spec_file_revision;
 }
+
+// function lib_extract_validator_spec_file_revision_TODO_API(validator_script_contents) {
+//     const REVISION_STR = '.specFileRevision'; // between '.specFileRevision=' and ';'
+//     let _script_contents = validator_script_contents;
+//     let _validator_spec_file_revision = 0;
+//     let _has_revision = false;
+//     let _revision_strs = [];
+//     try { //!!!hack that scans for embedded spec file revision number - NOT OFFICIAL
+//         _has_revision = S(_script_contents).contains(REVISION_STR);
+//         if (_has_revision) {
+//             _revision_strs = _script_contents.split(REVISION_STR);
+//             _revision_strs.forEach((_rev_str) => {
+//                 _rev_str = S(_rev_str).between('=', ';').s;
+//                 let _rev_int = parseInt(_rev_str, 10);
+//                 if (0 < _rev_int) {
+//                     _validator_spec_file_revision = _rev_int;
+//                 }
+//             });
+//         }
+//     } catch(err) {
+//         // carry on regardless - we do not want to fail execution
+//     }
+//     return _validator_spec_file_revision;
+// }
 
 function lib_fetch_cdn_validator_spec_file_revision(callback) {
     fetch(VALIDATOR_JS_URL)
@@ -915,7 +937,7 @@ function fetch_and_validate_url(validate_url, on_output_callback, as_json) {
             const http_options = {
                 host: url_parsed.hostname,
                 path: url_parsed_path,
-                headers: {'User-Agent': UA_CURL}
+                headers: {'User-Agent': UA_AMPBENCH}
             };
             let req = http_response.http_client.request(http_options, callback);
             req.on('error', (err) => {
@@ -992,7 +1014,7 @@ function fetch_and_parse_url_for_amplinks(request_url, on_parsed_callback) {
             const http_options = {
                 host: url_parsed.hostname,
                 path: url_parsed_path,
-                headers: {'User-Agent': UA_CURL}
+                headers: {'User-Agent': UA_AMPBENCH}
             };
             let req = http_response.http_client.request(http_options, callback);
             req.on('error', (err) => {
@@ -1866,6 +1888,7 @@ exports.VALIDATOR_JS_FILE = VALIDATOR_JS_FILE;
 exports.lib_download_validator = lib_download_validator;
 exports.lib_load_validator = lib_load_validator;
 exports.lib_refresh_validator_if_stale = lib_refresh_validator_if_stale;
+exports.UA_AMPBENCH = UA_AMPBENCH;
 exports.UA_CURL = UA_CURL;
 exports.UA_GOOGLEBOT = UA_GOOGLEBOT;
 exports.UA_GOOGLEBOT_SMARTPHONE = UA_GOOGLEBOT_SMARTPHONE;
