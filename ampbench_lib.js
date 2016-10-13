@@ -749,8 +749,9 @@ var   amphtml_validator_instance = null; // cache the instance
 // The signature for the validator.js file that this module is currently using.
 // This gets updated in sync with amphtml_validator_instance.
 var   amphtml_validator_signature = '*unavailable*';
-function amphtml_validator_signature() {
-    return amphtml_validator_signature;
+
+function lib_amphtml_validator_signature() {
+  return amphtml_validator_signature;
 }
 
 // Computes a SHA256 signature, which is what you'd get if you were to
@@ -1862,7 +1863,7 @@ function print_dashes(dash_count) { // needs: const S = require('string');
 // module exports
 //
 
-exports.amphtml_validator_signature = amphtml_validator_signature;
+exports.lib_amphtml_validator_signature = lib_amphtml_validator_signature;
 exports.VALIDATOR_JS_URL = VALIDATOR_JS_URL;
 exports.VALIDATOR_JS_FILE = VALIDATOR_JS_FILE;
 exports.lib_download_validator = lib_download_validator;
