@@ -21,6 +21,8 @@ const os = require('os');
 
 // const http = require('http');
 // const https = require('https');
+const crypto = require('crypto');
+const fs = require('fs');
 const http = require('follow-redirects').http;
 const https = require('follow-redirects').https;
 require('follow-redirects').maxRedirects = 15; // 3X the default!!! we want to know when there *really* is many
@@ -741,54 +743,31 @@ class HttpBodySniffer {
 const VALIDATOR_JS_URL  = 'https://cdn.ampproject.org/v0/validator.js';
 const VALIDATOR_JS_FILE = './validator/validator.js';
 
-// const amphtml_validator = require('amphtml-validator');
-const amphtml_validator = require('./ampbench_validator.js');
+const amphtml_validator = require('amphtml-validator');
 var   amphtml_validator_instance = null; // cache the instance
 
-var   amphtml_validator_spec_file_revision = '*unavailable*'; // what ampbench instance is using
-function amphtml_validator_spec_revision() {
-    return amphtml_validator_spec_file_revision;
+// The signature for the validator.js file that this module is currently using.
+// This gets updated in sync with amphtml_validator_instance.
+var   amphtml_validator_signature = '*unavailable*';
+
+function lib_amphtml_validator_signature() {
+  return amphtml_validator_signature;
 }
 
-// currently this simply returns the validator code content size - an MD5 checksum would be stricter
-// but this is good enough for now due to lack of official spec file revision API (as of 2016.10.13)
-function lib_extract_validator_spec_file_revision(validator_script_contents) {
-    let _validator_spec_file_revision = validator_script_contents.length;
-    return _validator_spec_file_revision;
+// Computes a SHA256 signature, which is what you'd get if you were to
+// run the sha256sum Linux command on the validator.js file. This is used to
+// distinguish releases of the validator.js file.
+function lib_extract_validator_signature(validator_js_contents) {
+    return crypto.createHash('sha256').update(validator_js_contents).digest('hex');
 }
 
-// function lib_extract_validator_spec_file_revision_TODO_API(validator_script_contents) {
-//     const REVISION_STR = '.specFileRevision'; // between '.specFileRevision=' and ';'
-//     let _script_contents = validator_script_contents;
-//     let _validator_spec_file_revision = 0;
-//     let _has_revision = false;
-//     let _revision_strs = [];
-//     try { //!!!hack that scans for embedded spec file revision number - NOT OFFICIAL
-//         _has_revision = S(_script_contents).contains(REVISION_STR);
-//         if (_has_revision) {
-//             _revision_strs = _script_contents.split(REVISION_STR);
-//             _revision_strs.forEach((_rev_str) => {
-//                 _rev_str = S(_rev_str).between('=', ';').s;
-//                 let _rev_int = parseInt(_rev_str, 10);
-//                 if (0 < _rev_int) {
-//                     _validator_spec_file_revision = _rev_int;
-//                 }
-//             });
-//         }
-//     } catch(err) {
-//         // carry on regardless - we do not want to fail execution
-//     }
-//     return _validator_spec_file_revision;
-// }
-
-function lib_fetch_cdn_validator_spec_file_revision(callback) {
+function lib_fetch_cdn_validator_signature(callback) {
     fetch(VALIDATOR_JS_URL)
         .then(function(res) {
             return res.text();
-        }).then(function(validator_script_contents) {
-        let validator_spec_revision_cdn = lib_extract_validator_spec_file_revision(validator_script_contents);
-        callback(validator_spec_revision_cdn);
-    });
+        }).then(function(validator_js_contents) {
+            callback(lib_extract_validator_signature(validator_js_contents));
+        });
 }
 
 /**
@@ -797,10 +776,16 @@ function lib_fetch_cdn_validator_spec_file_revision(callback) {
  */
 function lib_load_validator(opt_force_reload) {
     let _force_reload = opt_force_reload || false;
-    const _validator = amphtml_validator.getInstanceFromFileSync(VALIDATOR_JS_FILE, _force_reload);
-    amphtml_validator_instance = _validator; // cache the module level instance here
-    amphtml_validator_spec_file_revision = lib_extract_validator_spec_file_revision(_validator.scriptContents);
-    return _validator;
+    if (!_force_reload && amphtml_validator_instance !== null) {
+        return amphtml_validator_instance;
+    }
+    // amphtml_validator_instance is a module level global, so we cache it and will
+    // return it unless opt_force_reload is true.
+    const validator_js_contents = fs.readFileSync(VALIDATOR_JS_FILE).toString()
+    amphtml_validator_signature = lib_extract_validator_signature(
+        validator_js_contents);
+    amphtml_validator_instance = amphtml_validator.newInstance(validator_js_contents);
+    return amphtml_validator_instance;
 }
 
 /**
@@ -823,8 +808,8 @@ function lib_download_validator(callback_on_complete) {
     download.on('end', function(output) {
         console.log('[VALIDATOR REFRESH] END: ' + output);
         lib_load_validator(true);               // reload the validator into memory
-        if (null != _callback_on_complete) {    // invoke optional callback passing fetched revision number
-            _callback_on_complete(amphtml_validator_spec_file_revision);
+        if (null != _callback_on_complete) {
+            _callback_on_complete(amphtml_validator_signature);
         }
     });
 }
@@ -834,11 +819,11 @@ function lib_download_validator(callback_on_complete) {
  * if a different (not only newer; might be a rollback) version is available.
  */
 function lib_refresh_validator_if_stale(callback_on_complete) {
-    lib_fetch_cdn_validator_spec_file_revision( (validator_spec_revision_cdn) => {
-        if (validator_spec_revision_cdn !== amphtml_validator_spec_file_revision) {
+    lib_fetch_cdn_validator_signature( (validator_signature_cdn) => {
+        if (validator_signature_cdn !== amphtml_validator_signature) {
             lib_download_validator(callback_on_complete);
         } else {
-            callback_on_complete(amphtml_validator_spec_file_revision);
+            callback_on_complete(amphtml_validator_signature);
         }
     });
 }
@@ -1878,7 +1863,7 @@ function print_dashes(dash_count) { // needs: const S = require('string');
 // module exports
 //
 
-exports.amphtml_validator_spec_revision = amphtml_validator_spec_revision;
+exports.lib_amphtml_validator_signature = lib_amphtml_validator_signature;
 exports.VALIDATOR_JS_URL = VALIDATOR_JS_URL;
 exports.VALIDATOR_JS_FILE = VALIDATOR_JS_FILE;
 exports.lib_download_validator = lib_download_validator;
