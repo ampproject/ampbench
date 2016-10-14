@@ -28,7 +28,7 @@ function version_msg(msg){
 }
 
 function validator_signature() {
-    return '[validator-signature:' + benchlib.amphtml_validator_signature() + ']';
+    return '[validator-signature:' + benchlib.lib_amphtml_validator_signature() + ']';
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
