@@ -384,7 +384,7 @@ function validate(route, req, res, on_validate_callback) {
                                     __ret = {
                                         // https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
                                         response_timestamp: new Date().toISOString(), // The timezone is always zero UTC offset, as per suffix "Z"
-                                        amphtml_validator_signature: validator_signature(),
+                                        amphtml_validator_signature: validator_signature().substr(0, 21+16) + ']', // only show left 16 chars
                                         // http_response: http_response,
                                         http_response_result: http_response_result,
                                         parse_amplinks: parse_amplinks,
