@@ -141,7 +141,6 @@ app.post('/valid', (req, res) => {
 });
 
 app.get('/validate', (req, res) => {
-    const query_url = req.query.url;
     const on_handler_validate = (__res) => {
         res.header("Content-Type", "text/html; charset=utf-8");
         if (__res) {
@@ -190,22 +189,116 @@ app.get('/check/', (req, res) => {
     }
 });
 
-//TODO // - - make into an ERROR PAGE but for now it is a debug dump route - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// DEBUG dump route: this can also double as an error fallback route
+//
+
+// shared variables
+let _debug_results = '';
+
+// set up the request debug handler
+const request = require('request');
+require('request-debug')(request, function(type, data, req) {
+    _debug_results +=
+        '\n==> ' +
+        type.toUpperCase() + ': ' +
+        ifdef(data.statusCode) + ' ' +
+        ifdef(data.uri) + '\n\n' +
+        ifdef(JSON.stringify(data.headers)) + '\n\n' +
+        format_dashes(30) + '\n';
+});
+
+// browser compatible version
 app.get('/debug/', (req, res) => {
     let amp_url = req.query.url || '';
-    let check_http_response = null;
     if ('' == amp_url.trim()) {
         res.status(200).send(version_msg('No AMP URL parameter found.'));
     } else {
-        const on_output = (http_response, output) => {
-            check_http_response = http_response;
-            console.log(version_msg(
-                validator_signature() +
-                '[HTTP:' + check_http_response.http_response_code + '] ' +
-                req.path + ' ' + amp_url)); //!!!USEFUL!!!
-            res.status(200).send(benchlib.multiline_to_html(output) + os.EOL);
-        };
-        benchlib.api_validate_url(amp_url, on_output, 0);
+        console.log(version_msg(
+            '[DEBUG] ' +
+            req.path + ' ' + amp_url)); //!!!USEFUL!!!
+        _debug_results =
+            '\n==> GET: ' + amp_url + '\n\n' + '{"User-Agent": '
+            + benchlib.UA_AMPBENCH_NAME + '}\n\n' + format_dashes(30) + '\n';
+        // do the request
+        request({
+            uri: amp_url,
+            headers: {'User-Agent': benchlib.UA_AMPBENCH},
+            rejectUnauthorized: false
+        }, function(err, res_debug, body) {
+            // console.log(_debug_results);
+            res.status(200).send(benchlib.multiline_to_html(_debug_results) + os.EOL);
+        });
+    }
+});
+
+// command-line compatible version
+app.get('/debug_cli/', (req, res) => {
+    let amp_url = req.query.url || '';
+    if ('' == amp_url.trim()) {
+        res.status(200).send(version_msg('No AMP URL parameter found.'));
+    } else {
+        console.log(version_msg(
+            '[DEBUG-CLI] ' +
+            req.path + ' ' + amp_url)); //!!!USEFUL!!!
+        _debug_results =
+            '\n==> GET: ' + amp_url + '\n\n' + '{"User-Agent": '
+            + benchlib.UA_AMPBENCH_NAME + '}\n\n' + format_dashes(30) + '\n';
+        // do the request
+        request({
+            uri: amp_url,
+            headers: {'User-Agent': benchlib.UA_AMPBENCH},
+            rejectUnauthorized: false
+        }, function(err, res_debug, body) {
+            // console.log(_debug_results);
+            res.status(200).send(_debug_results + os.EOL);
+        });
+    }
+});
+
+// browser compatible version
+app.get('/debug_curl/', (req, res) => {
+    let amp_url = req.query.url || '';
+    if ('' == amp_url.trim()) {
+        res.status(200).send(version_msg('No AMP URL parameter found.'));
+    } else {
+        console.log(version_msg(
+            '[DEBUG_CURL] ' +
+            req.path + ' ' + amp_url)); //!!!USEFUL!!!
+        _debug_results =
+            '\n==> GET: ' + amp_url + '\n\n' + '{"User-Agent": UA_CURL}\n\n' + format_dashes(30) + '\n';
+        // do the request
+        request({
+            uri: amp_url,
+            headers: {'User-Agent': benchlib.UA_CURL},
+            rejectUnauthorized: false
+        }, function(err, res_debug, body) {
+            // console.log(_debug_results);
+            res.status(200).send(benchlib.multiline_to_html(_debug_results) + os.EOL);
+        });
+    }
+});
+
+// command-line compatible version
+app.get('/debug_curl_cli/', (req, res) => {
+    let amp_url = req.query.url || '';
+    if ('' == amp_url.trim()) {
+        res.status(200).send(version_msg('No AMP URL parameter found.'));
+    } else {
+        console.log(version_msg(
+            '[DEBUG_CURL_CLI] ' +
+            req.path + ' ' + amp_url)); //!!!USEFUL!!!
+        _debug_results =
+            '\n==> GET: ' + amp_url + '\n\n' + '{"User-Agent": UA_CURL}\n\n' + format_dashes(30) + '\n';
+        // do the request
+        request({
+            uri: amp_url,
+            headers: {'User-Agent': benchlib.UA_CURL},
+            rejectUnauthorized: false
+        }, function(err, res_debug, body) {
+            // console.log(_debug_results);
+            res.status(200).send(_debug_results + os.EOL);
+        });
     }
 });
 
@@ -499,8 +592,19 @@ app.get('/api2/', (req, res) => {
     }
 });
 
+function ifdef(v) { // useful for outputting potentially undefined variable values
+    if(v)
+        return v;
+    else
+        return '';
+}
+
+function format_dashes(dash_count) { // needs: const S = require('string');
+    return ( S(('- ').repeat(dash_count)).s );
+}
+
 function print_dashes(dash_count) { // needs: const S = require('string');
-    console.log(S(('- ').repeat(dash_count)).s );
+    console.log(format_dashes(dash_count));
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

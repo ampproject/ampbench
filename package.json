@@ -5,12 +5,12 @@
   "repository": "https://github.com/ampproject/ampbench",
   "private": true,
   "scripts": {
-    "start"    : "node ampbench_main.js",
-    "monitor"  : "nodemon --watch . --watch views/index.hbs --watch views/results.hbs --ignore 'validator/*.*'",
-    "deploy"   : "gcloud app deploy app.yaml",
-    "lint"     : "jshint --exclude-path=../.gitignore .",
-    "mocha"    : "mocha test/*.test.js -t 30000",
-    "test"     : "npm run lint && npm run mocha"
+    "start": "node ampbench_main.js",
+    "monitor": "nodemon --watch . --watch views/index.hbs --watch views/results.hbs --ignore 'validator/*.*'",
+    "deploy": "gcloud app deploy app.yaml",
+    "lint": "jshint --exclude-path=../.gitignore .",
+    "mocha": "mocha test/*.test.js -t 30000",
+    "test": "npm run lint && npm run mocha"
   },
   "author": "The AMP HTML Authors",
   "license": "Apache Version 2.0",
@@ -33,6 +33,7 @@
     "nodemon": "^1.9.1",
     "promise": "^7.1.1",
     "request": "^2.69.0",
+    "request-debug": "^0.2.0",
     "serve-favicon": "^2.3.0",
     "string": "^3.3.1",
     "valid-url": "^1.0.9",

@@ -256,7 +256,8 @@ const UA_GOOGLEBOT_SMARTPHONE =
 // user agent currently in use - - - - - - - - - - - - - - - - - - - - - - - - -
 // const UA_AMPBENCH = UA_CURL;
 // const UA_AMPBENCH = UA_GOOGLEBOT_SMARTPHONE;
-const UA_AMPBENCH = UA_MOBILE_ANDROID_CHROME_52;
+const UA_AMPBENCH       = UA_MOBILE_ANDROID_CHROME_52;
+const UA_AMPBENCH_NAME  = 'UA_MOBILE_ANDROID_CHROME_52';
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // HTTP response content inspector
@@ -1870,6 +1871,7 @@ exports.lib_download_validator = lib_download_validator;
 exports.lib_load_validator = lib_load_validator;
 exports.lib_refresh_validator_if_stale = lib_refresh_validator_if_stale;
 exports.UA_AMPBENCH = UA_AMPBENCH;
+exports.UA_AMPBENCH_NAME = UA_AMPBENCH_NAME;
 exports.UA_CURL = UA_CURL;
 exports.UA_GOOGLEBOT = UA_GOOGLEBOT;
 exports.UA_GOOGLEBOT_SMARTPHONE = UA_GOOGLEBOT_SMARTPHONE;
