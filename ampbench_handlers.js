@@ -349,6 +349,17 @@ function validate(route, req, res, on_validate_callback) {
                                     let fetch_compare_canonical_amp_cache = (0 < fetch_duration_canonical && 0 < fetch_duration_amp_cache)
                                         ? Math.round((fetch_duration_canonical / fetch_duration_amp_cache) * 100) / 100
                                         : 0;
+                                    let response_times_status_css = CHECK_INFO_CSS,
+                                        response_times_status_amp = '',
+                                        response_times_status_amp_cache = '';
+                                    if (fetch_duration_amp > fetch_duration_canonical) {
+                                        response_times_status_css = CHECK_WARN_CSS;
+                                        response_times_status_amp = '[' + CHECK_WARN + ': AMP page fetch is slower than Canonical page]';
+                                    }
+                                    if (fetch_duration_amp_cache > fetch_duration_canonical) {
+                                        response_times_status_css = CHECK_WARN_CSS;
+                                        response_times_status_amp_cache = '[' + CHECK_WARN + ': AMP Cache page fetch is slower than Canonical page]';
+                                    }
 
                                     // response body sniffer reporting
                                     let sniffer_raw_status_css = sniffer.containsAmpHtmlLink // AMP should not contain an AMP rel link
@@ -390,7 +401,9 @@ function validate(route, req, res, on_validate_callback) {
                                         parse_amplinks: parse_amplinks,
                                         canonical_parsed_return: canonical_parsed_return,
                                         response_times: {
-                                            status: CHECK_INFO_CSS,
+                                            status: response_times_status_css,
+                                            response_times_status_amp: response_times_status_amp,
+                                            response_times_status_amp_cache: response_times_status_amp_cache,
                                             fetch_duration_canonical,
                                             fetch_duration_amp,
                                             fetch_duration_amp_cache,

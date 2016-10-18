@@ -35,6 +35,12 @@
             <span class="mdl-layout-title">AMPBench ⚡ </span>
             <hr>
             <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="https://github.com/ampproject/ampbench"
+                   target="_blank">
+                    AMPBench on GitHub</a>
+                <a class="mdl-navigation__link" href="https://github.com/ampproject/ampbench/blob/master/README.md"
+                   target="_blank">
+                    AMPBench README</a>
                 <a class="mdl-navigation__link" href="https://www.ampproject.org"
                    target="_blank">
                     The AMP Project Home</a>
@@ -173,8 +179,8 @@
                     <td class="mdl-data-table__cell--non-numeric">{{{response_times.status}}}</td>
                     <td class="mdl-data-table__cell--non-numeric">
                         [{{response_times.fetch_duration_canonical}} ms] Canonical page response time<br>
-                        [{{response_times.fetch_duration_amp}} ms] AMP page response time<br>
-                        [{{response_times.fetch_duration_amp_cache}} ms] Google AMP Cache response time {{response_times.fetch_status_amp_cache}}<br>
+                        [{{response_times.fetch_duration_amp}} ms] AMP page response time {{response_times.response_times_status_amp}}<br>
+                        [{{response_times.fetch_duration_amp_cache}} ms] Google AMP Cache response time {{response_times.response_times_status_amp_cache}} {{response_times.fetch_status_amp_cache}}<br>
                         [{{response_times.fetch_compare_canonical_amp}} X] Canonical / AMP response time factor<br>
                         [{{response_times.fetch_compare_canonical_amp_cache}} X] Canonical / Google AMP Cache response time factor
                     </td>

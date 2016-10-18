@@ -1372,7 +1372,7 @@ function check_google_amp_cache(url, callback) {
 
     let _stamp_on_begin = new Date(); // set beginning timestamp
 
-    request(url_cdn, (err, res, body) => {
+    request( { uri: url_cdn, headers: {'User-Agent': UA_AMPBENCH} }, (err, res, body) => {
         if (!err) {
             if (res.statusCode == 200) {
                 duration_in_milliseconds = new Date() - _stamp_on_begin;
@@ -1419,7 +1419,7 @@ function check_google_amp_viewer(url, callback) {
 
     let _stamp_on_begin = new Date(); // set beginning timestamp
 
-    request(url_viewer, (err, res, body) => {
+    request( { uri: url_viewer, headers: {'User-Agent': UA_AMPBENCH} }, (err, res, body) => {
         if (!err) {
             if (res.statusCode == 200) {
                 duration_in_milliseconds = new Date() - _stamp_on_begin;
