@@ -59,6 +59,41 @@ Or:
 
     $ curl http://localhost:8080/command_force_validator_update
 
+####Utilities
+
+AMPBench includes some useful debug utility commands that can in some cases help with troubleshooting, such as when a full validation fails on a URL by returning unexpected server responses. 
+
+The `/debug...` commands attempt to follow fetch requests and display relevant request and response details in a similar spirit to the `curl -I [--head]...` utility.
+
+Use these as follows in the browser:
+
+- [https://ampbench.appspot.com/debug?url=https://ampbyexample.com](https://ampbench.appspot.com/debug?url=https://ampbyexample.com)
+
+and:
+
+- [https://ampbench.appspot.com/debug_curl?url=https://ampbyexample.com](https://ampbench.appspot.com/debug_curl?url=https://ampbyexample.com)
+
+Or, with the command-line compatible `_cli` equivalents, in a terminal session:
+
+    $ curl https://ampbench.appspot.com/debug_cli?url=https://ampbyexample.com
+
+and:
+
+    $ curl https://ampbench.appspot.com/debug_curl_cli?url=https://ampbyexample.com
+
+The `/debug` and `/debug_cli` versions use a smartphone HTTP User Agent. The `/debug_curl` and `/debug_curl_cli` variants use the `curl` (desktop and server-side) User Agent. 
+
+The applied User Agent is reported in the output and can be seen in the resulting HTTP request headers as in the following examples.
+
+For `/debug...`:
+
+    {"User-Agent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2725.0 Mobile Safari/537.36","host":"ampbyexample.com"}
+
+and for `/debug_curl...`:
+
+    {"User-Agent":"curl/7.43.0","host":"ampbyexample.com"}
+
+
 ###Deploying AMPBench to the Cloud
 
 ####Deploying AMPBench to Google Compute Engine
