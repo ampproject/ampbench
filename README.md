@@ -1,5 +1,9 @@
 ##AMPBench: AMP URL Validation and Troubleshooting
 
+###Guides
+
+[Walkthrough article: Debug AMP pages with AMPBench, an open source app from the AMP Project.](https://medium.com/@greyling/ampbench-an-amp-url-validation-and-troubleshooting-application-d33ee83df604)
+
 ###What does it do?
 
 AMPBench is a web application and service that validates AMP URLs + their associated Structured Data. 
