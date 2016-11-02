@@ -132,6 +132,27 @@ app.get('/version', (req, res) => {
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+function assert_url(req, res) { // handle bad urls
+    let url_to_validate = req.query.url || '';
+    if (!benchlib.check_url_is_valid(url_to_validate)) {
+        console.log(version_msg(
+            validator_signature() +
+            '[ERROR: INVALID URL] Please check the formatting of the requested URL: ' +
+            req.path + ' ' + url_to_validate));
+        let _err = {
+            error: true,
+            error_message:
+                '[ERROR: INVALID URL] Please check the formatting of the requested URL',
+            error_url: url_to_validate,
+            error_request_host: req.hostname,
+            error_request_path: req.path,
+            error_version: version_msg('')
+        };
+        app.set('json spaces', 4);
+        res.status(500).json(_err);
+    }
+}
+
 app.post('/valid', (req, res) => {
     const
         validate_url = benchlib.str_encode_hard_amp(req.body.input_url),
@@ -141,10 +162,11 @@ app.post('/valid', (req, res) => {
 });
 
 app.get('/validate', (req, res) => {
-    const on_handler_validate = (__res) => {
+    assert_url(req, res); // handle bad url
+    const on_handler_validate = (__ret) => {
         res.header("Content-Type", "text/html; charset=utf-8");
-        if (__res) {
-            res.write(handlebars.compile(results_template)(__res));
+        if (__ret) {
+            res.write(handlebars.compile(results_template)(__ret));
             res.end();
         } else {
             res.status(200).send(version_msg('No data was retrieved from AMP validation service.'));
@@ -154,6 +176,7 @@ app.get('/validate', (req, res) => {
 });
 
 app.get('/raw/', (req, res) => {
+    assert_url(req, res); // handle bad url
     let amp_url = req.query.url || '';
     let check_http_response = null;
     if ('' == amp_url.trim()) {
@@ -172,6 +195,7 @@ app.get('/raw/', (req, res) => {
 });
 
 app.get('/check/', (req, res) => {
+    assert_url(req, res); // handle bad url
     let amp_url = req.query.url || '';
     let check_http_response = null;
     if ('' == amp_url.trim()) {
@@ -210,6 +234,7 @@ require('request-debug')(request, function(type, data, req) {
 
 // browser compatible version
 app.get('/debug/', (req, res) => {
+    assert_url(req, res); // handle bad url
     let amp_url = req.query.url || '';
     if ('' == amp_url.trim()) {
         res.status(200).send(version_msg('No AMP URL parameter found.'));
@@ -234,6 +259,7 @@ app.get('/debug/', (req, res) => {
 
 // command-line compatible version
 app.get('/debug_cli/', (req, res) => {
+    assert_url(req, res); // handle bad url
     let amp_url = req.query.url || '';
     if ('' == amp_url.trim()) {
         res.status(200).send(version_msg('No AMP URL parameter found.'));
@@ -258,6 +284,7 @@ app.get('/debug_cli/', (req, res) => {
 
 // browser compatible version
 app.get('/debug_curl/', (req, res) => {
+    assert_url(req, res); // handle bad url
     let amp_url = req.query.url || '';
     if ('' == amp_url.trim()) {
         res.status(200).send(version_msg('No AMP URL parameter found.'));
@@ -281,6 +308,7 @@ app.get('/debug_curl/', (req, res) => {
 
 // command-line compatible version
 app.get('/debug_curl_cli/', (req, res) => {
+    assert_url(req, res); // handle bad url
     let amp_url = req.query.url || '';
     if ('' == amp_url.trim()) {
         res.status(200).send(version_msg('No AMP URL parameter found.'));
@@ -369,6 +397,7 @@ const make_api_sd_validation = (api_validate_sd_return) => {
 // http://localhost:8080/api?url=https://health.mail.ru/amp/news/chto_delaet_pechen/
 // curl http://localhost:8080/api?url=https://health.mail.ru/amp/news/chto_delaet_pechen/
 app.get('/api/', (req, res) => {
+    assert_url(req, res); // handle bad url
     // console.log('==> api: req.query.url: ' + req.query.url);
     let amp_url = req.query.url || '';
     // console.log('==> api: amp_url: ' + amp_url);
@@ -403,6 +432,7 @@ app.get('/api/', (req, res) => {
 //
 
 app.get('/api1/', (req, res) => {
+    assert_url(req, res); // handle bad url
     let amp_url = (req.query.url).trim() || '';
 
     let check_http_response = null;
@@ -475,6 +505,7 @@ app.get('/api1/', (req, res) => {
 //
 
 app.get('/api2/', (req, res) => {
+    assert_url(req, res); // handle bad url
     let amp_url = (req.query.url).trim() || '';
 
     let check_http_response = null;

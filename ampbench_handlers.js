@@ -91,7 +91,7 @@ function validate(route, req, res, on_validate_callback) {
 
     let url_to_validate = req.query.url || '';
     if ('' !== url_to_validate.trim()) {
-        // url_to_validate = benchlib.str_rtrim_char(url_to_validate, '/'); //TODO: PROBLEMATIC
+
         const on_amp_validate = (http_response, output) => {
 
             console.log(version_msg(
