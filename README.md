@@ -130,6 +130,7 @@ AWS Elastic Beanstalk uses highly reliable and scalable services that are availa
 
 Please review the following documentation:
 
+- [Deploy a Node.js Web App: Launch and run a highly available Node.js web application on AWS](https://aws.amazon.com/getting-started/projects/deploy-nodejs-web-app/)
 - [AWS Elastic Beanstalk](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html)
 - [Getting Started Using Elastic Beanstalk](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/GettingStarted.html)
 - [Managing and Configuring Applications and Environments Using the Console, CLI, and APIs](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.html)
