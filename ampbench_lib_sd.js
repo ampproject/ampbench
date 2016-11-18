@@ -57,6 +57,9 @@ const
     sd_type_is_amp_article = type => {
         return AMP_SD_TYPES_ARTICLE.indexOf(type) !== -1;
     },
+    sd_type_is_amp_article_companion_type = type => {
+        return AMP_SD_TYPES_ARTICLE_COMPANIONS.indexOf(type) !== -1;
+    },
     sd_type_is_amp_recipe = type => {
         return AMP_SD_TYPES_RECIPE.indexOf(type) !== -1;
     };
@@ -427,7 +430,7 @@ function check_body_metadata(body) {
 
 function extract_metadata(body, metadata) {
 
-	var md = extract_metadata_json_ld_article(body, metadata);
+	let md = extract_metadata_json_ld_article(body, metadata);
 
     // console.log('- - extract_metadata - -');
     // console.log('==> metadata.kind  : ' + md.kind);
@@ -490,7 +493,7 @@ function get_json_ld_value_safe(parent, item) {
 
 function extract_metadata_json_ld_news_types(body) { // cater for multiple ld+json blocks
     let md_type = '',
-        jsonld_script = '',
+        jsonld_script_return = '',
         jsonld_json = null,
         jsonld_block = null,
         jsonld_blocks = null;
@@ -502,11 +505,11 @@ function extract_metadata_json_ld_news_types(body) { // cater for multiple ld+js
             jsonld_block = jsonld_blocks[i].children[0].data;
             try {
                 jsonld_json = JSON.parse(jsonld_block);
-                md_type = jsonld_json['@type'];
-                // console.log('==> md_type: ' + md_type);
-                if (sd_type_is_amp_article(md_type)) { // AMP_SD_TYPES_ARTICLE = ['Article', 'NewsArticle', 'BlogPosting']
-                    jsonld_script = jsonld_block.trim();
-                    return jsonld_script; // found what we were looking for - RETURN IT!!!
+                for (let j = 0; j < jsonld_json.length; j++) {
+                    md_type = jsonld_json[j]['@type'];
+                    if (sd_type_is_amp_article(md_type)) {
+                        jsonld_script_return = JSON.stringify(jsonld_json[j]);
+                    }
                 }
             } catch(err) { // do nothing - we need to carry on
                 // console.log('==> ERROR: extract_json_ld: JSON.parse(jsonld_block): ' + err);
@@ -515,13 +518,11 @@ function extract_metadata_json_ld_news_types(body) { // cater for multiple ld+js
     } catch(err) { // do nothing - we need to carry on
         // console.log('==> ERROR: extract_json_ld(): ' + err);
     }
-    return jsonld_script;
+    return jsonld_script_return;
 }
 
 function extract_metadata_json_ld_article(body, metadata) {
 
-    // const $ = cheerio.load(body, {});
-    // let script_jsonld_txt = $('script[type="application/ld+json"]').text().trim();
     let script_jsonld_txt = extract_metadata_json_ld_news_types(body);
     metadata.json_text = script_jsonld_txt;
 
