@@ -505,10 +505,17 @@ function extract_metadata_json_ld_news_types(body) { // cater for multiple ld+js
             jsonld_block = jsonld_blocks[i].children[0].data;
             try {
                 jsonld_json = JSON.parse(jsonld_block);
-                for (let j = 0; j < jsonld_json.length; j++) {
-                    md_type = jsonld_json[j]['@type'];
+                if (jsonld_json instanceof Array) {
+                    for (let j = 0; j < jsonld_json.length; j++) {
+                        md_type = jsonld_json[j]['@type'];
+                        if (sd_type_is_amp_article(md_type)) {
+                            jsonld_script_return = JSON.stringify(jsonld_json[j]);
+                        }
+                    }
+                } else {
+                    md_type = jsonld_json['@type'];
                     if (sd_type_is_amp_article(md_type)) {
-                        jsonld_script_return = JSON.stringify(jsonld_json[j]);
+                        jsonld_script_return = JSON.stringify(jsonld_json);
                     }
                 }
             } catch(err) { // do nothing - we need to carry on
@@ -776,6 +783,8 @@ const unwrap_microdata_json_for_news = (md) => { // scans Microdata json block o
                 try { // DO NOT REMOVE!!! we need to carry on regardless of missing or invalid metadata items...
                     switch (md_block_type) {
                         
+                        case 'http://schema.org/Article':
+                        case 'https://schema.org/Article':
                         case 'http://schema.org/NewsArticle':
                         case 'https://schema.org/NewsArticle':
                             // in which block id is each item of interest
