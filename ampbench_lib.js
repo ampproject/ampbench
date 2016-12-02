@@ -34,7 +34,7 @@ const http_status = require('http-status');
 const valid_url = require('valid-url');
 // https://www.npmjs.com/package/wget-improved
 const wget = require('wget-improved');
-const robots = require('cyborg.txt');
+const robots_parser = require('robots-parser');
 const util = require('util');
 const inspect_obj = (obj) => {return util.inspect(obj, { showHidden: true, depth: null })};
 const cheerio = require('cheerio');
@@ -1152,6 +1152,7 @@ function check_url_is_reachable_with_user_agent(fetch_url, user_agent, callback)
         status: '',
         result: '',
         size: 0,
+        body: '',
         err: null
     };
 
@@ -1162,10 +1163,6 @@ function check_url_is_reachable_with_user_agent(fetch_url, user_agent, callback)
 
     try {
         fetch(fetch_url, options)
-        // https://github.com/github/fetch#html
-        // .then(function(res) {
-        //     return res.text()
-        // })
             .then(function(res) {
                 // _log_response(res);
                 if (res.status == 200) {
@@ -1181,6 +1178,12 @@ function check_url_is_reachable_with_user_agent(fetch_url, user_agent, callback)
                     _ret.size = res.size;
                     _ret.err = true; // make it true rather than null
                 }
+                // _log_return(_ret);
+                // return callback(_ret);
+                return res.text();
+            })
+            .then(function(body) {
+                _ret.body = body;
                 // _log_return(_ret);
                 return callback(_ret);
             })
@@ -1220,7 +1223,9 @@ function check_url_is_reachable_with_user_agent(fetch_url, user_agent, callback)
         console.log('=> _ret.ok     : ' + ret.ok);
         console.log('=> _ret.status : ' + ret.status);
         console.log('=> _ret.result : ' + ret.result);
+        console.log('=> _ret.size   : ' + ret.size);
         console.log('=> _ret.err    : ' + ret.err);
+        console.log('=> _ret.body   : ' + ret.body);
     }
 
 }
@@ -1235,7 +1240,7 @@ function check_url_is_reachable_with_user_agent(fetch_url, user_agent, callback)
 function make_robots_txt_url(uri) {
 
     const parse_url = require('url').parse;
-    var parsed = parse_url(uri);
+    let parsed = parse_url(uri);
 
     if ((!parsed.protocol) || (!parsed.host)) {
         throw new Error('Cannot parse URL ' + uri);
@@ -1261,50 +1266,20 @@ function check_robots_txt(validation_url, callback) {
         check_robots_txt_ua_googlebot_ok = '',
         check_robots_txt_ua_googlebot_smartphone_ok = '';
 
-    // crawling access checkers
-    const bot_gb = new robots.Bot({
-        agent: UA_GOOGLEBOT,
-        maxAge: 3000 // cache robots.txt for 3 seconds
-    });
-    const bot_gbs = new robots.Bot({
-        agent: UA_GOOGLEBOT_SMARTPHONE,
-        maxAge: 3000 // cache robots.txt for 3 seconds
-    });
-
-    // google bot
-    const on_gb_success  = () => {
-        check_robots_txt_ua_googlebot_ok = CHECK_PASS;
-        bot_gbs.allows(validation_url, on_gbs_success, on_gbs_failure);
-    };
-    const on_gb_failure  = () => {
-        check_robots_txt_ua_googlebot_ok = CHECK_FAIL;
-        bot_gbs.allows(validation_url, on_gbs_success, on_gbs_failure);
-    };
-    // google bot smartphone
-    const on_gbs_success = () => {
-        check_robots_txt_ua_googlebot_smartphone_ok = CHECK_PASS;
-        build_results();
-        callback(check_robots_txt_return);
-    };
-    const on_gbs_failure = () => {
-        check_robots_txt_ua_googlebot_smartphone_ok = CHECK_FAIL;
-        build_results();
-        callback(check_robots_txt_return);
-    };
-
-    const build_results = () => {
+    function build_results(build_result_extras) {
         check_robots_txt_results =
             'Googlebot [' + check_robots_txt_ua_googlebot_ok + '] ' +
             'Googlebot-Smartphone [' + check_robots_txt_ua_googlebot_smartphone_ok + '] ';
+        check_robots_txt_results
+            = build_result_extras
+            ? check_robots_txt_results + '[' + build_result_extras + ']'
+            : check_robots_txt_results;
         if (CHECK_PASS === check_url_is_reachable_return.status) {
             if (CHECK_PASS === check_robots_txt_ua_googlebot_ok &&
                 CHECK_PASS === check_robots_txt_ua_googlebot_smartphone_ok) {
                 check_robots_txt_status = CHECK_PASS;
-            // } else {
-            //     check_robots_txt_status = CHECK_FAIL;
             }
         } else {
-            // check_robots_txt_results += check_url_is_reachable_return.result;
             check_robots_txt_status = check_url_is_reachable_return.status;
         }
         check_robots_txt_return = {
@@ -1320,14 +1295,15 @@ function check_robots_txt(validation_url, callback) {
         // console.log('=> [Googlebot-Smartphone] ' + check_robots_txt_ua_googlebot_smartphone_ok + ': ' + url);
     };
 
-    const url_is_reachable_callback = (_ret) => {
-        // _ret = {
+    function url_is_reachable_callback(_ret) {
+        // return object: _ret = {
         //     url: fetch_url,
         //     agent: user_agent,
         //     ok: false,
         //     status: '',
         //     result: '',
         //     size: 0,
+        //     body: '',
         //     err: null
         // };
 
@@ -1339,15 +1315,43 @@ function check_robots_txt(validation_url, callback) {
         if (!_ret.ok) { // cannot get to the sites robots.txt
             check_robots_txt_ua_googlebot_ok = CHECK_FAIL;
             check_robots_txt_ua_googlebot_smartphone_ok = CHECK_FAIL;
-            // check_robots_txt_results += check_url_is_reachable_return.result;
             build_results();
             callback(check_robots_txt_return);
         } else {
-            bot_gb.allows(validation_url, on_gb_success, on_gb_failure);
-        }
-    };
+            try {
+                // https://www.npmjs.com/package/robots-parser - - - - - - - - - - - - - - - - - - - -
+                const robots = robots_parser(check_robots_txt_file_url, _ret.body);
+                // robots.getSitemaps(); // ['http://example.com/sitemap.xml']
+                let site_maps = robots.getSitemaps();
+                let site_map_cnt = site_maps.length;
+                site_maps
+                    = site_maps[0]
+                    ? 'site maps (' + site_map_cnt + '): ' + site_maps[0]
+                    : null;
+                let build_result_extras = site_maps || null;
 
-    check_robots_txt_file_url = robots.url(validation_url);
+                // UA_GOOGLEBOT
+                check_robots_txt_ua_googlebot_ok
+                    = robots.isAllowed(validation_url, UA_GOOGLEBOT)
+                    ? CHECK_PASS : CHECK_FAIL;
+                // UA_GOOGLEBOT_SMARTPHONE
+                check_robots_txt_ua_googlebot_smartphone_ok
+                    = robots.isAllowed(validation_url, UA_GOOGLEBOT_SMARTPHONE)
+                    ? CHECK_PASS : CHECK_FAIL;
+                build_results(build_result_extras);
+                callback(check_robots_txt_return);
+            } catch (err) {
+                console.log('==> ERROR: check_robots_txt(validation_url): '  + validation_url);
+                console.log('==> ERROR: check_robots_txt(err)           : '  + err);
+                check_robots_txt_ua_googlebot_ok = CHECK_FAIL;
+                check_robots_txt_ua_googlebot_smartphone_ok = CHECK_FAIL;
+                build_results(err);
+                callback(check_robots_txt_return);
+            }
+        }
+    }
+
+    check_robots_txt_file_url = make_robots_txt_url(validation_url);
     check_url_is_reachable(check_robots_txt_file_url, url_is_reachable_callback);
 
 }
