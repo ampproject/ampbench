@@ -85,7 +85,9 @@ function version(route, req, res) {
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-function validate(route, req, res, on_validate_callback) {
+function validate(route, user_agent, req, res, on_validate_callback) {
+
+    benchlib.set_global_user_agent(user_agent);
 
     let __ret = null;
 

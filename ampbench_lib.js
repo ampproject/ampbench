@@ -254,10 +254,21 @@ const UA_GOOGLEBOT_SMARTPHONE =
     'Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.96 Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)';
 
 // user agent currently in use - - - - - - - - - - - - - - - - - - - - - - - - -
+var UA_AMPBENCH = UA_MOBILE_ANDROID_CHROME_52;
+var UA_AMPBENCH_NAME = 'UA_MOBILE_ANDROID_CHROME_52';
+function set_global_user_agent(user_agent) {
+    UA_AMPBENCH = user_agent;
+}
+function get_global_user_agent() {
+    return UA_AMPBENCH;
+}
+
+
 // const UA_AMPBENCH = UA_CURL;
+// const UA_AMPBENCH_NAME  = 'UA_CURL';
+
 // const UA_AMPBENCH = UA_GOOGLEBOT_SMARTPHONE;
-const UA_AMPBENCH       = UA_MOBILE_ANDROID_CHROME_52;
-const UA_AMPBENCH_NAME  = 'UA_MOBILE_ANDROID_CHROME_52';
+// const UA_AMPBENCH_NAME  = 'UA_GOOGLEBOT_SMARTPHONE';
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // HTTP response content inspector
@@ -1604,9 +1615,6 @@ function parse_body_for_amplinks(body, http_response) {
         }
     });
 
-    // console.log('=> parse_body_for_amplinks __return:\n' + inspect_obj(__return));
-    // print_dashes(60);
-
     return __return;
 }
 
@@ -1874,9 +1882,13 @@ exports.VALIDATOR_JS_FILE = VALIDATOR_JS_FILE;
 exports.lib_download_validator = lib_download_validator;
 exports.lib_load_validator = lib_load_validator;
 exports.lib_refresh_validator_if_stale = lib_refresh_validator_if_stale;
+exports.set_global_user_agent = set_global_user_agent;
+exports.get_global_user_agent = get_global_user_agent;
 exports.UA_AMPBENCH = UA_AMPBENCH;
 exports.UA_AMPBENCH_NAME = UA_AMPBENCH_NAME;
 exports.UA_CURL = UA_CURL;
+exports.UA_MOBILE = UA_MOBILE_ANDROID_CHROME_52;
+exports.UA_MOBILE_ANDROID_CHROME_52 = UA_MOBILE_ANDROID_CHROME_52;
 exports.UA_GOOGLEBOT = UA_GOOGLEBOT;
 exports.UA_GOOGLEBOT_SMARTPHONE = UA_GOOGLEBOT_SMARTPHONE;
 exports.HttpResponse = HttpResponse;

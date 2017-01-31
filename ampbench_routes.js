@@ -161,7 +161,16 @@ app.post('/valid', (req, res) => {
     res.redirect(forward_url);
 });
 
+app.post('/valid_ua_desktop', (req, res) => {
+    const
+        validate_url = benchlib.str_encode_hard_amp(req.body.input_url),
+        validate_url_enc = encodeURIComponent(validate_url),
+        forward_url = '../validate_ua_desktop?url=' + validate_url_enc;
+    res.redirect(forward_url);
+});
+
 app.get('/validate', (req, res) => {
+    const user_agent = benchlib.UA_MOBILE_ANDROID_CHROME_52; // mobile ua
     assert_url(req, res); // handle bad url
     const on_handler_validate = (__ret) => {
         res.header("Content-Type", "text/html; charset=utf-8");
@@ -172,7 +181,22 @@ app.get('/validate', (req, res) => {
             res.status(200).send(version_msg('No data was retrieved from AMP validation service.'));
         }
     };
-    handlers.validate('/validate', req, res, on_handler_validate);
+    handlers.validate('/validate', user_agent, req, res, on_handler_validate);
+});
+
+app.get('/validate_ua_desktop', (req, res) => {
+    const user_agent = benchlib.UA_CURL; // desktop ua
+    assert_url(req, res); // handle bad url
+    const on_handler_validate = (__ret) => {
+        res.header("Content-Type", "text/html; charset=utf-8");
+        if (__ret) {
+            res.write(handlebars.compile(results_template)(__ret));
+            res.end();
+        } else {
+            res.status(200).send(version_msg('No data was retrieved from AMP validation service.'));
+        }
+    };
+    handlers.validate('/validate', user_agent, req, res, on_handler_validate);
 });
 
 app.get('/raw/', (req, res) => {
