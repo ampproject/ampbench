@@ -1,10 +1,10 @@
-##AMPBench: AMP URL Validation and Troubleshooting
+## AMPBench: AMP URL Validation and Troubleshooting
 
-###Guides
+### Guides
 
 [Walkthrough article: Debug AMP pages with AMPBench, an open source app from the AMP Project.](https://medium.com/@greyling/ampbench-an-amp-url-validation-and-troubleshooting-application-d33ee83df604)
 
-###What does it do?
+### What does it do?
 
 AMPBench is a web application and service that validates AMP URLs + their associated Structured Data. 
 
@@ -14,15 +14,15 @@ During AMP URL validation, it builds referable, support-friendly sharable URLs s
 
 ![AMPBench in action](/SCREENSHOT.png?raw=true)
 
-###License
+### License
 
 AMPBench is licensed under the [Apache 2.0 LICENSE](http://www.apache.org/licenses/LICENSE-2.0.txt).
 
-###Disclaimer
+### Disclaimer
 
 AMPBench **is not** an official Google product.
 
-###Getting the code and running it
+### Getting the code and running it
 
 Install [Node.js](https://nodejs.org) version 4.X on your system. E.g., [by downloading](https://nodejs.org/en/download/) or [by using a package manager](https://nodejs.org/en/download/package-manager/) or [by using NVM](https://github.com/creationix/nvm).
 
@@ -49,7 +49,7 @@ Even try this from the command-line:
     $ curl http://localhost:8080/api?url=https://ampbyexample.com/
     $ curl http://localhost:8080/api2?url=https://ampbyexample.com/
 
-####Requesting an AMPHTML Validator reload from the CDN ([https://cdn.ampproject.org/v0/validator.js](https://cdn.ampproject.org/v0/validator.js))
+#### Requesting an AMPHTML Validator reload from the CDN ([https://cdn.ampproject.org/v0/validator.js](https://cdn.ampproject.org/v0/validator.js))
 
 Use the following URL to ask AMPBench to reload the validator code into memory should a different (not only newer; there might have been a rollback) version be available:
 
@@ -63,7 +63,7 @@ Or:
 
     $ curl http://localhost:8080/command_force_validator_update
 
-####Utilities
+#### Utilities
 
 AMPBench includes some useful debug utility commands that can in some cases help with troubleshooting, such as when a full validation fails on a URL by returning unexpected server responses. 
 
@@ -98,9 +98,9 @@ and for `/debug_curl...`:
     {"User-Agent":"curl/7.43.0","host":"ampbyexample.com"}
 
 
-###Deploying AMPBench to the Cloud
+### Deploying AMPBench to the Cloud
 
-####Deploying AMPBench to Google Compute Engine
+#### Deploying AMPBench to Google Compute Engine
 
 To deploy AMPBench to the App Engine flexible environment, you need to have a Google Cloud Platform Console project. 
 
@@ -124,7 +124,7 @@ From within the ampbench source root folder, deplyoment to Google Compute Engine
     
     $ gcloud app deploy 
 
-####Deploying AMPBench to Amazon Web Services (AWS)
+#### Deploying AMPBench to Amazon Web Services (AWS)
 
 AWS Elastic Beanstalk uses highly reliable and scalable services that are available in the [AWS Free Usage Tier](http://aws.amazon.com/free/) and supports apps developed in Node.js, such as AMPBench, out-of-the-box.
 
