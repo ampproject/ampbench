@@ -80,26 +80,18 @@
             <!--<div class="page-content" style="width:95%; margin:0 auto; padding:20px">-->
             <div class="page-content" style="width:95%; margin:0 auto; padding:20px;">
                 <form method="POST" action="/valid">
+                    <!--<div style="float: right;">-->
+                    <div style="position:static;">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                                type="submit" formaction="/valid">Fetch with Mobile UA</button>
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                                type="submit" formaction="/valid_ua_desktop">Desktop UA</button>
+                    </div>
                     <div class="mdl-textfield mdl-js-textfield  mdl-textfield--floating-label"
                          style="position:absolute; left: 0px; width: 78%">
                         <input  id="id_input_url" class="mdl-textfield__input"
                                 name="input_url" type="url"
                                 value={{{amp_url}}} required/>
-                    </div>
-                    <!--<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"-->
-                            <!--style="float: right; r right: 25px;"-->
-                            <!--type="submit">-->
-                        <!--Mobile UA-->
-                    <!--</button>-->
-                    <!--<button class="mdl-button--fab mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"-->
-                            <!--style="position: absolute; right: 25px; padding:15px"-->
-                            <!--type="submit"><i class="material-icons">check</i>-->
-                    <!--</button>-->
-                    <div style="float: right;">
-                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-                                type="submit" formaction="/valid">Mobile UA</button>
-                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-                                type="submit" formaction="/valid_ua_desktop">Desktop UA</button>
                     </div>
                 </form>
 
@@ -282,7 +274,7 @@
             </tr>
             <tr>
                 <td class="mdl-data-table__cell--non-numeric">
-                    <a href="https://developers.google.com/search/docs/data-types/articles#amp-logo-guidelines" target="_blank">
+                    <a href="https://developers.google.com/search/docs/data-types/articles#logo-guidelines" target="_blank">
                         Publisher Logo<br>
                         (Top Stories with AMP)</a></td>
                 <td class="mdl-data-table__cell--non-numeric">{{{metadata_return.image.status}}}</td>

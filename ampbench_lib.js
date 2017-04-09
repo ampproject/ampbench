@@ -744,6 +744,22 @@ class HttpBodySniffer {
     }
 }
 
+class HttpBodyParser extends HttpBodySniffer {
+
+    constructor(url, body) {
+        super(url, body);
+    }
+
+    contains(search_text) {
+        if (this.isValidForUse) {
+            // return S(this._body).contains(search_text);
+            return (-1 < this._body.indexOf(search_text));
+        } else {
+            throw 'ERROR: HttpBodyParser instance is not valid for use';
+        }
+    }
+}
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // AMP validator: Official Node.js API
 // https://github.com/ampproject/amphtml/tree/master/validator/nodejs#nodejs-api-beta
@@ -1627,10 +1643,13 @@ function parse_body_for_amplinks_and_robots_metatags(http_response) {
         amphtml_url = __links.amphtml_url,
         has_dns_prefetch = __links.has_dns_prefetch;
 
-    let check_robots_meta_status = CHECK_FAIL,
-        check_robots_meta_result = 'Page content could not be read';
+    let check_robots_meta_status = CHECK_PASS,
+        check_robots_meta_result = '';
 
     let meta_name = '', meta_content = '', meta_entry = '';
+
+    const WARN_NOINDEX =
+        '[Using noindex means that your AMPs will likely fail to be consumed by search engines]';
 
     //https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag#using-the-robots-meta-tag
     const $ = cheerio.load(http_response.http_response_body, null);
@@ -1655,12 +1674,18 @@ function parse_body_for_amplinks_and_robots_metatags(http_response) {
             meta_content = $(meta).attr('content');
             meta_entry = '[' + meta_name + ': ' + meta_content + ']';
             check_robots_meta_result += meta_entry;
-            check_robots_meta_status = CHECK_FAIL;
-        } else {
-            check_robots_meta_result = 'Robots meta tag check appears to be OK';
-            check_robots_meta_status = CHECK_PASS;
+            if (-1 < meta_content.indexOf('noindex')) {
+                check_robots_meta_result += WARN_NOINDEX;
+            }
+            check_robots_meta_status = CHECK_WARN;
+            // console.log('=> WARN: [meta_name: ' + meta_name + '] [meta_content: ' + meta_content + ']');
         }
+        // console.log('=> [meta_entry: ' + meta_entry + ']');
     });
+    if (check_robots_meta_status === CHECK_PASS) {
+        check_robots_meta_result = 'Robots meta tag check appears to be OK';
+    }
+    // console.log('=> [check_robots_meta_result: ' + check_robots_meta_result + ']');
 
     return {
         canonical_url: canonical_url,
