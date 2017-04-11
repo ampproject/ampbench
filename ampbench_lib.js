@@ -262,7 +262,12 @@ function set_global_user_agent(user_agent) {
 function get_global_user_agent() {
     return UA_AMPBENCH;
 }
-
+function set_global_user_agent_name(user_agent_name) {
+    UA_AMPBENCH_NAME = user_agent_name;
+}
+function get_global_user_agent_name() {
+    return UA_AMPBENCH_NAME;
+}
 
 // const UA_AMPBENCH = UA_CURL;
 // const UA_AMPBENCH_NAME  = 'UA_CURL';
@@ -748,12 +753,13 @@ class HttpBodyParser extends HttpBodySniffer {
 
     constructor(url, body) {
         super(url, body);
+        this._index_of_search = -1;
     }
 
-    contains(search_text) {
+    bodyContains(search_text) { // override super method
         if (this.isValidForUse) {
-            // return S(this._body).contains(search_text);
-            return (-1 < this._body.indexOf(search_text));
+            this._index_of_search = this._body.indexOf(search_text);
+            return (-1 < this._index_of_search);
         } else {
             throw 'ERROR: HttpBodyParser instance is not valid for use';
         }
@@ -1909,6 +1915,8 @@ exports.lib_load_validator = lib_load_validator;
 exports.lib_refresh_validator_if_stale = lib_refresh_validator_if_stale;
 exports.set_global_user_agent = set_global_user_agent;
 exports.get_global_user_agent = get_global_user_agent;
+exports.set_global_user_agent_name = set_global_user_agent_name;
+exports.get_global_user_agent_name = get_global_user_agent_name;
 exports.UA_AMPBENCH = UA_AMPBENCH;
 exports.UA_AMPBENCH_NAME = UA_AMPBENCH_NAME;
 exports.UA_CURL = UA_CURL;

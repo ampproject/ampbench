@@ -171,6 +171,7 @@ app.post('/valid_ua_desktop', (req, res) => {
 
 app.get('/validate', (req, res) => {
     const user_agent = benchlib.UA_MOBILE_ANDROID_CHROME_52; // mobile ua
+    const user_agent_name = 'MOBILE'; // mobile ua
     assert_url(req, res); // handle bad url
     const on_handler_validate = (__ret) => {
         res.header("Content-Type", "text/html; charset=utf-8");
@@ -181,11 +182,12 @@ app.get('/validate', (req, res) => {
             res.status(200).send(version_msg('No data was retrieved from AMP validation service.'));
         }
     };
-    handlers.validate('/validate', user_agent, req, res, on_handler_validate);
+    handlers.validate('/validate', user_agent, user_agent_name, req, res, on_handler_validate);
 });
 
 app.get('/validate_ua_desktop', (req, res) => {
     const user_agent = benchlib.UA_CURL; // desktop ua
+    const user_agent_name = 'DESKTOP'; // desktop ua
     assert_url(req, res); // handle bad url
     const on_handler_validate = (__ret) => {
         res.header("Content-Type", "text/html; charset=utf-8");
@@ -196,7 +198,7 @@ app.get('/validate_ua_desktop', (req, res) => {
             res.status(200).send(version_msg('No data was retrieved from AMP validation service.'));
         }
     };
-    handlers.validate('/validate', user_agent, req, res, on_handler_validate);
+    handlers.validate('/validate', user_agent, user_agent_name, req, res, on_handler_validate);
 });
 
 app.get('/raw/', (req, res) => {

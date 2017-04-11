@@ -85,9 +85,10 @@ function version(route, req, res) {
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-function validate(route, user_agent, req, res, on_validate_callback) {
+function validate(route, user_agent, user_agent_name, req, res, on_validate_callback) {
 
     benchlib.set_global_user_agent(user_agent);
+    benchlib.set_global_user_agent_name(user_agent_name);
 
     let __ret = null;
 
@@ -395,6 +396,8 @@ function validate(route, user_agent, req, res, on_validate_callback) {
                                         ? CHECK_FAIL_CSS : sniffer_raw_status_css;
 
                                     __ret = {
+                                        user_agent: benchlib.get_global_user_agent(),
+                                        user_agent_name: benchlib.get_global_user_agent_name(),
                                         // https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
                                         response_timestamp: new Date().toISOString(), // The timezone is always zero UTC offset, as per suffix "Z"
                                         amphtml_validator_signature: validator_signature().substr(0, 21+16) + ']', // only show left 16 chars

@@ -4,18 +4,12 @@
     <!-- Latest compiled and minified BOOTSTRAP CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet"
-          href="http://fonts.googleapis.com/css?family=Noto:400,100,500,300italic,500italic,700italic,900,300">
+          href="https://fonts.googleapis.com/css?family=Noto:400,100,500,300italic,500italic,700italic,900,300">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="/css/ampbench-material-blue.min.css">
     <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
     <link rel="stylesheet" href="/css/ampbench.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!--<style>-->
-        <!--body { background-color: #f0f0f0; }-->
-        <!--/*h6 { color: maroon; }*/-->
-    <!--</style>-->
-
 </head>
 <body>
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
@@ -76,47 +70,50 @@
         </div>
 
         <main class="mdl-layout__content" style="margin: 10px;">
-        <!--<main class="mdl-layout__content" style="width: auto; height: auto; overflow: scroll">-->
-            <!--<div class="page-content" style="width:95%; margin:0 auto; padding:20px">-->
-            <div class="page-content" style="width:95%; margin:0 auto; padding:20px;">
+            <!--<div class="page-content" style="width:95%; margin:0 auto; padding:10px;">-->
+            <div class="page-content" style="width:95%; margin-left:0px; padding:10px;">
                 <form method="POST" action="/valid">
-                    <!--<div style="float: right;">-->
                     <div style="position:static;">
-                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-                                type="submit" formaction="/valid">Fetch with Mobile UA</button>
-                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                        <button id="btn-ua-mobile"
+                                class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                                type="submit" formaction="/valid">Mobile UA</button>
+                        <button id="btn-ua-desktop"
+                                class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
                                 type="submit" formaction="/valid_ua_desktop">Desktop UA</button>
                     </div>
                     <div class="mdl-textfield mdl-js-textfield  mdl-textfield--floating-label"
-                         style="position:absolute; left: 0px; width: 78%">
+                         style="position:absolute; left: 0px; width: 98%">
                         <input  id="id_input_url" class="mdl-textfield__input"
                                 name="input_url" type="url"
                                 value={{{amp_url}}} required/>
                     </div>
                 </form>
-
             </div>
 
-            <br> <!--a line break be here!!!-->
+        <br> <!--a line break be here!!!-->
 
-            <div id="id_hdr_checks">
-                <h6><a href="https://gist.github.com/pietergreyling/460b35469d51c62a17a3#validating-amp-pages-and-enabling-discovery-by-google"
-                       target="_blank">
-                    AMP Checks</a><b> [{{{ amp_hdr_status }}}]</b>{{http_response_result}}</h6>
-            </div>
+        <br> <!--a line break be here!!!-->
 
         <div class="table-responsive">
-            <table class="table table-striped table-bordered table-condensed" style="width:98%;">
+            <table  class="table table-striped table-bordered table-condensed" style="width:98%;">
                 <thead>
                 <tr>
                     <th class="mdl-data-table__cell--non-numeric">
-                    <a href="https://www.ampproject.org/docs/get_started/about-amp.html#amp-html" target="_blank">
-                        AMP Check</a></th>
+                    <a href="https://gist.github.com/pietergreyling/460b35469d51c62a17a3#validating-amp-pages-and-enabling-discovery-by-google"
+                       target="_blank">
+                        <b>AMP Checks</b></a><b> [{{{ amp_hdr_status }}}]</b>{{http_response_result}}</th>
                     <th class="mdl-data-table__cell--non-numeric">Status</th>
                     <th class="mdl-data-table__cell--non-numeric">Results [@{{response_timestamp}}]{{amphtml_validator_signature}}</th>
                 </tr>
                 </thead>
                 <tbody>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <a href="https://en.wikipedia.org/wiki/User_agent" target="_blank">
+                            HTTP User Agent</a></td>
+                    <td class="mdl-data-table__cell--non-numeric">{{user_agent_name}}</td>
+                    <td class="mdl-data-table__cell--non-numeric">{{user_agent}}</td>
+                </tr>
                 <tr>
                     <td class="mdl-data-table__cell--non-numeric">
                         <a href="https://www.ampproject.org/docs/guides/validate.html" target="_blank">
