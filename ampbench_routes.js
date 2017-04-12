@@ -412,6 +412,7 @@ const make_api_sd_validation = (api_validate_sd_return) => {
         sd_date_published:  api_validate_sd_return.date_published,
         sd_date_modified:   api_validate_sd_return.date_modified,
         sd_logo_image:      api_validate_sd_return.image,
+        sd_article_image:   api_validate_sd_return.article_image,
         sd_article:         api_validate_sd_return.article
     };
 };
