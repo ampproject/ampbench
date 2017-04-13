@@ -263,6 +263,10 @@ const sd_article_is_ok = (metadata) => {
 
 // PUBLISHER LOGO!
 // https://developers.google.com/search/docs/data-types/articles#amp-logo-guidelines
+// https://developers.google.com/search/docs/data-types/articles#logo-guidelines
+//     The logo should be a rectangle, not a square.
+//     The logo should fit in a 60x600px rectangle, and either be exactly 60px high (preferred), or exactly 600px wide.
+//     For example, 450x45px would not be acceptable, even though it fits in the 600x60px rectangle.
 function sd_publisher_logo_image_is_ok(url, width, height) {
     // Logo image files should be raster (.jpg, .png, .gif), not vector (.svg)
     // The logo image should fit in a 600x60px rectangle.
@@ -271,7 +275,7 @@ function sd_publisher_logo_image_is_ok(url, width, height) {
         sd_logo_image_url_status = benchlib.check_url_is_valid(url)
             ? CHECK_PASS + ': Publisher logo image URL appears to be valid'
             : CHECK_FAIL + ': Publisher logo image URL appears to be invalid';
-    let rule_desc_logo_dims = 'Should fit in a 600 X 60 px rectangle';
+    let rule_desc_logo_dims = 'Should fit in a 60x600px rectangle, and either be exactly 60px high (preferred), or exactly 600px wide.';
     let rule_desc_logo_file = 'Should be raster (.jpg, .png, .gif), not vector (.svg)';
     let h_stat = { status: CHECK_PASS, result: rule_desc_logo_dims };
     let w_stat = { status: CHECK_PASS, result: rule_desc_logo_dims };
@@ -279,36 +283,49 @@ function sd_publisher_logo_image_is_ok(url, width, height) {
     let f_type = url ? (S(url).splitRight('.', 1))[1].toUpperCase() : '';
     f_type = 4 < f_type.length ? S(f_type).left(4).s + '...' : f_type;
 
-    // image height - - - - - - - - - - - - - - - - - - - - -
-    if (height > 0 && height < 61) {
-        h_stat = { status: CHECK_PASS, result: rule_desc_logo_dims };
-        sd_logo_image_result += '[height OK]';
-    }
-    else if (height > 60) {
-        h_stat = { status: CHECK_FAIL, result: rule_desc_logo_dims + '[invalid: height > 60]' };
+    // not square - - - - - - - - - - - - - - - - - - - - - -
+    if (height == width) {
+        h_stat = { status: CHECK_FAIL, result: rule_desc_logo_dims + '[invalid: should be a rectangle, not a square]' };
         sd_logo_image_status = CHECK_FAIL;
-        sd_logo_image_result += '[invalid: height > 60]';
+        sd_logo_image_result += '[invalid: should be a rectangle, not a square]';
+    }
+    // either 60px high or 600px wide - - - - - - - - - - - -
+    else if (height != 60 && width != 600) {
+        h_stat = { status: CHECK_FAIL, result: rule_desc_logo_dims + '[invalid: should be either 60px high (preferred) or 600px wide]' };
+        sd_logo_image_status = CHECK_FAIL;
+        sd_logo_image_result += '[invalid: should be either 60px high (preferred) or 600px wide]';
     }
     else {
-        h_stat = { status: CHECK_FAIL, result: rule_desc_logo_dims + '[invalid: height = 0 or is unavailable]' };
-        sd_logo_image_status = CHECK_FAIL;
-        sd_logo_image_result += '[invalid: height = 0 or is unavailable]';
-    }
-
-    // image width - - - - - - - - - - - - - - - - - - - - -
-    if (width > 0 && width < 601) {
-        w_stat = { status: CHECK_PASS, result: rule_desc_logo_dims };
-        sd_logo_image_result += '[width OK]';
-    }
-    else if (width > 600) {
-        w_stat = { status: CHECK_FAIL, result: rule_desc_logo_dims + '[invalid: width > 600]' };
-        sd_logo_image_status = CHECK_FAIL;
-        sd_logo_image_result += '[invalid: width > 600]';
-    }
-    else {
-        w_stat = { status: CHECK_FAIL, result: rule_desc_logo_dims + '[invalid: width = 0 or is unavailable]' };
-        sd_logo_image_status = CHECK_FAIL;
-        sd_logo_image_result += '[invalid: width = 0 or is unavailable]';
+        // image height - - - - - - - - - - - - - - - - - - - - -
+        if (height > 0 && height < 61) {
+            h_stat = {status: CHECK_PASS, result: rule_desc_logo_dims};
+            sd_logo_image_result += '[height OK]';
+        }
+        else if (height > 60) {
+            h_stat = {status: CHECK_FAIL, result: rule_desc_logo_dims + '[invalid: height > 60]'};
+            sd_logo_image_status = CHECK_FAIL;
+            sd_logo_image_result += '[invalid: height > 60]';
+        }
+        else {
+            h_stat = {status: CHECK_FAIL, result: rule_desc_logo_dims + '[invalid: height = 0 or is unavailable]'};
+            sd_logo_image_status = CHECK_FAIL;
+            sd_logo_image_result += '[invalid: height = 0 or is unavailable]';
+        }
+        // image width - - - - - - - - - - - - - - - - - - - - -
+        if (width > 0 && width < 601) {
+            w_stat = {status: CHECK_PASS, result: rule_desc_logo_dims};
+            sd_logo_image_result += '[width OK]';
+        }
+        else if (width > 600) {
+            w_stat = {status: CHECK_FAIL, result: rule_desc_logo_dims + '[invalid: width > 600]'};
+            sd_logo_image_status = CHECK_FAIL;
+            sd_logo_image_result += '[invalid: width > 600]';
+        }
+        else {
+            w_stat = {status: CHECK_FAIL, result: rule_desc_logo_dims + '[invalid: width = 0 or is unavailable]'};
+            sd_logo_image_status = CHECK_FAIL;
+            sd_logo_image_result += '[invalid: width = 0 or is unavailable]';
+        }
     }
 
     // image type - - - - - - - - - - - - - - - - - - - - -
