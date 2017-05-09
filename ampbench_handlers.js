@@ -356,12 +356,12 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                                         response_times_status_amp = '',
                                         response_times_status_amp_cache = '';
                                     if (fetch_duration_amp > fetch_duration_canonical) {
-                                        response_times_status_css = CHECK_WARN_CSS;
-                                        response_times_status_amp = '[' + CHECK_WARN + ': AMP page fetch is slower than Canonical page]';
+                                        response_times_status_css = CHECK_INFO_CSS;
+                                        response_times_status_amp = '[' + CHECK_INFO + ': AMP page fetch is slower than Canonical page]';
                                     }
                                     if (fetch_duration_amp_cache > fetch_duration_canonical) {
-                                        response_times_status_css = CHECK_WARN_CSS;
-                                        response_times_status_amp_cache = '[' + CHECK_WARN + ': AMP Cache page fetch is slower than Canonical page]';
+                                        response_times_status_css = CHECK_INFO_CSS;
+                                        response_times_status_amp_cache = '[' + CHECK_INFO + ': AMP Cache page fetch is slower than Canonical page]';
                                     }
 
                                     // response body sniffer reporting
