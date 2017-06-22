@@ -1,0 +1,26 @@
+{
+  "manifest_version": 2,
+
+  "name": "Amp Ready-ness Tool",
+  "description": "A tool that allows one to see if a website is ready to be Amp-lified",
+  "version": "1.0",
+
+  "browser_action": {
+    "default_icon": "amp.png",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "scripts": ["getPagesSource.js"]
+  },
+  "web_accessible_resources": [
+    "apps.json"
+  ],
+  "permissions": [
+    "activeTab",
+    "<all_urls>",
+    "webNavigation",
+    "tabs",
+    "https://ajax.googleapis.com/"
+  ]
+}
+

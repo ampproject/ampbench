@@ -1,0 +1,32 @@
+{
+  "name": "chrome-ready-ness-tool",
+  "version": "10.3.1",
+  "description": "A tool for the sales team to better market AMP",
+  "author": "Alanna Walton <alwalton@google.com>",
+  "contributors": [
+    {
+      "name": "Alanna Walton",
+      "email": "alwalton@google.com"
+    }
+  ],
+  "bin": {
+    "module-name": "./bin/module-name"
+  },
+  "scripts": {},
+  "main": "lib/foo.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nodejitsu/browsenpm.org"
+  },
+  "dependencies": {
+    "builtwith": "^1.0.1"
+  },
+  "devDependencies": {
+    "vows": "^0.7.0",
+    "assume": "<1.0.0 || >=2.3.1 <2.4.5 || >=2.5.2 <3.0.0",
+    "pre-commit": "*"
+  },
+  "subdomain": "foobar",
+  "analyze": true,
+  "license": "MIT"
+}

@@ -1,0 +1,125 @@
+<!doctype html>
+<!--
+ This page is shown when the extension button is clicked, because the
+ "browser_action" field in manifest.json contains the "default_popup" key with
+ value "popup.html".
+ -->
+<html>
+
+<head>
+    <title>Getting Started Extension's Popup</title>
+    <style>
+        html {
+            background-color: #f5f5f5;
+        }
+        
+        header {
+            min-height: 35px;
+            margin: -15px -15px 30px -15px;
+            padding: 15px;
+            background-color: #0379c4;
+            font-family: "Roboto", "Lucida Grande", Tahoma, sans-serif;
+            color: white;
+            text-align: center;
+        }
+        
+        body {
+            font-family: "Roboto", "Lucida Grande", Tahoma, sans-serif;
+            font-size: 100%;
+            min-width: 400px;
+        }
+        
+        #ampImg {
+            float: left;
+            height: 50px;
+            width: 50px;
+        }
+        
+        footer {
+            background-color: #f5f5f5;
+            clear: both;
+            height: 50px;
+            margin-top: 30px;
+            max-width: 900px;
+            padding: 0 20px 10px 20px;
+        }
+        
+        h2 {
+            display: block;
+            float: right;
+            height: 24px;
+            line-height: 24px;
+            padding: 5px 0 0 0;
+            margin-left: 30px;
+        }
+        
+        #leftSide {
+            float: left;
+            width: 45%;
+            text-align: center;
+        }
+        
+        #rightSide {
+            float: right;
+            width: 45%;
+            text-align: center;
+        }
+        
+        #verifyImg {
+            text-align: center;
+            width: 45px;
+            height: 45px;
+            margin: 0px;
+        }
+        
+        span {
+            text-decoration: underline;
+        }
+        
+        ul {
+            font-size: 12px;
+            margin: 0px;
+            width: 60%;
+        }
+        
+
+    </style>
+
+    <!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      -
+      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
+     -->
+    <script src="popup.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>What Is On This Page?</h1>
+    </header>
+    <div style="width: 100%;">
+        <div id="leftSide">
+            <img id="verifyImg" src="https://cdn.pixabay.com/photo/2017/01/13/01/22/ok-1976099_1280.png">
+            <p>Ads & Analytics supported by AMP</p>
+            <div id="supported"> </div>
+        </div>
+        <div id="rightSide">
+            <img id="verifyImg" src="https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_1280.png">
+            <p>Ads & Analytics <span>NOT</span> supported by AMP!</p>
+            <div id="notSupported">
+            </div>
+        </div>
+        
+        
+    </div>
+    <div style="clear:both"></div>
+
+    
+    <footer>
+        <img id="ampImg" src="amp.png">
+        <h2> AMP READY-NESS TOOL </h2>
+    </footer>
+</body>
+
+</html>
