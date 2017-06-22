@@ -15,8 +15,7 @@ The AMP Readiness Tool (ART) is designed to assist the Sales team in determining
 2. Unzip the file.
 3. While in the Chrome browser, type `chrome://extensions/`into the omnibox
 4. Make sure that "Developer Mode" in the top right corner is checked
-5. Click the "Pack Extension..." button 
+5. Click the "Load the unpacked extension..." button 
 6. Direct the window to where your unzipped file is
-7. Click "Load the unpacked extension"
 
 
