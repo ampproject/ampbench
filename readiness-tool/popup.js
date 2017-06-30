@@ -6,8 +6,9 @@
    */
 chrome.runtime.onMessage.addListener(function (request, sender) {
     if (request.action == "getSource") {
+        // htmlOfTab contains the page source as a string
         htmlOfTab = request.source;
-        var appsinPage = findDetectedApps(htmlOfTab);
+        findDetectedApps(htmlOfTab);
 
     }
 });
@@ -16,11 +17,13 @@ chrome.runtime.onMessage.addListener(function (request, sender) {
 /** Event called when window is loaded */
 function onWindowLoad() {
     var htmlOfTab;
+    // When page is loaded, display "Loading..." so the user expects content
     var loading1 = document.getElementById("supported");
     var loading2 = document.getElementById("notSupported");
     loading1.innerHTML = 'Loading...';
     loading2.innerHTML = "Loading...";
     
+    // Gets the DOM of the current web page and converts it to a string
     chrome.tabs.executeScript(null, {
         file: "getPagesSource.js"
     }, function () {
@@ -29,7 +32,7 @@ function onWindowLoad() {
 }
 
 /**
-   * Callback function that sends a response upon receiving message
+   * Returns all the 3rd party applications found on the website
    * @param {String} html - String containing all HTML on the page
    * @return {Object} 
    */
@@ -43,16 +46,11 @@ function findDetectedApps(html) {
     xhr.open("GET", linkToApps, true);
     xhr.onreadystatechange = function () {
         // Wait until the response is done (onload or onerror).
-        if (xhr.readyState == 4) {
+        if (xhr.readyState === 4) {
             listAllApps = JSON.parse(xhr.response).apps;
-            detectedApps = findAllItems(listAllApps, htmlString);
-            console.log("detectedApps", detectedApps);
-            var loading1 = document.getElementById("supported");
-            var loading2 = document.getElementById("notSupported");
-            loading1.innerHTML = "";
-            loading2.innerHTML = "";
-            document.getElementById('supported').appendChild(makeList(detectedApps.supported));
-            document.getElementById('notSupported').appendChild(makeList(detectedApps.notSupported));
+            detectedApps = specifySupport(listAllApps, htmlString);
+            showSupportedAppsInView(detectedApps);
+            
         }
     }
     xhr.send();
@@ -60,12 +58,26 @@ function findDetectedApps(html) {
 }
 
 /**
-   * Determines which items are supported and not supported
+   * Add supported and unsupported applications to the view
+   * @param {Objected} detectedApps - All 3rd Party Applications found on page
+   */
+
+function showSupportedAppsInView(detectedApps) {
+    var loading1 = document.getElementById("supported");
+    var loading2 = document.getElementById("notSupported");
+    loading1.innerHTML = "";
+    loading2.innerHTML = "";
+    document.getElementById('supported').appendChild(makeList(detectedApps.supported));
+    document.getElementById('notSupported').appendChild(makeList(detectedApps.notSupported));
+}
+
+/**
+   * Splits all detected apps into 'supported' and 'not supported'
    * @param {Object} apps - All possible services that could exist on the page
    * @param {String} htmlString - String containing all HTML on the page
    * @return {Object} 
    */
-function findAllItems(apps, htmlString) {
+function specifySupport(apps, htmlString) {
     let obj = apps;
     let foundThis = {
         "supported": [],
@@ -76,34 +88,33 @@ function findAllItems(apps, htmlString) {
     for (let key in obj) {
         if (obj.hasOwnProperty(key)) {
             let val = obj[key];
+            //If object has a 'script' key
             if (val.script != null) {
                 // Sometimes val.script contains an array of regular expressions to check
-                if (val.script.length > 0) {
-                    if (typeof (val.script) == 'object') {
-                        for (let x in val.script) {
-                            let tempScript = val.script[x].split('\\;');
-                            let regX = new RegExp(tempScript[0]);
-                            if (doesRegexExist(regX, htmlString)) {
-                                if (foundThis.supported.indexOf(key) == -1 && foundThis.notSupported.indexOf(key) == -1) {
-
-                                    if (isSupported(key)) {
-                                        foundThis.supported.push(key);
-                                    } else {
-                                        foundThis.notSupported.push(key);
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        let tempScript = val.script.split('\\;');
+                if (typeof (val.script) == 'object') {
+                    for (let x in val.script) {
+                        let tempScript = val.script[x].split('\\;');
                         let regX = new RegExp(tempScript[0]);
                         if (doesRegexExist(regX, htmlString)) {
                             if (foundThis.supported.indexOf(key) == -1 && foundThis.notSupported.indexOf(key) == -1) {
+
                                 if (isSupported(key)) {
                                     foundThis.supported.push(key);
                                 } else {
                                     foundThis.notSupported.push(key);
                                 }
+                            }
+                        }
+                    }
+                } else {
+                    let tempScript = val.script.split('\\;');
+                    let regX = new RegExp(tempScript[0]);
+                    if (doesRegexExist(regX, htmlString)) {
+                        if (foundThis.supported.indexOf(key) == -1 && foundThis.notSupported.indexOf(key) == -1) {
+                            if (isSupported(key)) {
+                                foundThis.supported.push(key);
+                            } else {
+                                foundThis.notSupported.push(key);
                             }
                         }
                     }
@@ -126,6 +137,7 @@ function doesRegexExist(regexString, htmlString) {
 }
 
 /**
+   * TODO (alwalton@): find a way to get list of supported ads and analytics w/o hardcoding the values
    * Check if app is in supported list of app names
    * @param {String} key - name of app
    * @return {boolean} 
@@ -141,7 +153,7 @@ function isSupported(key) {
 }
 
 /**
-   * Make list of apps into an unordered list and add it to the view
+   * Make list of supported/unsupported apps into an unordered list
    * @param {Array[String]} array - array of app names
    * @return {Element} 
    */

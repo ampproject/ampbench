@@ -148,26 +148,6 @@
 			"script": "adzerk\\.net/ados\\.js",
 			"website": "http://adzerk.com"
 		},
-		"Airee": {
-			"cats": [
-				"31"
-			],
-			"headers": {
-				"Server": "Airee"
-			},
-			"icon": "Airee.png",
-			"website": "http://xn--80aqc2a.xn--p1ai"
-		},
-		"Akamai": {
-			"cats": [
-				"31"
-			],
-			"headers": {
-				"X-Akamai-Transformed": ""
-			},
-			"icon": "Akamai.png",
-			"website": "http://akamai.com"
-		},
 		"Algolia Realtime Search": {
 			"cats": [
 				"29"
@@ -185,16 +165,6 @@
 				"generator": "Amaya(?: V?([\\d.]+[a-z]))?\\;version:\\1"
 			},
 			"website": "http://www.w3.org/Amaya"
-		},
-		"Amazon Cloudfront": {
-			"cats": [
-				"31"
-			],
-			"headers": {
-				"X-Amz-Cf-Id": ""
-			},
-			"icon": "Amazon-Cloudfront.svg",
-			"website": "http://aws.amazon.com/cloudfront/"
 		},
 		"Amazon S3": {
 			"cats": [
@@ -225,17 +195,6 @@
 			"icon": "AppNexus.svg",
 			"script": "adnxs\\.(?:net|com)",
 			"website": "http://appnexus.com"
-		},
-		"ArvanCloud": {
-			"cats": [
-				"31"
-			],
-			"env": "^ArvanCloud$",
-			"headers": {
-				"AR-PoweredBy": "Arvan Cloud \\(arvancloud.com\\)"
-			},
-			"icon": "ArvanCloud.png",
-			"website": "http://www.ArvanCloud.com"
 		},
 		"BittAds": {
 			"cats": [
@@ -299,18 +258,6 @@
 			"html": "src=[^>]+co2stats\\.com/propres\\.php",
 			"icon": "CO2Stats.png",
 			"website": "http://co2stats.com"
-		},
-		"CacheFly": {
-			"cats": [
-				"31"
-			],
-			"headers": {
-				"Server": "^CFS ",
-				"X-CF1": "",
-				"X-CF2": ""
-			},
-			"icon": "CacheFly.png",
-			"website": "http://www.cachefly.com"
 		},
 		"Carbon Ads": {
 			"cats": [
@@ -390,17 +337,6 @@
 			"icon": "Clipboard.js.svg",
 			"script": "clipboard(?:\\.min)?\\.js",
 			"website": "https://clipboardjs.com/"
-		},
-		"CloudFlare": {
-			"cats": [
-				"31"
-			],
-			"env": "^CloudFlare$",
-			"headers": {
-				"Server": "cloudflare"
-			},
-			"icon": "CloudFlare.svg",
-			"website": "http://www.cloudflare.com"
 		},
 		"CodeMirror": {
 			"cats": [
@@ -487,7 +423,7 @@
 			"icon": "DoubleClick.svg",
 			"script": [
 				"googlesyndication\\.com/pagead/show_ads\\.js",
-				"tpc\\.googlesyndication\\.com/safeframe",
+				"tpc\\.googlesyndication\\.com",
 				"googlesyndication\\.com.*abg\\.js"
 			],
 			"website": "http://www.doubleclickbygoogle.com/solutions/digital-marketing/ad-exchange/"
@@ -552,17 +488,6 @@
 			},
 			"website": "http://www.eprints.org"
 		},
-		"EdgeCast": {
-			"cats": [
-				"31"
-			],
-			"headers": {
-				"Server": "^ECD\\s\\(\\S+\\)"
-			},
-			"icon": "EdgeCast.png",
-			"url": "https?://(?:[^/]+\\.)?edgecastcdn\\.net/",
-			"website": "http://www.edgecast.com"
-		},
 		"Epom": {
 			"cats": [
 				"36"
@@ -619,26 +544,6 @@
 			"script": "Suggest\\.ff",
 			"url": "(?:/ViewParametricSearch|ffsuggest\\.[a-z]htm)",
 			"website": "http://fact-finder.com"
-		},
-		"Fastly": {
-			"cats": [
-				"31"
-			],
-			"headers": {
-				"Fastly-Debug-Digest": ""
-			},
-			"icon": "Fastly.svg",
-			"website": "https://www.fastly.com"
-		},
-		"Fireblade": {
-			"cats": [
-				"31"
-			],
-			"headers": {
-				"Server": "fbs"
-			},
-			"icon": "Fireblade.png",
-			"website": "http://fireblade.com"
 		},
 		"FreeTextBox": {
 			"cats": [
@@ -739,17 +644,6 @@
 			"icon": "Google Code Prettify.png",
 			"website": "http://code.google.com/p/google-code-prettify"
 		},
-		"Google Maps": {
-			"cats": [
-				"35"
-			],
-			"icon": "Google Maps.png",
-			"script": [
-				"(?:maps\\.google\\.com/maps\\?file=api(?:&v=([\\d.]+))?|maps\\.google\\.com/maps/api/staticmap)\\;version:API v\\1",
-				"//maps.googleapis.com/maps/api/js"
-			],
-			"website": "http://maps.google.com"
-		},
 		"Google Tag Manager": {
 			"cats": [
 				"42"
@@ -792,14 +686,6 @@
 			"env": "^GravityInsights$",
 			"icon": "Gravity Insights.png",
 			"website": "http://insights.gravity.com"
-		},
-		"HERE": {
-			"cats": [
-				"35"
-			],
-			"icon": "HERE.png",
-			"script": "https?://js\\.cit\\.api\\.here\\.com/se/([\\d.]+)\\/\\;version:\\1",
-			"website": "http://developer.here.com"
 		},
 		"HP System Management": {
 			"cats": [
@@ -871,16 +757,6 @@
 			"script": "^https?://(?:[^/]+\\.)?i(?:oam|v)wbox\\.de/",
 			"website": "http://infonline.de"
 		},
-		"Incapsula": {
-			"cats": [
-				"31"
-			],
-			"headers": {
-				"X-CDN": "Incapsula"
-			},
-			"icon": "Incapsula.png",
-			"website": "http://www.incapsula.com"
-		},
 		"Intercom": {
 			"cats": [
 				"10"
@@ -945,16 +821,6 @@
 			"icon": "KISSmetrics.png",
 			"website": "http://www.kissmetrics.com"
 		},
-		"KeyCDN": {
-			"cats": [
-				"31"
-			],
-			"headers": {
-				"Server": "^keycdn-engine$"
-			},
-			"icon": "KeyCDN.png",
-			"website": "http://www.keycdn.com"
-		},
 		"Koego": {
 			"cats": [
 				"10"
@@ -963,14 +829,6 @@
 			"icon": "Koego.png",
 			"script": "tracking\\.koego\\.com/end/ego\\.js",
 			"website": "http://www.koego.com/en"
-		},
-		"Leaflet": {
-			"cats": [
-				"35"
-			],
-			"icon": "Leaflet.png",
-			"script": "leaflet.*\\.js",
-			"website": "http://leafletjs.com"
 		},
 		"Less": {
 			"cats": [
@@ -1029,17 +887,6 @@
 			"icon": "MadAdsMedia.png",
 			"script": "^https?://(?:ads-by|pixel)\\.madadsmedia.com/",
 			"website": "http://madadsmedia.com"
-		},
-		"MaxCDN": {
-			"cats": [
-				"31"
-			],
-			"headers": {
-				"Server": "^NetDNA",
-				"X-CDN-Forward": "^maxcdn$"
-			},
-			"icon": "MaxCDN.png",
-			"website": "http://www.maxcdn.com"
 		},
 		"MediaTomb": {
 			"cats": [
@@ -1194,15 +1041,6 @@
 				"generator": "OpenGrok(?: v?([\\d.]+))?\\;version:\\1"
 			},
 			"website": "http://hub.opensolaris.org/bin/view/Project+opengrok/WebHome"
-		},
-		"OpenLayers": {
-			"cats": [
-				"35"
-			],
-			"env": "^OpenLayers$",
-			"icon": "OpenLayers.png",
-			"script": "openlayers",
-			"website": "http://openlayers.org"
 		},
 		"OpenX": {
 			"cats": [
@@ -1525,7 +1363,7 @@
 		},
         "Sharethrough": {
 			"cats": [
-				"35"
+				"36"
 			],
 			"script": "\\.sharethrough\\.com",
 			"website": "https://sharethrough.com"
@@ -1580,7 +1418,7 @@
 		},
         "Skimlinks": {
 			"cats": [
-				"35"
+				"36"
 			],
 			"script": "skimlinks.*\\.js"
 		},
@@ -1640,19 +1478,6 @@
 			"icon": "StatCounter.png",
 			"script": "statcounter\\.com/counter/counter",
 			"website": "http://www.statcounter.com"
-		},
-		"Synology DiskStation": {
-			"cats": [
-				"48"
-			],
-			"html": "<noscript><div class='syno-no-script'",
-			"icon": "Synology DiskStation.png",
-			"meta": {
-				"application-name": "Synology DiskStation",
-				"description": "^DiskStation provides a full-featured network attached storage"
-			},
-			"script": "webapi/entry\\.cgi\\?api=SYNO\\.(?:Core|Filestation)\\.Desktop\\.",
-			"website": "http://synology.com"
 		},
 		"SyntaxHighlighter": {
 			"cats": [
@@ -1854,7 +1679,7 @@
 		},
         "Yieldmo": {
 			"cats": [
-				"35"
+				"36"
 			],
 			"icon": "Yieldlab.png",
 			"script": "static\\.yieldmo\\.com",
