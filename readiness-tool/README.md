@@ -11,7 +11,7 @@ The AMP Readiness Tool (ART) is designed to assist the Sales team in determining
 4. Enjoy!
 
 ## Instructions to get ART in your Chrome browser:
-1. Download the [zip file] (https://github.com/alannawalton/AMP-READY-NESS-Chrome-Extension/archive/master.zip).
+1. Download the [zip file](https://github.com/alannawalton/AMP-READY-NESS-Chrome-Extension/archive/master.zip).
 2. Unzip the file.
 3. While in the Chrome browser, type `chrome://extensions/` into the omnibox
 4. Make sure that "Developer Mode" in the top right corner is checked
