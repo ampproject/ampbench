@@ -20,3 +20,10 @@ describe('test', function() {
      expect(1).to.equal(1);
    });
  });
+
+describe('isSupported(key)', function() {
+
+   it('should return true when the key given is in the supported list', function() {
+     expect(isSupported("Adhese")).to.equal(1);
+   });
+ });
