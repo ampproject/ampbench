@@ -55,6 +55,7 @@
     "mocha": "^2.5.3",
     "sinon": "^2.3.6",
     "sinon-chai": "^2.11.0",
+    "sinon-chrome": "^2.2.1",
     "supertest": "^1.1.0",
     "watchify": "^3.9.0"
   },

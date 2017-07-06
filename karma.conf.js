@@ -30,14 +30,12 @@ module.exports = {
     'src/**/*.js': ['browserify'],
     'tests/**/*.js': ['browserify'],
   },
-
   browserify: {
     watch: true,
     debug: true,
-    transform: ['babelify'],
+    transform: [ ['babelify', {presets: ["es2015"]}] ],
     bundleDelay: 900,
   },
-
   port: 9876,
   colors: true,
   logLevel: process.env.TRAVIS ? 'ERROR' : 'WARN',

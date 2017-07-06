@@ -13,17 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const chrome = require('sinon-chrome/extensions');
 
-describe('test', function() {
+import {
+  isSupported,
+} from '../readiness-tool/popup';
 
-   it('should pass', function() {
-     expect(1).to.equal(1);
-   });
- });
 
-describe('isSupported(key)', function() {
 
-   it('should return true when the key given is in the supported list', function() {
-     expect(isSupported("Adhese")).to.equal(1);
-   });
- });
+describe('isSupported(key)', function () {
+    it('should return true when the key given is in the supported list', function () {
+        expect(isSupported('Adhese')).to.be.true;
+    });
+});
