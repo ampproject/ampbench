@@ -9,10 +9,8 @@ chrome.runtime.onMessage.addListener(function (request, sender) {
         // htmlOfTab contains the page source as a string
         htmlOfTab = request.source;
         findDetectedApps(htmlOfTab);
-
     }
 });
-
 
 /** Event called when window is loaded */
 function onWindowLoad() {
@@ -26,9 +24,7 @@ function onWindowLoad() {
     // Gets the DOM of the current web page and converts it to a string
     chrome.tabs.executeScript(null, {
         file: "getPagesSource.js"
-    }, function () {
-
-    });
+    }, function () {});
 }
 
 /**
@@ -49,8 +45,7 @@ function findDetectedApps(html) {
         if (xhr.readyState === 4) {
             listAllApps = JSON.parse(xhr.response).apps;
             detectedApps = specifySupport(listAllApps, htmlString);
-            showSupportedAppsInView(detectedApps);
-            
+            showSupportedAppsInView(detectedApps); 
         }
     }
     xhr.send();
