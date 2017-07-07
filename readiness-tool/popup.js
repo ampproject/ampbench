@@ -89,35 +89,40 @@ function specifySupport(apps, htmlString) {
                 if (typeof (val.script) == 'object') {
                     for (let x in val.script) {
                         let tempScript = val.script[x].split('\\;');
-                        let regX = new RegExp(tempScript[0]);
-                        if (doesRegexExist(regX, htmlString)) {
-                            if (foundThis.supported.indexOf(key) == -1 && foundThis.notSupported.indexOf(key) == -1) {
-
-                                if (isSupported(key)) {
-                                    foundThis.supported.push(key);
-                                } else {
-                                    foundThis.notSupported.push(key);
-                                }
-                            }
-                        }
+                        addToDict(tempScript, htmlString, foundThis, key);
                     }
                 } else {
-                    let tempScript = val.script.split('\\;');
-                    let regX = new RegExp(tempScript[0]);
-                    if (doesRegexExist(regX, htmlString)) {
-                        if (foundThis.supported.indexOf(key) == -1 && foundThis.notSupported.indexOf(key) == -1) {
-                            if (isSupported(key)) {
-                                foundThis.supported.push(key);
-                            } else {
-                                foundThis.notSupported.push(key);
-                            }
-                        }
-                    }
+                    console.log(typeof (val.script), val.script);
+                    let tempScript = val.script.split('\\;'); 
+                    addToDict(tempScript, htmlString, foundThis, key);
                 }
+                
             }
         }
     }
     return foundThis;
+}
+
+
+/**
+   * Pushes keys to either the supported or not supported list of the object 'found this'
+   * @param {Array} tempScript - String array containing the regular expression being looked for
+   * @param {!String} htmlString - String containing all HTML on the page
+   * @param {Object} foundThis - Object seperating the 3p services based on available support
+   * @param {String} key - name of third party service
+   * @return {boolean} 
+   */
+function addToDict(tempScript, htmlString, foundThis, key) {
+    let regX = new RegExp(tempScript[0]);
+    if (doesRegexExist(regX, htmlString)) {
+        if (foundThis.supported.indexOf(key) == -1 && foundThis.notSupported.indexOf(key) == -1) {
+            if (isSupported(key)) {
+                foundThis.supported.push(key);
+            } else {
+                foundThis.notSupported.push(key);
+            }
+        }
+    }
 }
 
 /**
@@ -137,7 +142,7 @@ function doesRegexExist(regexString, htmlString) {
    * @param {String} key - name of app
    * @return {boolean} 
    */
-export function isSupported(key) {
+function isSupported(key) {
     var ampSupported = ["A8", "A9", "AcccessTrade", "Adblade", "Adform", "Adfox", "Ad Generation", "Adhese", "ADITION", "Adman", "AdmanMedia", "AdReactor", "AdSense", "AdsNative", "AdSpirit", "AdSpeed", "AdStir", "AdTech", "AdThrive", "Ad Up Technology", "Adverline", "Adverticum", "AdvertServe", "Affiliate-B", "AMoAd", "AppNexus", "Atomx", "Bidtellect", "brainy", "CA A.J.A. Infeed", "CA-ProFit-X", "Chargeads", "Colombia", "Content.ad", "Criteo", "CSA", "CxenseDisplay", "Dianomi", "DistroScale", "Dot and Media", "Doubleclick", "DoubleClick for Publishers (DFP)", "DoubleClick Ad Exchange (AdX)", "E-Planning", "Ezoic", "FlexOneELEPHANT", "FlexOneHARRIER", "fluct", "Felmat", "Flite", "Fusion", "Google AdSense", "GenieeSSP", "GMOSSP", "GumGum", "Holder", "Imedia", "I-Mobile", "iBillboard", "Improve Digital", "Index Exchange", "Industrybrains", "InMobi", "Kargo", "Kiosked", "Kixer", "Ligatus", "LOKA", "MADS", "MANTIS", "MediaImpact", "Media.net", "Mediavine", "Meg", "MicroAd", "Mixpo", "myWidget", "Nativo", "Navegg", "Nend", "NETLETIX", "Nokta", "Open AdStream (OAS)", "OpenX", "plista", "polymorphicAds", "popin", "PubMatic", "Pubmine", "PulsePoint", "Purch", "Rambler&Co", "Relap", "Revcontent", "Rubicon Project", "Sharethrough", "Sklik", "SlimCut Media", "Smart AdServer", "smartclip", "Sortable", "SOVRN", "SpotX", "SunMedia", "Swoop", "Teads", "TripleLift", "ValueCommerce", "Webediads", "Weborama", "Widespace", "Xlift", "Yahoo", "YahooJP", "Yandex", "Yieldbot", "Yieldmo", "Yieldone", "Zedo", "Zucks", "Bringhub", "Outbrain", "Taboola", "ZergNet", "Acquia Lift", "Adobe Analytics", "AFS Analytics", "AT Internet", "Baidu Analytics", "Burt", "Chartbeat", "Clicky Web Analytics", "comScore", "Cxense", "Dynatrace", "Eulerian Analytics", "Gemius", "Google AdWords", "Google Analytics", "INFOnline / IVW", "Krux", "Linkpulse", "Lotame", "Médiamétrie", "mParticle", "Nielsen", "OEWA", "Parsely", "Piano", "Quantcast Measurement", "Segment", "SOASTA mPulse", "SimpleReach", "Snowplow Analytics", "Webtrekk", "Yandex Metrica"];
     
     //If it is NOT in list of supported apps
