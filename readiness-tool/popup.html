@@ -10,6 +10,7 @@
         <style>
             html {
                 background-color: #f5f5f5;
+                max-height: 100px;
             }
 
             header {
@@ -80,6 +81,14 @@
                 margin: 0px;
                 width: 60%;
             }
+            
+            .supported-title {
+                color: #4BB543;
+            }
+            
+            .notSupported-title {
+                color: #ff0033;
+            }
         </style>
 
         <!--
@@ -97,13 +106,13 @@
         </header>
         <div style="width: 100%;">
             <div id="leftSide">
-                <img id="verifyImg" src="https://cdn.pixabay.com/photo/2017/01/13/01/22/ok-1976099_1280.png">
-                <p>Ads & Analytics supported by AMP</p>
+                <h3 class="supported-title">Supported</h3>
+                <h5>Ads</h5>
                 <div id="supported"> </div>
+                <h5>Analytics</h5>
             </div>
             <div id="rightSide">
-                <img id="verifyImg" src="https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_1280.png">
-                <p>Ads & Analytics <span>NOT</span> supported by AMP!</p>
+                <h3 class="notSupported-title">Not Yet Supported</h3>
                 <div id="notSupported">
                 </div>
             </div>

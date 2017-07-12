@@ -22,6 +22,7 @@
     "builtwith": "^1.0.1"
   },
   "devDependencies": {
+    "babel-preset-es2015": "^6.24.1",
     "vows": "^0.7.0",
     "assume": "<1.0.0 || >=2.3.1 <2.4.5 || >=2.5.2 <3.0.0",
     "pre-commit": "*"

@@ -4,8 +4,7 @@
 			"cats": [
 				"19"
 			],
-			"html": "<title>3ware 3DM([\\d\\.]+)?\\;version:\\1",
-			"icon": "3DM.png",
+			"script": "<title>3ware 3DM([\\d\\.]+)?\\;version:\\1",
 			"implies": "3ware",
 			"website": "http://www.3ware.com"
 		},
@@ -13,32 +12,24 @@
 			"cats": [
 				"10"
 			],
-			"html": [
+			"script": [
 				"<!-- EBiS contents tag",
 				"<!--EBiS tag",
 				"<!-- Tag EBiS",
 				"<!-- EBiS common tag"
 			],
-			"icon": "ebis.png",
 			"website": "http://www.ebis.ne.jp"
 		},
 		"AT Internet Analyzer": {
 			"cats": [
 				"10"
 			],
-			"env": [
-				"^xtsite$",
-				"^ATInternet$"
-			],
-			"icon": "AT Internet.png",
 			"website": "http://atinternet.com/en"
 		},
 		"AT Internet XiTi": {
 			"cats": [
 				"10"
 			],
-			"env": "^Xt_",
-			"icon": "AT Internet.png",
 			"script": "xiti\\.com/hit\\.xiti",
 			"website": "http://atinternet.com/en"
 		},
@@ -46,18 +37,14 @@
 			"cats": [
 				"10"
 			],
-			"icon": "AWStats.png",
 			"implies": "Perl",
-			"meta": {
-				"generator": "AWStats ([\\d.]+(?: \\(build [\\d.]+\\))?)\\;version:\\1"
-			},
+			"script": "AWStats ([\\d.]+(?: \\(build [\\d.]+\\))?)\\;version:\\1",
 			"website": "http://awstats.sourceforge.net"
 		},
 		"AdInfinity": {
 			"cats": [
 				"36"
 			],
-			"icon": "AdInfinity.png",
 			"script": "adinfinity\\.com\\.au",
 			"website": "http://adinfinity.com.au"
 		},
@@ -66,17 +53,16 @@
 				"36"
 			],
 			"env": "^adriver$",
-			"html": "(?:<embed[^>]+(?:src=\"https?://mh\\d?\\.adriver\\.ru/|flashvars=\"[^\"]*(?:http:%3A//(?:ad|mh\\d?)\\.adriver\\.ru/|adriver_banner))|<(?:(?:iframe|img)[^>]+src|a[^>]+href)=\"https?://ad\\.adriver\\.ru/)",
-			"icon": "AdRiver.png",
-			"script": "(?:adriver\\.core\\.\\d\\.js|https?://(?:content|ad|masterh\\d)\\.adriver\\.ru/)",
+			"script": [
+                "(?:adriver\\.core\\.\\d\\.js|https?://(?:content|ad|masterh\\d)\\.adriver\\.ru/)",
+                "(?:<embed[^>]+(?:src=\"https?://mh\\d?\\.adriver\\.ru/|flashvars=\"[^\"]*(?:http:%3A//(?:ad|mh\\d?)\\.adriver\\.ru/|adriver_banner))|<(?:(?:iframe|img)[^>]+src|a[^>]+href)=\"https?://ad\\.adriver\\.ru/)"
+            ],
 			"website": "http://adriver.ru"
 		},
 		"AdRoll": {
 			"cats": [
 				"36"
 			],
-			"env": "^adroll_",
-			"icon": "AdRoll.svg",
 			"script": "(?:a|s)\\.adroll\\.com",
 			"website": "http://adroll.com"
 		},
@@ -84,48 +70,24 @@
 			"cats": [
 				"36"
 			],
-			"env": "^(?:ac_bgclick_URL|ct_(?:siteunder|tag|n(?:SuUrl(?:Opp)?)|Su(?:Loaded|Url)))$",
-			"icon": "Adcash.svg",
 			"script": "^[^\\/]*//(?:[^\\/]+\\.)?adcash\\.com/(?:script|ad)/",
-			"url": "^https?://(?:[^\\/]+\\.)?adcash\\.com/script/pop_",
 			"website": "http://adcash.com"
 		},
 		"Adnegah": {
 			"cats": [
 				"36"
 			],
-			"env": "^ados(?:Results)?$",
-			"html": "<iframe [^>]*src=\"[^\"]+adnegah\\.net",
-			"icon": "adnegah.png",
-			"script": "[^a-z]adnegah.*\\.js",
+			"script": [
+                "[^a-z]adnegah.*\\.js",
+                "<iframe [^>]*src=\"[^\"]+adnegah\\.net"
+            ],
 			"website": "http://Adnegah.net"
-		},
-		"Adobe GoLive": {
-			"cats": [
-				"20"
-			],
-			"icon": "Adobe GoLive.png",
-			"meta": {
-				"generator": "Adobe GoLive(?:\\s([\\d.]+))?\\;version:\\1"
-			},
-			"website": "http://www.adobe.com/products/golive"
-		},
-		"Adobe Muse": {
-			"cats": [
-				"20"
-			],
-			"icon": "Adobe Muse.svg",
-			"meta": {
-				"generator": "^Muse(?:$| ?/?(\\d[\\d.]+))\\;version:\\1"
-			},
-			"website": "http://muse.adobe.com"
 		},
 		"Advanced Web Stats": {
 			"cats": [
 				"10"
 			],
-			"html": "aws\\.src = [^<]+caphyon-analytics",
-			"icon": "Advanced Web Stats.png",
+			"script": "aws\\.src = [^<]+caphyon-analytics",
 			"implies": "Java",
 			"website": "http://www.advancedwebstats.com"
 		},
@@ -133,8 +95,6 @@
 			"cats": [
 				"36"
 			],
-			"env": "^advst_is_above_the_fold$",
-			"icon": "Advert Stream.png",
 			"script": "(?:ad\\.advertstream\\.com|adxcore\\.com)",
 			"website": "http://www.advertstream.com"
 		},
@@ -143,84 +103,33 @@
 				"36"
 			],
 			"env": "^ados(?:Results)?$",
-			"html": "<iframe [^>]*src=\"[^\"]+adzerk\\.net",
-			"icon": "Adzerk.png",
-			"script": "adzerk\\.net/ados\\.js",
+			"script": [
+                "adzerk\\.net/ados\\.js",
+                "<iframe [^>]*src=\"[^\"]+adzerk\\.net"
+            ],
 			"website": "http://adzerk.com"
-		},
-		"Algolia Realtime Search": {
-			"cats": [
-				"29"
-			],
-			"env": "^AlgoliaSearch$",
-			"icon": "Algolia Realtime Search.svg",
-			"website": "http://www.algolia.com"
-		},
-		"Amaya": {
-			"cats": [
-				"20"
-			],
-			"icon": "Amaya.png",
-			"meta": {
-				"generator": "Amaya(?: V?([\\d.]+[a-z]))?\\;version:\\1"
-			},
-			"website": "http://www.w3.org/Amaya"
-		},
-		"Amazon S3": {
-			"cats": [
-				"19"
-			],
-			"headers": {
-				"Server": "AmazonS3"
-			},
-			"icon": "aws-s3.svg",
-			"website": "http://aws.amazon.com/s3/"
-		},
-		"ApexPages": {
-			"cats": [
-				"51"
-			],
-			"headers": {
-				"X-Powered-By": "Salesforce.com ApexPages"
-			},
-			"icon": "ApexPages.png",
-			"implies": "Salesforce",
-			"website": "https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_intro.htm"
 		},
 		"AppNexus": {
 			"cats": [
 				"36"
 			],
-			"html": "<(?:iframe|img)[^>]+adnxs\\.(?:net|com)",
-			"icon": "AppNexus.svg",
-			"script": "adnxs\\.(?:net|com)",
+			"script":[
+                "adnxs\\.(?:net|com)",
+                "<(?:iframe|img)[^>]+adnxs\\.(?:net|com)"
+            ],
 			"website": "http://appnexus.com"
 		},
 		"BittAds": {
 			"cats": [
 				"36"
 			],
-			"env": "^bitt$",
-			"icon": "BittAds.png",
 			"script": "bittads\\.com/js/bitt\\.js$",
 			"website": "http://bittads.com"
-		},
-		"Bluefish": {
-			"cats": [
-				"20"
-			],
-			"icon": "Bluefish.png",
-			"meta": {
-				"generator": "Bluefish(?:\\s([\\d.]+))?\\;version:\\1"
-			},
-			"website": "http://sourceforge.net/projects/bluefish"
 		},
 		"BugSense": {
 			"cats": [
 				"10"
 			],
-			"env": "^BugSense$",
-			"icon": "BugSense.png",
 			"script": "bugsense\\.js",
 			"website": "http://bugsense.com"
 		},
@@ -228,8 +137,6 @@
 			"cats": [
 				"10"
 			],
-			"env": "^BugSnag$",
-			"icon": "BugSnag.png",
 			"script": "bugsnag.*\\.js",
 			"website": "http://bugsnag.com"
 		},
@@ -237,25 +144,18 @@
 			"cats": [
 				"36"
 			],
-			"env": "^_bsa",
-			"html": "<script[^>]*>[^<]+?bsa.src\\s*=\\s*['\"](?:https?:)?\\/{2}\\w\\d\\.buysellads\\.com\\/[\\w\\d\\/]+?bsa\\.js['\"]",
 			"icon": "BuySellAds.png",
-			"script": "^https?://s\\d\\.buysellads\\.com/",
+			"script": [
+                "^https?://s\\d\\.buysellads\\.com/",
+                "<script[^>]*>[^<]+?bsa.src\\s*=\\s*['\"](?:https?:)?\\/{2}\\w\\d\\.buysellads\\.com\\/[\\w\\d\\/]+?bsa\\.js['\"]"
+            ],
 			"website": "http://buysellads.com"
-		},
-		"CKEditor": {
-			"cats": [
-				"24"
-			],
-			"env": "^CKEDITOR$",
-			"icon": "CKEditor.png",
-			"website": "http://ckeditor.com"
 		},
 		"CO2Stats": {
 			"cats": [
 				"10"
 			],
-			"html": "src=[^>]+co2stats\\.com/propres\\.php",
+			"script": "src=[^>]+co2stats\\.com/propres\\.php",
 			"icon": "CO2Stats.png",
 			"website": "http://co2stats.com"
 		},
@@ -264,32 +164,16 @@
 				"36"
 			],
 			"env": "^_carbonads",
-			"html": "<[a-z]+ [^>]*id=\"carbonads-container\"",
-			"icon": "Carbon Ads.png",
-			"script": "[^\\/]*\\/\\/(?:engine|srv)\\.carbonads\\.com\\/",
+			"script": [
+                "[^\\/]*\\/\\/(?:engine|srv)\\.carbonads\\.com\\/",
+                "<[a-z]+ [^>]*id=\"carbonads-container\""
+            ],
 			"website": "http://carbonads.net"
-		},
-		"Chamilo": {
-			"cats": [
-				"21"
-			],
-			"headers": {
-				"X-Powered-By": "Chamilo ([\\d.]+)\\;version:\\1"
-			},
-			"html": "\">Chamilo ([\\d.]+)</a>\\;version:\\1",
-			"icon": "Chamilo.png",
-			"implies": "PHP",
-			"meta": {
-				"generator": "Chamilo ([\\d.]+)\\;version:\\1"
-			},
-			"website": "http://www.chamilo.org"
 		},
 		"Chartbeat": {
 			"cats": [
 				"10"
 			],
-			"env": "^_sf_(?:endpt|async_config)$",
-			"icon": "Chartbeat.png",
 			"script": "chartbeat\\.js",
 			"website": "http://chartbeat.com"
 		},
@@ -297,35 +181,13 @@
 			"cats": [
 				"36"
 			],
-			"env": "ch_c(?:lient|olor_site_link)",
-			"icon": "Chitika.png",
 			"script": "scripts\\.chitika\\.net/",
 			"website": "http://chitika.com"
-		},
-		"ClickHeat": {
-			"cats": [
-				"10"
-			],
-			"env": "^clickHeat",
-			"icon": "ClickHeat.png",
-			"implies": "PHP",
-			"script": "clickheat.*\\.js",
-			"website": "http://www.labsmedia.com/clickheat/index.html"
-		},
-		"ClickTale": {
-			"cats": [
-				"10"
-			],
-			"env": "^ClickTale",
-			"icon": "ClickTale.png",
-			"website": "http://www.clicktale.com"
 		},
 		"Clicky": {
 			"cats": [
 				"10"
 			],
-			"env": "^clicky$",
-			"icon": "Clicky.png",
 			"script": "static\\.getclicky\\.com",
 			"website": "http://getclicky.com"
 		},
@@ -333,24 +195,13 @@
 			"cats": [
 				"19"
 			],
-			"env": "^Clipboard$",
-			"icon": "Clipboard.js.svg",
 			"script": "clipboard(?:\\.min)?\\.js",
 			"website": "https://clipboardjs.com/"
-		},
-		"CodeMirror": {
-			"cats": [
-				"19"
-			],
-			"env": "^CodeMirror$",
-			"icon": "CodeMirror.png",
-			"website": "http://codemirror.net"
 		},
 		"ConversionLab": {
 			"cats": [
 				"10"
 			],
-			"icon": "ConversionLab.png",
 			"script": "conversionlab\\.trackset\\.com/track/tsend\\.js",
 			"website": "http://www.trackset.it/conversionlab"
 		},
@@ -358,8 +209,6 @@
 			"cats": [
 				"10"
 			],
-			"env": "^CE2$",
-			"icon": "Crazy Egg.png",
 			"script": "cetrk\\.com/pages/scripts/\\d+/\\d+\\.js",
 			"website": "http://crazyegg.com"
 		},
@@ -367,8 +216,6 @@
 			"cats": [
 				"36"
 			],
-			"env": "^criteo",
-			"icon": "Criteo.svg",
 			"script": "[^/]*//(?:cas\\.criteo\\.com|(?:[^/]\\.)?criteo\\.net)/",
 			"website": "http://criteo.com"
 		},
@@ -376,45 +223,8 @@
 			"cats": [
 				"10"
 			],
-			"env": "^crsspxl$",
-			"icon": "Cross Pixel.png",
 			"script": "tag\\.crsspxl\\.com/s1\\.js",
 			"website": "http://datadesk.crsspxl.com"
-		},
-		"DirectAdmin": {
-			"cats": [
-				"9"
-			],
-			"headers": {
-				"Server": "DirectAdmin Daemon v([\\d.]+)\\;version:\\1"
-			},
-			"html": "<a[^>]+>DirectAdmin</a> Web Control Panel",
-			"icon": "DirectAdmin.png",
-			"implies": [
-				"PHP",
-				"Apache"
-			],
-			"website": "http://www.directadmin.com"
-		},
-		"Dokeos": {
-			"cats": [
-				"21"
-			],
-			"headers": {
-				"X-Powered-By": "Dokeos"
-			},
-			"html": "(?:Portal <a[^>]+>Dokeos|@import \"[^\"]+dokeos_blue)",
-			"icon": "Dokeos.png",
-			"implies": [
-				"PHP",
-				"Xajax",
-				"jQuery",
-				"CKEditor"
-			],
-			"meta": {
-				"generator": "Dokeos"
-			},
-			"website": "http://dokeos.com"
 		},
 		"DoubleClick Ad Exchange (AdX)": {
 			"cats": [
@@ -452,14 +262,6 @@
 			"script": "googletagservices\\.com/tag/js/gpt(?:_mobile)?\\.js",
 			"website": "http://www.google.com/dfp"
 		},
-		"DreamWeaver": {
-			"cats": [
-				"20"
-			],
-			"html": "(?:<!--[^>]*(?:InstanceBeginEditable|Dreamweaver([^>]+)target|DWLayoutDefaultTable)|function MM_preloadImages\\(\\) \\{)\\;version:\\1",
-			"icon": "DreamWeaver.png",
-			"website": "http://www.adobe.com/products/dreamweaver"
-		},
 		"Dynatrace": {
 			"cats": [
 				"10"
@@ -496,87 +298,6 @@
 			"icon": "Epom.png",
 			"url": "^https?://(?:[^/]+\\.)?ad(?:op)?shost1\\.com/",
 			"website": "http://epom.com"
-		},
-		"Etherpad": {
-			"cats": [
-				"24"
-			],
-			"env": [
-				"^pad(?:editbar|impexp)$"
-			],
-			"headers": {
-				"Server": "^Etherpad"
-			},
-			"icon": "etherpad.png",
-			"implies": "Node.js",
-			"script": [
-				"/ep_etherpad-lite/"
-			],
-			"website": "https://etherpad.org"
-		},
-		"FAST ESP": {
-			"cats": [
-				"29"
-			],
-			"html": "<form[^>]+id=\"fastsearch\"",
-			"icon": "FAST ESP.png",
-			"website": "http://microsoft.com/enterprisesearch"
-		},
-		"FAST Search for SharePoint": {
-			"cats": [
-				"29"
-			],
-			"html": "<input[^>]+ name=\"ParametricSearch",
-			"icon": "FAST Search for SharePoint.png",
-			"implies": [
-				"Microsoft SharePoint",
-				"Microsoft ASP.NET"
-			],
-			"url": "Pages/SearchResults\\.aspx\\?k=",
-			"website": "http://sharepoint.microsoft.com/en-us/product/capabilities/search/Pages/Fast-Search.aspx"
-		},
-		"Fact Finder": {
-			"cats": [
-				"29"
-			],
-			"html": "<!-- Factfinder",
-			"icon": "Fact Finder.png",
-			"script": "Suggest\\.ff",
-			"url": "(?:/ViewParametricSearch|ffsuggest\\.[a-z]htm)",
-			"website": "http://fact-finder.com"
-		},
-		"FreeTextBox": {
-			"cats": [
-				"24"
-			],
-			"env": "^FTB_",
-			"html": "/<!--\\s*\\*\\s*FreeTextBox v\\d+ \\(([.\\d]+)(?:(?:.|\n)+?<!--\\s*\\*\\s*License Type: (Distribution|Professional)License)?/i\\;version:\\1 \\2",
-			"icon": "FreeTextBox.png",
-			"implies": "Microsoft ASP.NET",
-			"website": "http://freetextbox.com"
-		},
-		"Froala Editor": {
-			"cats": [
-				"24"
-			],
-			"html": "<[^>]+class=\"[^\"]*(?:fr-view|fr-box)",
-			"icon": "Froala.svg",
-			"implies": [
-				"jQuery",
-				"Font Awesome"
-			],
-			"website": "http://froala.com/wysiwyg-editor"
-		},
-		"FrontPage": {
-			"cats": [
-				"20"
-			],
-			"html": "<html[^>]+urn:schemas-microsoft-com:office:office",
-			"icon": "FrontPage.png",
-			"meta": {
-				"generator": "Microsoft FrontPage(?:\\s((?:Express )?[\\d.]+))?\\;version:\\1"
-			},
-			"website": "http://office.microsoft.com/frontpage"
 		},
 		"Fusion Ads": {
 			"cats": [
@@ -766,17 +487,6 @@
 			"script": "(?:api\\.intercom\\.io/api|static\\.intercomcdn\\.com/intercom\\.v1)",
 			"website": "http://intercom.io"
 		},
-		"Invenio": {
-			"cats": [
-				"50"
-			],
-			"headers": {
-				"Set-cookie": "INVENIOSESSION"
-			},
-			"html": "(?:Powered by|System)\\s+(?:CERN )?<a (?:class=\"footer\" )?href=\"http://(?:cdsware\\.cern\\.ch(?:/invenio)?|invenio-software\\.org|cern\\.ch/invenio)(?:/)?\">(?:CDS )?Invenio</a>\\s*v?([\\d\\.]+)?\\;version:\\1",
-			"icon": "Invenio.png",
-			"website": "http://invenio-software.org"
-		},
 		"Jive": {
 			"cats": [
 				"19"
@@ -871,14 +581,6 @@
 			"script": "/js/al/common.js\\?[0-9_]+",
 			"website": "http://liveinternet.ru/rating/"
 		},
-		"MHonArc": {
-			"cats": [
-				"50"
-			],
-			"html": "<!-- MHonArc v([0-9.]+) -->\\;version:\\1",
-			"icon": "mhonarc.png",
-			"website": "http://www.mhonarc.at"
-		},
 		"MadAdsMedia": {
 			"cats": [
 				"36"
@@ -915,22 +617,6 @@
 			"icon": "Mixpanel.png",
 			"script": "api\\.mixpanel\\.com/track",
 			"website": "http://mixpanel.com"
-		},
-		"Moodle": {
-			"cats": [
-				"21"
-			],
-			"env": "^moodle",
-			"headers": {
-				"Set-Cookie": "(?:MoodleSession|MOODLEID_)"
-			},
-			"html": "<img[^>]+moodlelogo",
-			"icon": "Moodle.png",
-			"implies": "PHP",
-			"meta": {
-				"keywords": "^moodle"
-			},
-			"website": "http://moodle.org"
 		},
 		"NOIX": {
 			"cats": [
@@ -1005,20 +691,6 @@
 			"icon": "Open AdStream.png",
 			"website": "http://xaxis.com"
 		},
-		"Open Journal Systems": {
-			"cats": [
-				"50"
-			],
-			"headers": {
-				"Set-Cookie": "\bOJSSID\b"
-			},
-			"icon": "Open Journal Systems.png",
-			"implies": "PHP",
-			"meta": {
-				"generator": "Open Journal Systems(?: ([\\d.]+))?\\;version:\\1"
-			},
-			"website": "http://pkp.sfu.ca/ojs"
-		},
 		"Open Web Analytics": {
 			"cats": [
 				"10"
@@ -1080,17 +752,6 @@
 			"script": "atgsvcs.+atgsvcs\\.js",
 			"website": "http://www.oracle.com/us/products/applications/commerce/recommendations-on-demand/index.html"
 		},
-		"Outlook Web App": {
-			"cats": [
-				"30"
-			],
-			"env": "^IsOwaPremiumBrowser$",
-			"html": "<link\\s[^>]*href=\"[^\"]*?([\\d.]+)/themes/resources/owafont\\.css\\;version:\\1",
-			"icon": "Outlook Web App.png",
-			"implies": "Microsoft ASP.NET",
-			"url": "/owa/auth/log(?:on|off)\\.aspx",
-			"website": "http://help.outlook.com"
-		},
 		"PDF.js": {
 			"cats": [
 				"19"
@@ -1150,28 +811,6 @@
 			"script": "piwik\\.js|piwik\\.php",
 			"website": "http://piwik.org"
 		},
-		"Planet": {
-			"cats": [
-				"49"
-			],
-			"icon": "Planet.png",
-			"meta": {
-				"generator": "^Planet(?:/([\\d.]+))?\\;version:\\1"
-			},
-			"website": "http://planetplanet.org"
-		},
-		"Plesk": {
-			"cats": [
-				"9"
-			],
-			"headers": {
-				"X-Powered-By": "PleskLin",
-				"X-Powered-By-Plesk": "Plesk"
-			},
-			"icon": "Plesk.png",
-			"script": "common\\.js\\?plesk",
-			"website": "http://plesk.com"
-		},
 		"Plura": {
 			"cats": [
 				"19"
@@ -1220,7 +859,7 @@
 			"cats": [
 				"19"
 			],
-			"html": "<link[^>]+pygments.css[\"']",
+			"script": "<link[^>]+pygments.css[\"']",
 			"icon": "pygments.png",
 			"website": "http://pygments.org"
 		},
@@ -1233,31 +872,6 @@
 			"script": "edge\\.quantserve\\.com/quant\\.js",
 			"website": "http://www.quantcast.com"
 		},
-		"Quill": {
-			"cats": [
-				"24"
-			],
-			"env": "^Quill$",
-			"icon": "Quill.png",
-			"website": "http://quilljs.com"
-		},
-		"RainLoop": {
-			"cats": [
-				"30"
-			],
-			"env": "^rainloop",
-			"headers": {
-				"Server": "RainLoop"
-			},
-			"html": [
-				"<meta [^>]*(?:content=\"([^\"]+)[^>]+ id=\"rlAppVersion\"|id=\"rlAppVersion\"[^>]+ content=\"([^\"]+))\\;version:\\1?\\1:\\2",
-				"<link[^>]* href=\"[^\"]*rainloop/v/([^/]+)\\;version:\\1"
-			],
-			"icon": "RainLoop.png",
-			"implies": "PHP",
-			"script": "rainloop/v/([^/]+)\\;version:\\1",
-			"website": "http://rainloop.net"
-		},
 		"Reinvigorate": {
 			"cats": [
 				"10"
@@ -1265,16 +879,6 @@
 			"env": "^reinvigorate$",
 			"icon": "Reinvigorate.png",
 			"website": "http://www.reinvigorate.net"
-		},
-		"RoundCube": {
-			"cats": [
-				"30"
-			],
-			"env": "^(?:rcmail|rcube_|roundcube)",
-			"html": "<title>RoundCube",
-			"icon": "RoundCube.png",
-			"implies": "PHP",
-			"website": "http://roundcube.net"
 		},
 		"Rubicon Project": {
 			"cats": [
@@ -1332,16 +936,6 @@
 			"html": "<[^>]+=\"brandQuaternaryFgrs\"",
 			"icon": "Salesforce.svg",
 			"website": "https://www.salesforce.com"
-		},
-		"Scholica": {
-			"cats": [
-				"21"
-			],
-			"headers": {
-				"X-Scholica-Version": ""
-			},
-			"icon": "Scholica.svg",
-			"website": "http://scholica.com"
 		},
 		"Segment": {
 			"cats": [
@@ -1460,17 +1054,6 @@
 			},
 			"website": "http://splunk.com"
 		},
-		"SquirrelMail": {
-			"cats": [
-				"30"
-			],
-			"env": "^squirrelmail_loginpage_onload$",
-			"html": "<small>SquirrelMail version ([.\\d]+)[^<]*<br \\;version:\\1",
-			"icon": "SquirrelMail.png",
-			"implies": "PHP",
-			"url": "/src/webmail\\.php(?:$|\\?)",
-			"website": "http://squirrelmail.org"
-		},
 		"StatCounter": {
 			"cats": [
 				"10"
@@ -1508,14 +1091,6 @@
 			],
 			"website": "http://tealium.com"
 		},
-		"TinyMCE": {
-			"cats": [
-				"24"
-			],
-			"env": "^tinyMCE$",
-			"icon": "TinyMCE.png",
-			"website": "http://tinymce.com"
-		},
 		"Titan": {
 			"cats": [
 				"36"
@@ -1536,17 +1111,6 @@
 			"icon": "TrackJs.png",
 			"script": "tracker.js",
 			"website": "http://trackjs.com"
-		},
-		"Unbounce": {
-			"cats": [
-				"20",
-				"51"
-			],
-			"headers": {
-				"X-Unbounce-PageId": ""
-			},
-			"icon": "Unbounce.png",
-			"website": "http://unbounce.com"
 		},
 		"Veoxa": {
 			"cats": [
@@ -1709,17 +1273,6 @@
 			"script": "zanox\\.com/scripts/zanox\\.js$",
 			"website": "http://zanox.com"
 		},
-		"cPanel": {
-			"cats": [
-				"9"
-			],
-			"headers": {
-				"Server": "cpsrvd/([\\d.]+)\\;version:\\1"
-			},
-			"html": "<!-- cPanel",
-			"icon": "cPanel.png",
-			"website": "http://www.cpanel.net"
-		},
 		"cgit": {
 			"cats": [
 				"19"
@@ -1744,16 +1297,6 @@
 			"icon": "comScore.png",
 			"script": "\\.scorecardresearch\\.com/beacon\\.js|COMSCORE\\.beacon",
 			"website": "http://comscore.com"
-		},
-		"iWeb": {
-			"cats": [
-				"20"
-			],
-			"icon": "iWeb.png",
-			"meta": {
-				"generator": "^iWeb( [\\d.]+)?\\;version:\\1"
-			},
-			"website": "http://apple.com/ilife/iweb"
 		},
 		"ownCloud": {
 			"cats": [

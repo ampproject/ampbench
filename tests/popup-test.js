@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chrome = require('sinon-chrome/extensions');
 
 import {
   isSupported,
@@ -24,5 +23,8 @@ import {
 describe('isSupported(key)', function () {
     it('should return true when the key given is in the supported list', function () {
         expect(isSupported('Adhese')).to.be.true;
+    });
+    it('should return false when the key given is in NOT in the supported list', function () {
+        expect(isSupported('Adhese')).to.be.false;
     });
 });
