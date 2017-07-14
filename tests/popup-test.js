@@ -14,17 +14,28 @@
  * limitations under the License.
  */
 
-import {
-  isSupported,
-} from '../readiness-tool/popup';
+require("../readiness-tool/popup"); 
 
 
 
 describe('isSupported(key)', function () {
     it('should return true when the key given is in the supported list', function () {
-        expect(isSupported('Adhese')).to.be.true;
+        expect(self.popups.isSupported('Adhese')).to.be.true;
     });
     it('should return false when the key given is in NOT in the supported list', function () {
-        expect(isSupported('Adhese')).to.be.false;
+        expect(self.popups.isSupported('alannalytics')).to.be.false;
+    });
+});
+
+describe('doesRegexExist(regexString, htmlString)', function () {
+    var htmlString = '<html><script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script></html>';
+    
+    it('should return true when the regular expression can be found within the context of the htmlString', function () {
+        var pattern = new RegExp("angular.*.js");
+        expect(self.popups.doesRegexExist(pattern, htmlString)).to.be.true;
+    });
+    it('should return false when the key given is in NOT in the supported list', function () {
+        var pattern = new RegExp("angulars.*.js");
+        expect(self.popups.doesRegexExist(pattern, htmlString)).to.be.false;
     });
 });

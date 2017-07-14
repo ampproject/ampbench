@@ -1,4 +1,8 @@
 
+self.popups = {};
+self.popups.isSupported = isSupported;
+self.popups.doesRegexExist = doesRegexExist;
+
 /**
    * Callback function that sends a response upon receiving message
    * @param {!Object} request - Message Object
@@ -16,10 +20,16 @@ chrome.runtime.onMessage.addListener(function (request, sender) {
 function onWindowLoad() {
     var htmlOfTab;
     // When page is loaded, display "Loading..." so the user expects content
-    var loading1 = document.getElementById("supported");
-    var loading2 = document.getElementById("notSupported");
-    loading1.innerHTML = 'Loading...';
-    loading2.innerHTML = "Loading...";
+    var supportedAds = document.getElementById("ads-supported");
+    var supportedAnalytics = document.getElementById("analytics-supported");
+    var notSupportedAds = document.getElementById("ads-notSupported");
+    var notSupportedAnalytics = document.getElementById("analytics-notSupported");
+    var notSupportedOther = document.getElementById("other-notSupported");
+    supportedAds.innerHTML = 'Loading...';
+    supportedAnalytics.innerHTML = "Loading...";
+    notSupportedAds.innerHTML = "Loading...";
+    notSupportedAnalytics.innerHTML = "Loading...";
+    notSupportedOther.innerHTML = "Loading...";
     
     // Gets the DOM of the current web page and converts it to a string
     chrome.tabs.executeScript(null, {
@@ -58,12 +68,21 @@ function findDetectedApps(html) {
    */
 
 function showSupportedAppsInView(detectedApps) {
-    var loading1 = document.getElementById("supported");
-    var loading2 = document.getElementById("notSupported");
-    loading1.innerHTML = "";
-    loading2.innerHTML = "";
-    document.getElementById('supported').appendChild(makeList(detectedApps.supported));
-    document.getElementById('notSupported').appendChild(makeList(detectedApps.notSupported));
+    var supportedAds = document.getElementById("ads-supported");
+    var supportedAnalytics = document.getElementById("analytics-supported");
+    var notSupportedAds = document.getElementById("ads-notSupported");
+    var notSupportedAnalytics = document.getElementById("analytics-notSupported");
+    var notSupportedOther = document.getElementById("other-notSupported");
+    supportedAds.innerHTML = "";
+    supportedAnalytics.innerHTML = "";
+    notSupportedAds.innerHTML = "";
+    notSupportedAnalytics.innerHTML = "";
+    notSupportedOther.innerHTML = "";
+    supportedAds.appendChild(makeList(detectedApps.supported.ads));
+    supportedAnalytics.appendChild(makeList(detectedApps.supported.analytics));
+    notSupportedAds.appendChild(makeList(detectedApps.notSupported.ads));
+    notSupportedAnalytics.appendChild(makeList(detectedApps.notSupported.analytics));
+    notSupportedOther.appendChild(makeList(detectedApps.notSupported.other));
 }
 
 /**
@@ -75,8 +94,16 @@ function showSupportedAppsInView(detectedApps) {
 function specifySupport(apps, htmlString) {
     let obj = apps;
     let foundThis = {
-        "supported": [],
-        "notSupported": []
+        "supported": {
+            "ads": [],
+            "analytics": [],
+            "other": []
+        },
+        "notSupported": {
+            "ads": [],
+            "analytics": [],
+            "other": []
+        }
     };
     
     //for all the app objects in the apps.JSON file
@@ -89,12 +116,11 @@ function specifySupport(apps, htmlString) {
                 if (typeof (val.script) == 'object') {
                     for (let x in val.script) {
                         let tempScript = val.script[x].split('\\;');
-                        addToDict(tempScript, htmlString, foundThis, key);
+                        addToDict(tempScript, htmlString, foundThis, key, val.cats);
                     }
                 } else {
-                    console.log(typeof (val.script), val.script);
                     let tempScript = val.script.split('\\;'); 
-                    addToDict(tempScript, htmlString, foundThis, key);
+                    addToDict(tempScript, htmlString, foundThis, key, val.cats);
                 }
                 
             }
@@ -110,20 +136,51 @@ function specifySupport(apps, htmlString) {
    * @param {!String} htmlString - String containing all HTML on the page
    * @param {Object} foundThis - Object seperating the 3p services based on available support
    * @param {String} key - name of third party service
-   * @return {boolean} 
+   * @param {String} category - the category that the key belongs to
    */
-function addToDict(tempScript, htmlString, foundThis, key) {
+function addToDict(tempScript, htmlString, foundThis, key, category) {
     let regX = new RegExp(tempScript[0]);
     if (doesRegexExist(regX, htmlString)) {
-        if (foundThis.supported.indexOf(key) == -1 && foundThis.notSupported.indexOf(key) == -1) {
+        if (get(foundThis, key) == undefined ) {
             if (isSupported(key)) {
-                foundThis.supported.push(key);
+                findCategory(category, foundThis.supported, key);
             } else {
-                foundThis.notSupported.push(key);
+                findCategory(category, foundThis.notSupported, key);
             }
         }
     }
 }
+
+/**
+   * Checks to see if this key is in the object already
+   * @param {Object} obj - Object seperating the 3p services based on available support
+   * @param {String} key - name of third party service
+   * @return {boolean} 
+   */
+function get(obj, key) {
+    return key.split(".").reduce(function(o, x) {
+        return (typeof o == "undefined" || o === null) ? o : o[x];
+    }, obj);
+}
+
+/**
+   * CFigure out which category the key belongs to (either - Ads, Analytics or Other)
+   * @param {String} category - number representing the category that each item belongs to
+   * @param {Object} objectList - The found supported/unsupported 3p services
+   * @param {String} key - name of third party service
+   */
+function findCategory(category, objectList, key) {
+    if (category == "10") {
+        objectList.analytics.push(key);
+    }
+    else if (category == "36") {
+        objectList.ads.push(key);
+    }
+    else {
+        objectList.other.push(key);
+    }
+}
+
 
 /**
    * Determines if regular expression exists within the HTML of the page
