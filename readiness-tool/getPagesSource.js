@@ -1,4 +1,9 @@
-function DOMtoString(document_root) {
+/**
+ * Makes source code of the page into a string
+ * @param {Object} documentRoot - DOM of page
+ * @return {String} 
+ */
+function DOMtoString(documentRoot) {
     var html = '',
         node = document_root.firstChild;
     while (node) {

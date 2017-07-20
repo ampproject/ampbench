@@ -211,6 +211,7 @@ function isSupported(key) {
  * @param {Array[String]} array - array of app names
  * @return {Element} 
  */
+
 function makeList(array) {
   // Create the list element:
   let list = document.createElement('ul');
