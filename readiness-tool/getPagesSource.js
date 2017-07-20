@@ -30,7 +30,6 @@ function DOMtoString(documentRoot) {
         }
         node = node.nextSibling;
     }
-    console.log('on getPagesSource', html);
     return html;
 }
 
