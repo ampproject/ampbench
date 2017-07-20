@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
 
-  "name": "Amp Ready-ness Tool",
+  "name": "Amp Readiness Tool",
   "description": "A tool that allows one to see if a website is ready to be Amp-lified",
   "version": "1.0",
     
