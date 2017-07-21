@@ -1,11 +1,3 @@
-/*
- * Contains the names of all applicable third part vendors on the page
- * Each vendor contains a "cats" value and a "script" value
- * Cats - (abbreviation of categories) it's value has a numeric representation 
- * that coordinates to the key of the same name inside the "categories" object 
- * at the foot of the page.
- * Script - a regular expression that is unique to that vendor 
- */
 {
   "apps": {
     "3DM": {
