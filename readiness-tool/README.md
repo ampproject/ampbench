@@ -11,7 +11,7 @@ The AMP Readiness Tool (ART) is designed to assist in determining whether AMP ca
 4. Enjoy!
 
 ## Instructions to get ART in your Chrome browser:
-1. Download the [zip file]. [](TODO(alwalton): Update link to zip file once merged. )
+1. Download the zip file. [](TODO(alwalton): Update link to zip file once merged. )
 2. Unzip the file.
 3. While in the Chrome browser, type `chrome://extensions/` into the omnibox
 4. Make sure that "Developer Mode" in the top right corner is checked
