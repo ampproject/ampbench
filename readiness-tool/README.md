@@ -11,11 +11,37 @@ The AMP Readiness Tool (ART) is designed to assist in determining whether AMP ca
 4. Enjoy!
 
 ## Instructions to get ART in your Chrome browser:
-1. Download the zip file. [](TODO(alwalton): Update link to zip file once merged. )
+1. Download the [zip file](https://github.com/ampproject/ampbench/archive/master.zip). 
 2. Unzip the file.
 3. While in the Chrome browser, type `chrome://extensions/` into the omnibox
 4. Make sure that "Developer Mode" in the top right corner is checked
 5. Click the "Load the unpacked extension..." button 
-6. Direct the window to where your unzipped file is
+6. Direct the window to where your unzipped file and into the readiness-tool folder
+
+## Updating the list of Third Party Vendors:
+
+Here is a sample of how the third party vendor should be included in the apps.json file. This file contains the names of all applicable third party vendors on the page. Each vendor contains a "cats" value and a "script" value.
+
+`Cats` - (abbreviation of categories) it's value has a numeric representation that coordinates to the key of the same name inside the "categories" object at the foot of the page. A value of "36" indicates that it is an analytics service and a value of "10" indicates an ads network.
+
+`Script` - a regular expression that is unique to that vendor
+
+Below is an example of the Google Analytics tag.
+```
+{
+    "apps": {
+        "Google Analytics": {
+			      "cats": [
+				      "36"
+			      ],
+			    "script": [
+				      "googlesyndication\\.com/",
+				      "ad\\.ca\\.doubleclick\\.net"
+			      ]
+         }
+     }
+}
+```
 
 
+                  
