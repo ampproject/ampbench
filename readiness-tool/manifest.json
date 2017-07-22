@@ -1,10 +1,10 @@
 {
   "manifest_version": 2,
 
-  "name": "Amp Readiness Tool",
-  "description": "A tool that allows one to see if a website is ready to be Amp-lified",
+  "name": "AMP Readiness Tool",
+  "description": "A tool that allows the user to see at a glance, the various third party vendors on the page and whether they have AMP support",
   "version": "1.0",
-    
+
   "browser_action": {
     "default_icon": "amp.png",
     "default_popup": "popup.html"
@@ -23,4 +23,3 @@
     "https://ajax.googleapis.com/"
   ]
 }
-
