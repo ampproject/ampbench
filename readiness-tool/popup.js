@@ -116,12 +116,10 @@ function specifySupport(apps, htmlString) {
       // Sometimes val.script contains an array of regular expressions
       if (typeof val.script == 'object') {
         Object.keys(val.script).forEach(function(x) {
-          let tempScript = val.script[x].split('\\;');
-          addToDict(tempScript[0], htmlString, foundThis, key, val.cats);
+          addToDict(val.script[x], htmlString, foundThis, key, val.cats);
         });
       } else {
-        let tempScript = val.script.split('\\;');
-        addToDict(tempScript[0], htmlString, foundThis, key, val.cats);
+        addToDict(val.script, htmlString, foundThis, key, val.cats);
       }
     }
   });
@@ -139,11 +137,10 @@ function specifySupport(apps, htmlString) {
  * @param {String} category - the category that the key belongs to
  */
 function addToDict(tempScript, htmlString, foundThis, key, category) {
-  let regX = new RegExp(tempScript);
+  tempScript = tempScript.split('\\;');
+  let regX = new RegExp(tempScript[0]);
   if (doesRegexExist(regX, htmlString)) {
     if (isKeyUnique(foundThis, key)) {
-      console.log('foundThis', foundThis);
-      console.log(key, get(foundThis, key));
       if (isSupported(key)) {
         findCategory(category, foundThis.supported, key);
       } else {

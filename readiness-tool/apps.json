@@ -4,7 +4,7 @@
       "cats": [
 				"19"
 			],
-      "script": "<title>3ware 3DM([\\d\\.]+)?\\;version:\\1"
+      "script": ["<title>3ware 3DM([\\d\\.]+)?\\;version:\\1"]
     },
     "AD EBiS": {
       "cats": [
@@ -15,36 +15,19 @@
 				"<!--EBiS tag",
 				"<!-- Tag EBiS",
 				"<!-- EBiS common tag"
-			],
-      "website": "http://www.ebis.ne.jp"
-    },
-    "AT Internet Analyzer": {
-      "cats": [
-				"10"
-			],
-      "website": "http://atinternet.com/en"
+			]
     },
     "AT Internet XiTi": {
       "cats": [
 				"10"
 			],
-      "script": "xiti\\.com/hit\\.xiti",
-      "website": "http://atinternet.com/en"
-    },
-    "AWStats": {
-      "cats": [
-				"10"
-			],
-      "implies": "Perl",
-      "script": "AWStats ([\\d.]+(?: \\(build [\\d.]+\\))?)\\;version:\\1",
-      "website": "http://awstats.sourceforge.net"
+      "script": ["xiti\\.com/hit\\.xiti"]
     },
     "AdInfinity": {
       "cats": [
 				"36"
 			],
-      "script": "adinfinity\\.com\\.au",
-      "website": "http://adinfinity.com.au"
+      "script": ["adinfinity\\.com\\.au"]
     },
     "AdRiver": {
       "cats": [
@@ -61,15 +44,13 @@
       "cats": [
 				"36"
 			],
-      "script": "(?:a|s)\\.adroll\\.com",
-      "website": "http://adroll.com"
+      "script": ["(?:a|s)\\.adroll\\.com"]
     },
     "Adcash": {
       "cats": [
 				"36"
 			],
-      "script": "^[^\\/]*//(?:[^\\/]+\\.)?adcash\\.com/(?:script|ad)/",
-      "website": "http://adcash.com"
+      "script": ["^[^\\/]*//(?:[^\\/]+\\.)?adcash\\.com/(?:script|ad)/"]
     },
     "Adnegah": {
       "cats": [
@@ -78,34 +59,22 @@
       "script": [
                 "[^a-z]adnegah.*\\.js",
                 "<iframe [^>]*src=\"[^\"]+adnegah\\.net"
-            ],
-      "website": "http://Adnegah.net"
-    },
-    "Advanced Web Stats": {
-      "cats": [
-				"10"
-			],
-      "script": "aws\\.src = [^<]+caphyon-analytics",
-      "implies": "Java",
-      "website": "http://www.advancedwebstats.com"
+            ]
     },
     "Advert Stream": {
       "cats": [
 				"36"
 			],
-      "script": "(?:ad\\.advertstream\\.com|adxcore\\.com)",
-      "website": "http://www.advertstream.com"
+      "script": ["(?:ad\\.advertstream\\.com|adxcore\\.com)"]
     },
     "Adzerk": {
       "cats": [
 				"36"
 			],
-      "env": "^ados(?:Results)?$",
       "script": [
                 "adzerk\\.net/ados\\.js",
                 "<iframe [^>]*src=\"[^\"]+adzerk\\.net"
-            ],
-      "website": "http://adzerk.com"
+            ]
     },
     "AppNexus": {
       "cats": [
@@ -114,826 +83,385 @@
       "script": [
                 "adnxs\\.(?:net|com)",
                 "<(?:iframe|img)[^>]+adnxs\\.(?:net|com)"
-            ],
-      "website": "http://appnexus.com"
+            ]
     },
     "BittAds": {
       "cats": [
 				"36"
 			],
-      "script": "bittads\\.com/js/bitt\\.js$",
-      "website": "http://bittads.com"
+      "script": ["bittads\\.com/js/bitt\\.js$"]
     },
     "BugSense": {
       "cats": [
 				"10"
 			],
-      "script": "bugsense\\.js",
-      "website": "http://bugsense.com"
+      "script": ["bugsense\\.js"]
     },
     "BugSnag": {
       "cats": [
 				"10"
 			],
-      "script": "bugsnag.*\\.js",
-      "website": "http://bugsnag.com"
+      "script": ["bugsnag.*\\.js"]
     },
     "BuySellAds": {
       "cats": [
 				"36"
 			],
-      "icon": "BuySellAds.png",
       "script": [
                 "^https?://s\\d\\.buysellads\\.com/",
                 "<script[^>]*>[^<]+?bsa.src\\s*=\\s*['\"](?:https?:)?\\/{2}\\w\\d\\.buysellads\\.com\\/[\\w\\d\\/]+?bsa\\.js['\"]"
-            ],
-      "website": "http://buysellads.com"
+            ]
     },
     "CO2Stats": {
       "cats": [
 				"10"
 			],
-      "script": "src=[^>]+co2stats\\.com/propres\\.php",
-      "icon": "CO2Stats.png",
-      "website": "http://co2stats.com"
+      "script": ["src=[^>]+co2stats\\.com/propres\\.php"]
     },
     "Carbon Ads": {
       "cats": [
 				"36"
 			],
-      "env": "^_carbonads",
       "script": [
                 "[^\\/]*\\/\\/(?:engine|srv)\\.carbonads\\.com\\/",
                 "<[a-z]+ [^>]*id=\"carbonads-container\""
-            ],
-      "website": "http://carbonads.net"
+            ]
     },
     "Chartbeat": {
       "cats": [
 				"10"
 			],
-      "script": "chartbeat\\.js",
-      "website": "http://chartbeat.com"
+      "script": ["chartbeat\\.js"]
     },
     "Chitika": {
       "cats": [
 				"36"
 			],
-      "script": "scripts\\.chitika\\.net/",
-      "website": "http://chitika.com"
+      "script": ["scripts\\.chitika\\.net/"]
     },
     "Clicky": {
       "cats": [
 				"10"
 			],
-      "script": "static\\.getclicky\\.com",
-      "website": "http://getclicky.com"
+      "script": ["static\\.getclicky\\.com"]
     },
     "Clipboard.js": {
       "cats": [
 				"19"
 			],
-      "script": "clipboard(?:\\.min)?\\.js",
-      "website": "https://clipboardjs.com/"
+      "script": ["clipboard(?:\\.min)?\\.js"]
     },
     "ConversionLab": {
       "cats": [
 				"10"
 			],
-      "script": "conversionlab\\.trackset\\.com/track/tsend\\.js",
-      "website": "http://www.trackset.it/conversionlab"
+      "script": [
+        "conversionlab\\.trackset\\.com/track/tsend\\.js"
+      ]
     },
     "Crazy Egg": {
       "cats": [
 				"10"
 			],
-      "script": "cetrk\\.com/pages/scripts/\\d+/\\d+\\.js",
-      "website": "http://crazyegg.com"
+      "script": ["cetrk\\.com/pages/scripts/\\d+/\\d+\\.js"]
     },
     "Criteo": {
       "cats": [
 				"36"
 			],
-      "script": "[^/]*//(?:cas\\.criteo\\.com|(?:[^/]\\.)?criteo\\.net)/",
-      "website": "http://criteo.com"
+      "script": [
+        "[^/]*//(?:cas\\.criteo\\.com|(?:[^/]\\.)?criteo\\.net)/"
+      ]
     },
     "Cross Pixel": {
       "cats": [
 				"10"
 			],
-      "script": "tag\\.crsspxl\\.com/s1\\.js",
-      "website": "http://datadesk.crsspxl.com"
+      "script": ["tag\\.crsspxl\\.com/s1\\.js"]
     },
     "DoubleClick Ad Exchange (AdX)": {
       "cats": [
 				"36"
 			],
-      "icon": "DoubleClick.svg",
       "script": [
 				"googlesyndication\\.com/pagead/show_ads\\.js",
 				"tpc\\.googlesyndication\\.com",
 				"googlesyndication\\.com.*abg\\.js"
-			],
-      "website": "http://www.doubleclickbygoogle.com/solutions/digital-marketing/ad-exchange/"
+			]
     },
     "DoubleClick Campaign Manager (DCM)": {
       "cats": [
 				"36"
 			],
-      "icon": "DoubleClick.svg",
-      "script": "2mdn\\.net",
-      "website": "http://www.doubleclickbygoogle.com/solutions/digital-marketing/campaign-manager/"
+      "script": ["2mdn\\.net"]
     },
     "DoubleClick Floodlight": {
       "cats": [
 				"36"
 			],
-      "icon": "DoubleClick.svg",
-      "script": "https?://fls.doubleclick.net",
-      "website": "http://support.google.com/ds/answer/6029713?hl=en"
+      "script": ["https?://fls.doubleclick.net"]
     },
     "DoubleClick for Publishers (DFP)": {
       "cats": [
 				"36"
 			],
       "icon": "DoubleClick.svg",
-      "script": "googletagservices\\.com/tag/js/gpt(?:_mobile)?\\.js",
-      "website": "http://www.google.com/dfp"
+      "script": ["googletagservices\\.com/tag/js/gpt(?:_mobile)?\\.js"]
     },
     "Dynatrace": {
       "cats": [
 				"10"
 			],
-      "icon": "Dynatrace.png",
-      "script": "dtagent.*\\.js",
-      "website": "http://dynatrace.com"
-    },
-    "ELOG": {
-      "cats": [
-				"19"
-			],
-      "html": "<title>ELOG Logbook Selection</title>",
-      "icon": "ELOG.png",
-      "website": "http://midas.psi.ch/elog"
-    },
-    "EPrints": {
-      "cats": [
-				"19"
-			],
-      "env": "^EPJS_menu_template$",
-      "icon": "EPrints.png",
-      "implies": "Perl",
-      "meta": {
-        "generator": "EPrints ([\\d.]+)\\;version:\\1"
-      },
-      "website": "http://www.eprints.org"
+      "script": ["dtagent.*\\.js"]
     },
     "Epom": {
       "cats": [
 				"36"
 			],
-      "env": "^Epom",
-      "icon": "Epom.png",
-      "url": "^https?://(?:[^/]+\\.)?ad(?:op)?shost1\\.com/",
-      "website": "http://epom.com"
+      "script": ["^https?://(?:[^/]+\\.)?ad(?:op)?shost1\\.com/"]
     },
     "Fusion Ads": {
       "cats": [
 				"36"
 			],
-      "env": "^_fusion",
-      "icon": "Fusion Ads.png",
-      "script": "^[^\\/]*//[ac]dn\\.fusionads\\.net/(?:api/([\\d.]+)/)?\\;version:\\1",
-      "website": "http://fusionads.net"
-    },
-    "Gauges": {
-      "cats": [
-				"10"
-			],
-      "env": "^_gauges$",
-      "headers": {
-        "Set-Cookie": "_gauges_[^;]+="
-      },
-      "icon": "Gauges.png",
-      "website": "http://get.gaug.es"
-    },
-    "GoStats": {
-      "cats": [
-				"10"
-			],
-      "env": "^_go(?:stats|_track)",
-      "icon": "GoStats.png",
-      "website": "http://gostats.com"
+      "script": [
+        "^[^\\/]*//[ac]dn\\.fusionads\\.net/(?:api/([\\d.]+)/)?\\;version:\\1"
+      ]
     },
     "Google AdSense": {
       "cats": [
 				"36"
 			],
-      "env": [
-				"^google_ad_",
-				"^__google_ad_",
-				"^Goog_AdSense_"
-			],
-      "icon": "Google AdSense.svg",
       "script": [
 				"googlesyndication\\.com/",
 				"ad\\.ca\\.doubleclick\\.net",
 				"2mdn\\.net",
 				"ad\\.ca\\.doubleclick\\.net"
-			],
-      "website": "http://google.com/adsense"
+			]
     },
     "Google Analytics": {
       "cats": [
 				"10"
 			],
-      "env": "^gaGlobal$",
-      "headers": {
-        "Set-Cookie": "__utma"
-      },
-      "icon": "Google Analytics.svg",
-      "script": "google-analytics\\.com\\/(?:ga|urchin|(analytics))\\.js\\;version:\\1?UA:",
-      "website": "http://google.com/analytics"
-    },
-    "Google Code Prettify": {
-      "cats": [
-				"19"
-			],
-      "env": "^prettyPrint$",
-      "icon": "Google Code Prettify.png",
-      "website": "http://code.google.com/p/google-code-prettify"
+      "script": [
+        "google-analytics\\.com\\/(?:ga|urchin|(analytics))\\.js\\;version:\\1?UA:"
+      ]
     },
     "Google Tag Manager": {
       "cats": [
 				"42"
 			],
-      "env": [
-				"^googletag$",
-				"^google_tag_manager$"
-			],
-      "html": "googletagmanager\\.com/ns\\.html[^>]+></iframe>",
-      "icon": "Google Tag Manager.png",
-      "website": "http://www.google.com/tagmanager"
-    },
-    "Gravatar": {
-      "cats": [
-				"19"
-			],
-      "env": "^Gravatar$",
-      "html": "<[^>]+gravatar\\.com/avatar/",
-      "icon": "Gravatar.png",
-      "website": "http://gravatar.com"
-    },
-    "Gravity Forms": {
-      "cats": [
-				"19"
-			],
-      "html": [
-				"<div class=(?:\"|')[^>]*gform_wrapper",
-				"<div class=(?:\"|')[^>]*gform_body",
-				"<ul [^>]*class=(?:\"|')[^>]*gform_fields",
-				"<link [^>]*href=(?:\"|')[^>]*wp-content/plugins/gravityforms/css/"
-			],
-      "icon": "gravityforms.svg",
-      "implies": "WordPress",
-      "website": "http://gravityforms.com"
-    },
-    "Gravity Insights": {
-      "cats": [
-				"10"
-			],
-      "env": "^GravityInsights$",
-      "icon": "Gravity Insights.png",
-      "website": "http://insights.gravity.com"
-    },
-    "HP System Management": {
-      "cats": [
-				"46"
-			],
-      "headers": {
-        "Server": "HP System Management"
-      },
-      "icon": "HP.svg",
-      "website": "http://hp.com"
-    },
-    "HTTP/2": {
-      "cats": [
-				"19"
-			],
-      "excludes": "SPDY",
-      "headers": {
-        "X-Firefox-Spdy": "h2"
-      },
-      "icon": "http2.png",
-      "website": "http://http2.github.io"
+      "script": ["googletagmanager\\.com/ns\\.html[^>]+></iframe>"]
     },
     "Heap": {
       "cats": [
 				"10"
 			],
-      "env": "^heap$",
-      "icon": "Heap.png",
-      "script": "heap-\\d+.js",
-      "website": "http://heapanalytics.com"
+      "script": ["heap-\\d+.js"]
     },
     "Highlight.js": {
       "cats": [
 				"19"
 			],
-      "icon": "Highlight.js.png",
-      "script": "/highlight\\.js/[\\d.]+?/highlight\\.min\\.js",
-      "website": "https://highlightjs.org/"
+      "script": ["/highlight\\.js/[\\d.]+?/highlight\\.min\\.js"]
     },
     "Hotjar": {
       "cats": [
 				"10"
 			],
-      "env": [
-				"^HotLeadfactory$",
-				"^HotleadController$"
-			],
-      "icon": "Hotjar.png",
-      "script": "^//static\\.hotjar\\.com/c/hotjar-",
-      "website": "https://www.hotjar.com"
+      "script": ["^//static\\.hotjar\\.com/c/hotjar-"]
     },
     "IBM Coremetrics": {
       "cats": [
 				"10"
 			],
-      "icon": "IBM.svg",
-      "script": "cmdatatagutils\\.js",
-      "website": "http://ibm.com/software/marketing-solutions/coremetrics"
+      "script": ["cmdatatagutils\\.js"]
     },
     "INFOnline": {
       "cats": [
 				"10"
 			],
-      "env": [
-				"^szmvars$",
-				"^iam_data$"
-			],
-      "icon": "INFOnline.png",
-      "script": "^https?://(?:[^/]+\\.)?i(?:oam|v)wbox\\.de/",
-      "website": "http://infonline.de"
+      "script": ["^https?://(?:[^/]+\\.)?i(?:oam|v)wbox\\.de/"]
     },
     "Intercom": {
       "cats": [
 				"10"
 			],
-      "env": "^Intercom$",
-      "icon": "Intercom.png",
-      "script": "(?:api\\.intercom\\.io/api|static\\.intercomcdn\\.com/intercom\\.v1)",
-      "website": "http://intercom.io"
-    },
-    "Jive": {
-      "cats": [
-				"19"
-			],
-      "headers": {
-        "X-JIVE-USER-ID": "",
-        "X-JSL": "",
-        "X-Jive-Flow-Id": "",
-        "X-Jive-Request-Id": "",
-        "x-jive-chrome-wrapped": ""
-      },
-      "icon": "Jive.png",
-      "website": "http://www.jivesoftware.com"
-    },
-    "JobberBase": {
-      "cats": [
-				"19"
-			],
-      "env": "^Jobber$",
-      "icon": "JobberBase.png",
-      "implies": "PHP",
-      "meta": {
-        "generator": "Jobberbase"
-      },
-      "website": "http://jobberbase.com"
-    },
-    "K2": {
-      "cats": [
-				"19"
-			],
-      "env": "^K2RatingURL$",
-      "html": "<!--(?: JoomlaWorks \"K2\"| Start K2)",
-      "icon": "K2.png",
-      "implies": "Joomla",
-      "website": "http://getk2.org"
-    },
-    "KISSmetrics": {
-      "cats": [
-				"10"
-			],
-      "env": "^KM_COOKIE_DOMAIN$",
-      "icon": "KISSmetrics.png",
-      "website": "http://www.kissmetrics.com"
+      "script": ["(?:api\\.intercom\\.io/api|static\\.intercomcdn\\.com/intercom\\.v1)"]
     },
     "Koego": {
       "cats": [
 				"10"
 			],
-      "env": "^ego_domains$",
-      "icon": "Koego.png",
-      "script": "tracking\\.koego\\.com/end/ego\\.js",
-      "website": "http://www.koego.com/en"
-    },
-    "Less": {
-      "cats": [
-				"19"
-			],
-      "html": "<link[^>]+ rel=\"stylesheet/less\"",
-      "icon": "Less.png",
-      "website": "http://lesscss.org"
-    },
-    "LimeSurvey": {
-      "cats": [
-				"19"
-			],
-      "headers": {
-        "generator": "LimeSurvey"
-      },
-      "icon": "LimeSurvey.png",
-      "website": "http://limesurvey.org/"
+      "script": ["tracking\\.koego\\.com/end/ego\\.js"]
     },
     "LinkSmart": {
       "cats": [
 				"36"
 			],
-      "env": "^(?:_mb_site_guid$|LS_JSON|LinkSmart(?:_|$))",
-      "icon": "LinkSmart.png",
-      "script": "^https?://cdn\\.linksmart\\.com/linksmart_([\\d.]+?)(?:\\.min)?\\.js\\;version:\\1",
-      "website": "http://linksmart.com"
+      "script": [
+        "^https?://cdn\\.linksmart\\.com/linksmart_([\\d.]+?)(?:\\.min)?\\.js\\;version:\\1"
+      ]
     },
     "Liveinternet": {
       "cats": [
 				"10"
 			],
-      "html": [
+      "script": [
 				"<script[^<>]*>[^]{0,128}?src\\s*=\\s*['\"]//counter\\.yadro\\.ru/hit(?:;\\S+)?\\?(?:t\\d+\\.\\d+;)?r",
 				"<!--LiveInternet counter-->",
 				"<!--/LiveInternet-->",
-				"<a href=\"http://www.liveinternet.ru/click\""
-			],
-      "icon": "Liveinternet.png",
-      "script": "/js/al/common.js\\?[0-9_]+",
-      "website": "http://liveinternet.ru/rating/"
+				"<a href=\"http://www.liveinternet.ru/click\"",
+                "/js/al/common.js\\?[0-9_]+"
+			]
     },
     "MadAdsMedia": {
       "cats": [
 				"36"
 			],
-      "env": "^setM(?:Iframe|RefURL)$",
-      "icon": "MadAdsMedia.png",
-      "script": "^https?://(?:ads-by|pixel)\\.madadsmedia.com/",
-      "website": "http://madadsmedia.com"
-    },
-    "MediaTomb": {
-      "cats": [
-				"38"
-			],
-      "headers": {
-        "Server": "MediaTomb(?:/([\\d.]+))?\\;version:\\1"
-      },
-      "icon": "MediaTomb.png",
-      "website": "http://mediatomb.cc"
+      "script": ["^https?://(?:ads-by|pixel)\\.madadsmedia.com/"]
     },
     "Mint": {
       "cats": [
 				"10"
 			],
-      "env": "^Mint$",
-      "icon": "Mint.png",
-      "script": "mint/\\?js",
-      "website": "http://haveamint.com"
+      "script": ["mint/\\?js"]
     },
     "Mixpanel": {
       "cats": [
 				"10"
 			],
-      "env": "^Mixpanel$",
-      "icon": "Mixpanel.png",
-      "script": "api\\.mixpanel\\.com/track",
-      "website": "http://mixpanel.com"
+      "script": ["api\\.mixpanel\\.com/track"]
     },
     "NOIX": {
       "cats": [
 				"19"
 			],
-      "html": "(?:<[^>]+(?:src|href)=[^>]*/media/noix|<!-- NOIX)",
-      "icon": "NOIX.png",
-      "website": "http://www.noix.com.br/tecnologias/joomla"
+      "script": ["(?:<[^>]+(?:src|href)=[^>]*/media/noix|<!-- NOIX)"]
     },
     "Navegg": {
       "cats": [
 				"10"
 			],
-      "env": "^nvg[0-9]$",
-      "icon": "Navegg.png",
-      "script": "tag.navdmp.com",
-      "website": "https://www.navegg.com/"
-    },
-    "Nedstat": {
-      "cats": [
-				"10"
-			],
-      "env": "^sitestat$",
-      "icon": "Nedstat.png",
-      "website": "http://www.nedstat.com"
+      "script": ["tag.navdmp.com"]
     },
     "Netmonitor": {
       "cats": [
 				"10"
 			],
-      "env": "^netmonitor$",
-      "icon": "Netmonitor.png",
-      "script": "netmonitor\\.fi/nmtracker\\.js",
-      "website": "http://netmonitor.fi/en"
-    },
-    "New Relic": {
-      "cats": [
-				"10"
-			],
-      "env": "^NREUM",
-      "icon": "New Relic.png",
-      "website": "http://newrelic.com"
-    },
-    "OmniTouch 8660 My Teamwork": {
-      "cats": [
-				"19"
-			],
-      "icon": "OmniTouch 8660 My Teamwork.png",
-      "website": "http://enterprise.alcatel-lucent.com"
-    },
-    "OneAPM": {
-      "cats": [
-				"10"
-			],
-      "env": "^BWEUM",
-      "icon": "OneAPM.png",
-      "website": "http://www.oneapm.com"
-    },
-    "OneStat": {
-      "cats": [
-				"10"
-			],
-      "env": "^OneStat",
-      "icon": "OneStat.png",
-      "website": "http://www.onestat.com"
-    },
-    "Open AdStream": {
-      "cats": [
-				"36"
-			],
-      "env": "^OAS_AD$",
-      "icon": "Open AdStream.png",
-      "website": "http://xaxis.com"
+      "script": ["netmonitor\\.fi/nmtracker\\.js"]
     },
     "Open Web Analytics": {
       "cats": [
 				"10"
 			],
-      "env": "^_?owa_",
-      "html": "<!-- (?:Start|End) Open Web Analytics Tracker -->",
-      "icon": "Open Web Analytics.png",
-      "website": "http://openwebanalytics.com"
-    },
-    "OpenGrok": {
-      "cats": [
-				"19"
-			],
-      "headers": {
-        "Set-Cookie": "OpenGrok"
-      },
-      "icon": "OpenGrok.png",
-      "implies": "Java",
-      "meta": {
-        "generator": "OpenGrok(?: v?([\\d.]+))?\\;version:\\1"
-      },
-      "website": "http://hub.opensolaris.org/bin/view/Project+opengrok/WebHome"
+      "script": "<!-- (?:Start|End) Open Web Analytics Tracker -->"
     },
     "OpenX": {
       "cats": [
 				"36"
 			],
-      "icon": "OpenX.png",
       "script": [
 				"https?://[^/]*\\.openx\\.net",
 				"https?://[^/]*\\.servedbyopenx\\.com"
-			],
-      "website": "http://openx.com"
+			]
     },
     "Optimizely": {
       "cats": [
 				"10"
 			],
-      "env": "^optimizely$",
-      "icon": "Optimizely.png",
-      "script": "optimizely\\.com.*\\.js",
-      "website": "http://optimizely.com"
-    },
-    "Oracle Dynamic Monitoring Service": {
-      "cats": [
-				"19"
-			],
-      "headers": {
-        "x-oracle-dms-ecid": ""
-      },
-      "icon": "Oracle.png",
-      "website": "http://oracle.com"
+      "script": ["optimizely\\.com.*\\.js"],
+      "tooltip": "Workaround is available. Use amp-experiment."
     },
     "Oracle Recommendations On Demand": {
       "cats": [
 				"10"
 			],
-      "icon": "Oracle.png",
-      "script": "atgsvcs.+atgsvcs\\.js",
-      "website": "http://www.oracle.com/us/products/applications/commerce/recommendations-on-demand/index.html"
+      "script": ["atgsvcs.+atgsvcs\\.js"]
     },
     "PDF.js": {
       "cats": [
 				"19"
 			],
-      "env": "^PDFJS$",
-      "html": "<\\/div>\\s*<!-- outerContainer -->\\s*<div\\s*id=\"printContainer\"><\\/div>",
-      "icon": "PDF.js.svg",
-      "url": "/web/viewer\\.html?file=[^&]\\.pdf",
-      "website": "http://mozilla.github.io/pdf.js/"
-    },
-    "Parse.ly": {
-      "cats": [
-				"10"
-			],
-      "env": "^PARSELY$",
-      "icon": "Parse.ly.png",
-      "website": "http://parse.ly"
-    },
-    "PerfSONAR-PS": {
-      "cats": [
-				"19"
-			],
-      "headers": {
-        "User-agent": "perfSONAR-PS/?([\\d\\.]+)?\\;version:\\1"
-      },
-      "icon": "PerfSONAR-PS.png",
-      "website": "http://psps.perfsonar.net"
-    },
-    "Piano Solo": {
-      "cats": [
-				"43"
-			],
-      "env": "^PianoMedia$",
-      "headers": {
-        "Set-Cookie": "pianovisitkey"
-      },
-      "icon": "Piano Solo.png",
-      "website": "http://www.pianomedia.com/products"
+      "script": ["<\\/div>\\s*<!-- outerContainer -->\\s*<div\\s*id=\"printContainer\"><\\/div>"]
     },
     "Piwik": {
       "cats": [
 				"10"
 			],
-      "env": [
-				"^Piwik$",
-				"^_paq$"
-			],
-      "headers": {
-        "Set-Cookie": "PIWIK_SESSID="
-      },
-      "icon": "Piwik.png",
-      "meta": {
-        "apple-itunes-app": "app-id=737216887",
-        "generator": "Piwik - Open Source Web Analytics",
-        "google-play-app": "app-id=org\\.piwik\\.mobile2"
-      },
-      "script": "piwik\\.js|piwik\\.php",
-      "website": "http://piwik.org"
+      "script": ["piwik\\.js|piwik\\.php"]
     },
     "Plura": {
       "cats": [
 				"19"
 			],
-      "html": "<iframe src=\"[^>]+pluraserver\\.com",
-      "icon": "Plura.png",
-      "website": "http://www.pluraprocessing.com"
+      "script": ["<iframe src=\"[^>]+pluraserver\\.com"]
     },
     "Prefix-Free": {
       "cats": [
 				"19"
 			],
-      "env": "^PrefixFree$",
-      "icon": "Prefix-Free.png",
-      "script": "prefixfree\\.js",
-      "website": "http://leaverou.github.io/prefixfree/"
+      "script": ["prefixfree\\.js"]
     },
     "Project Wonderful": {
       "cats": [
 				"36"
 			],
-      "env": "^pw_adloader$",
-      "html": "<div[^>]+id=\"pw_adbox_",
-      "icon": "Project Wonderful.png",
-      "script": "^https?://(?:www\\.)?projectwonderful\\.com/(?:pwa\\.js|gen\\.php)",
-      "website": "http://projectwonderful.com"
+      "script": [
+        "^https?://(?:www\\.)?projectwonderful\\.com/(?:pwa\\.js|gen\\.php)",
+        "<div[^>]+id=\"pw_adbox_"
+      ]
     },
     "Prospector": {
       "cats": [
 				"36"
 			],
-      "html": "<[^>]+data-name=['\"]prospectscript",
-      "icon": "Prospector.png",
-      "script": "processprospector\\.js",
-      "website": "http://prospector.io"
+      "script": [
+        "processprospector\\.js",
+        "<[^>]+data-name=['\"]prospectscript"
+      ]
     },
     "PubMatic": {
       "cats": [
 				"36"
 			],
-      "icon": "PubMatic.png",
-      "script": "https?://[^/]*\\.pubmatic\\.com",
-      "website": "http://www.pubmatic.com/"
+      "script": ["https?://[^/]*\\.pubmatic\\.com"]
     },
     "Pygments": {
       "cats": [
 				"19"
 			],
-      "script": "<link[^>]+pygments.css[\"']",
-      "icon": "pygments.png",
-      "website": "http://pygments.org"
+      "script": ["<link[^>]+pygments.css[\"']"]
     },
     "Quantcast Measurement": {
       "cats": [
 				"10"
 			],
-      "env": "^quantserve$",
-      "icon": "Quantcast.png",
-      "script": "edge\\.quantserve\\.com/quant\\.js",
-      "website": "http://www.quantcast.com"
-    },
-    "Reinvigorate": {
-      "cats": [
-				"10"
-			],
-      "env": "^reinvigorate$",
-      "icon": "Reinvigorate.png",
-      "website": "http://www.reinvigorate.net"
+      "script": ["edge\\.quantserve\\.com/quant\\.js"]
     },
     "Rubicon Project": {
       "cats": [
 				"36"
 			],
-      "icon": "Rubicon Project.png",
-      "script": "https?://[^/]*\\.rubiconproject\\.com",
-      "website": "http://rubiconproject.com/"
+      "script": ["https?://[^/]*\\.rubiconproject\\.com"]
     },
     "Ruxit": {
       "cats": [
 				"10"
 			],
-      "icon": "Ruxit.png",
-      "script": "ruxitagentjs",
-      "website": "http://ruxit.com"
-    },
-    "SOBI 2": {
-      "cats": [
-				"19"
-			],
-      "html": "(?:<!-- start of Sigsiu Online Business Index|<div[^>]* class=\"sobi2)",
-      "icon": "SOBI 2.png",
-      "implies": "Joomla",
-      "website": "http://www.sigsiu.net/sobi2.html"
-    },
-    "SPDY": {
-      "cats": [
-				"19"
-			],
-      "excludes": "HTTP/2",
-      "headers": {
-        "X-Firefox-Spdy": "\\d\\.\\d"
-      },
-      "icon": "SPDY.png",
-      "website": "http://chromium.org/spdy"
+      "script": ["ruxitagentjs"]
     },
     "SWFObject": {
       "cats": [
 				"19"
 			],
-      "env": "^SWFObject$",
-      "icon": "SWFObject.png",
-      "script": "swfobject.*\\.js",
-      "website": "http://github.com/swfobject/swfobject"
+      "script": ["swfobject.*\\.js"]
     },
     "Salesforce": {
       "cats": [
 				"53"
 			],
-      "env": "^SFDC(?:App|Cmp|Page|SessionVars)$",
-      "headers": {
-        "Set-Cookie": "com\\.salesforce\\."
-      },
-      "html": "<[^>]+=\"brandQuaternaryFgrs\"",
-      "icon": "Salesforce.svg",
-      "website": "https://www.salesforce.com"
+      "script": ["<[^>]+=\"brandQuaternaryFgrs\""]
     },
     "Segment": {
       "cats": [
