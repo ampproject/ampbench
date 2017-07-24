@@ -355,7 +355,7 @@
       "cats": [
 				"10"
 			],
-      "script": "<!-- (?:Start|End) Open Web Analytics Tracker -->"
+      "script": ["<!-- (?:Start|End) Open Web Analytics Tracker -->"]
     },
     "OpenX": {
       "cats": [
@@ -466,376 +466,227 @@
     "Segment": {
       "cats": [
 				"10"
-			],
-      "env": "^analytics$",
-      "html": "<script[\\s\\S]*cdn\\.segment\\.com/analytics.js[\\s\\S]*script>",
-      "icon": "Segment.png",
-      "script": "cdn\\.segment\\.com/analytics\\.js",
-      "website": "http://segment.com"
+			], 
+      "script": [
+        "cdn\\.segment\\.com/analytics\\.js",
+        "<script[\\s\\S]*cdn\\.segment\\.com/analytics.js[\\s\\S]*script>"
+      ]
     },
     "Sentinel License Monitor": {
       "cats": [
 				"19"
 			],
-      "html": "<title>Sentinel (?:Keys )?License Monitor</title>",
-      "icon": "Sentinel.png",
-      "website": "http://www.safenet-inc.com/software-monetization/sentinel-rms/"
+      "script": ["<title>Sentinel (?:Keys )?License Monitor</title>"]
     },
     "Sharethrough": {
       "cats": [
 				"36"
 			],
-      "script": "\\.sharethrough\\.com",
-      "website": "https://sharethrough.com"
-    },
-    "ShellInABox": {
-      "cats": [
-				"46"
-			],
-      "env": "^ShellInABox$",
-      "html": [
-				"<title>Shell In A Box</title>",
-				"must be enabled for ShellInABox</noscript>"
-			],
-      "icon": "ShellInABox.png",
-      "website": "http://shellinabox.com"
+      "script": ["\\.sharethrough\\.com"]
     },
     "ShinyStat": {
       "cats": [
 				"10"
 			],
-      "env": "^SSsdk$",
-      "html": "<img[^>]*\\s+src=['\"]?https?://www\\.shinystat\\.com/cgi-bin/shinystat\\.cgi\\?[^'\"\\s>]*['\"\\s/>]",
-      "icon": "ShinyStat.png",
-      "script": "^https?://codice(?:business|ssl|pro|isp)?\\.shinystat\\.com/cgi-bin/getcod\\.cgi",
-      "website": "http://shinystat.com"
+      "script": [
+        "^https?://codice(?:business|ssl|pro|isp)?\\.shinystat\\.com/cgi-bin/getcod\\.cgi",
+        "<img[^>]*\\s+src=['\"]?https?://www\\.shinystat\\.com/cgi-bin/shinystat\\.cgi\\?[^'\"\\s>]*['\"\\s/>]"
+      ]
     },
     "Site Meter": {
       "cats": [
 				"10"
 			],
-      "icon": "Site Meter.png",
-      "script": "sitemeter\\.com/js/counter\\.js\\?site=",
-      "website": "http://www.sitemeter.com"
+      "script": ["sitemeter\\.com/js/counter\\.js\\?site="]
     },
     "SiteCatalyst": {
       "cats": [
 				"10"
 			],
-      "env": "^s_(?:account|objectID|code|INST)$",
-      "icon": "SiteCatalyst.png",
-      "script": "/s[_-]code.*\\.js",
-      "website": "http://www.adobe.com/solutions/digital-marketing.html"
+      "script": ["/s[_-]code.*\\.js"]
     },
     "Sizmek": {
       "cats": [
 				"36"
 			],
-      "html": "(?:<a [^>]*href=\"[^/]*//[^/]*serving-sys\\.com/|<img [^>]*src=\"[^/]*//[^/]*serving-sys\\.com/)",
-      "icon": "Sizmek.png",
-      "script": "[^/]*//[^/]*serving-sys\\.com/",
-      "website": "http://sizmek.com"
+      "script": [
+        "[^/]*//[^/]*serving-sys\\.com/",
+        "(?:<a [^>]*href=\"[^/]*//[^/]*serving-sys\\.com/|<img [^>]*src=\"[^/]*//[^/]*serving-sys\\.com/)"
+      ]
     },
     "Skimlinks": {
       "cats": [
 				"36"
 			],
-      "script": "skimlinks.*\\.js"
+      "script": ["skimlinks.*\\.js"]
     },
     "Smart Ad Server": {
       "cats": [
 				"36"
 			],
-      "env": "^SmartAdServer$",
-      "html": "<img[^>]+smartadserver\\.com\\/call",
-      "icon": "Smart Ad Server.png",
-      "website": "http://smartadserver.com"
+      "script": ["<img[^>]+smartadserver\\.com\\/call"]
     },
     "Snoobi": {
       "cats": [
 				"10"
 			],
-      "env": "^snoobi$",
-      "icon": "Snoobi.png",
-      "script": "snoobi\\.com/snoop\\.php",
-      "website": "http://www.snoobi.com"
-    },
-    "SobiPro": {
-      "cats": [
-				"19"
-			],
-      "env": "^SobiProUrl$",
-      "icon": "SobiPro.png",
-      "implies": "Joomla",
-      "website": "http://sigsiu.net/sobipro.html"
-    },
-    "Splunk": {
-      "cats": [
-				"19"
-			],
-      "html": "<p class=\"footer\">&copy; [-\\d]+ Splunk Inc\\.(?: Splunk ([\\d\\.]+(?: build [\\d\\.]*\\d)?))?[^<]*</p>\\;version:\\1",
-      "icon": "Splunk.png",
-      "meta": {
-        "author": "Splunk Inc\\;confidence:50"
-      },
-      "website": "http://splunk.com"
+      "script": ["snoobi\\.com/snoop\\.php"]
     },
     "StatCounter": {
       "cats": [
 				"10"
 			],
-      "icon": "StatCounter.png",
-      "script": "statcounter\\.com/counter/counter",
-      "website": "http://www.statcounter.com"
+      "script": ["statcounter\\.com/counter/counter"]
     },
     "SyntaxHighlighter": {
       "cats": [
 				"19"
 			],
-      "env": "^SyntaxHighlighter$",
-      "html": "<(?:script|link)[^>]*sh(?:Core|Brush|ThemeDefault)",
-      "icon": "SyntaxHighlighter.png",
-      "website": "http://github.com/syntaxhighlighter"
-    },
-    "Tealeaf": {
-      "cats": [
-				"10"
-			],
-      "env": "^TeaLeaf$",
-      "icon": "Tealeaf.png",
-      "website": "http://www.tealeaf.com"
+      "script": ["<(?:script|link)[^>]*sh(?:Core|Brush|ThemeDefault)"]
     },
     "Tealium": {
       "cats": [
 				"36"
 			],
-      "env": "^TEALIUMENABLED$",
-      "icon": "Tealium.png",
       "script": [
 				"^//tags\\.tiqcdn\\.com/",
 				"/tealium/utag\\.js$"
-			],
-      "website": "http://tealium.com"
+			]
     },
     "Titan": {
       "cats": [
 				"36"
 			],
-      "env": [
-				"^titan$",
-				"^titanEnabled$"
-			],
-      "html": "<script[^>]+>var titan",
-      "icon": "Titan.png",
-      "website": "http://titan360.com"
+      "script": ["<script[^>]+>var titan"]
     },
     "TrackJs": {
       "cats": [
 				"10"
 			],
-      "env": "^TrackJs$",
-      "icon": "TrackJs.png",
-      "script": "tracker.js",
-      "website": "http://trackjs.com"
+      "script": ["tracker.js"]
     },
     "Veoxa": {
       "cats": [
 				"36"
 			],
-      "env": "^(?:Veoxa_|VuVeoxaContent)",
-      "html": "<img [^>]*src=\"[^\"]+tracking\\.veoxa\\.com",
-      "icon": "Veoxa.png",
-      "script": "tracking\\.veoxa\\.com",
-      "website": "http://veoxa.com"
+      "script": [
+        "tracking\\.veoxa\\.com",
+        "<img [^>]*src=\"[^\"]+tracking\\.veoxa\\.com"
+      ]
     },
     "VigLink": {
       "cats": [
 				"36"
 			],
-      "env": "^(?:vglnk(?:$|_)|vl_(?:cB|disable)$)",
-      "icon": "VigLink.png",
-      "script": "(?:^[^/]*//[^/]*viglink\\.com/api/|vglnk\\.js)",
-      "website": "http://viglink.com"
+      "script": ["(?:^[^/]*//[^/]*viglink\\.com/api/|vglnk\\.js)"]
     },
     "VisualPath": {
       "cats": [
 				"10"
 			],
-      "icon": "VisualPath.png",
-      "script": "visualpath[^/]*\\.trackset\\.it/[^/]+/track/include\\.js",
-      "website": "http://www.trackset.com/web-analytics-software/visualpath"
+      "script": ["visualpath[^/]*\\.trackset\\.it/[^/]+/track/include\\.js"]
     },
     "W3Counter": {
       "cats": [
 				"10"
 			],
-      "icon": "W3Counter.png",
-      "script": "w3counter\\.com/tracker\\.js",
-      "website": "http://www.w3counter.com"
+      "script": ["w3counter\\.com/tracker\\.js"]
     },
     "Web Optimizer": {
       "cats": [
 				"10"
 			],
-      "html": "<title [^>]*lang=\"wo\">",
-      "icon": "Web Optimizer.png",
-      "website": "http://www.web-optimizer.us"
-    },
-    "Webtrekk": {
-      "cats": [
-				"10"
-			],
-      "env": "^webtrekk",
-      "icon": "Webtrekk.png",
-      "website": "http://www.webtrekk.com"
+      "script": ["<title [^>]*lang=\"wo\">"]
     },
     "Webtrends": {
       "cats": [
 				"10"
 			],
-      "env": "^(?:WTOptimize|WebTrends)",
-      "html": "<img[^>]+id=\"DCSIMG\"[^>]+webtrends",
-      "icon": "Webtrends.png",
-      "website": "http://worldwide.webtrends.com"
+      "script": ["<img[^>]+id=\"DCSIMG\"[^>]+webtrends"]
     },
     "Woopra": {
       "cats": [
 				"10"
 			],
-      "icon": "Woopra.png",
-      "script": "static\\.woopra\\.com",
-      "website": "http://www.woopra.com"
-    },
-    "Wowza Media Server": {
-      "cats": [
-				"38"
-			],
-      "html": "<title>Wowza Media Server \\d+ ((?:\\w+ Edition )?\\d+\\.[\\d\\.]+(?: build\\d+)?)?\\;version:\\1",
-      "icon": "Wowza Media Server.png",
-      "website": "http://www.wowza.com"
+      "script": ["static\\.woopra\\.com"]
     },
     "Yahoo Advertising": {
       "cats": [
 				"36"
 			],
-      "env": "^adxinserthtml$",
-      "html": [
+      "script": [
 				"<iframe[^>]+adserver\\.yahoo\\.com",
-				"<img[^>]+clicks\\.beap\\.bc\\.yahoo\\.com"
-			],
-      "icon": "yahoo.png",
-      "script": "adinterax\\.com",
-      "website": "http://advertising.yahoo.com"
+				"<img[^>]+clicks\\.beap\\.bc\\.yahoo\\.com",
+                "adinterax\\.com"
+			]
     },
     "Yahoo! Web Analytics": {
       "cats": [
 				"10"
 			],
-      "env": "^YWA$",
-      "icon": "yahoo.png",
-      "script": "d\\.yimg\\.com/mi/ywa\\.js",
-      "website": "http://web.analytics.yahoo.com"
+      "script": ["d\\.yimg\\.com/mi/ywa\\.js"]
     },
     "Yandex.Direct": {
       "cats": [
 				"36"
 			],
-      "env": [
-				"^yandex_partner_id$",
-				"^yandex_ad_format$",
-				"^yandex_direct_"
-			],
-      "html": "<yatag class=\"ya-partner__ads\">",
-      "icon": "Yandex.Direct.png",
-      "script": "https?://an\\.yandex\\.ru/",
-      "website": "http://partner.yandex.com"
+      "script": [
+				"<yatag class=\"ya-partner__ads\">",
+				"https?://an\\.yandex\\.ru/"
+			]
     },
     "Yandex.Metrika": {
       "cats": [
 				"10"
 			],
-      "env": "^yandex_metrika",
-      "icon": "Yandex.Metrika.png",
-      "script": "mc\\.yandex\\.ru\\/metrika\\/watch\\.js",
-      "website": "http://metrika.yandex.com"
+      "script": ["mc\\.yandex\\.ru\\/metrika\\/watch\\.js"]
     },
     "Yieldlab": {
       "cats": [
 				"36"
 			],
-      "icon": "Yieldlab.png",
-      "script": "^https?://(?:[^/]+\\.)?yieldlab\\.net/",
-      "website": "http://yieldlab.de"
+      "script": ["^https?://(?:[^/]+\\.)?yieldlab\\.net/"]
     },
     "Yieldmo": {
       "cats": [
 				"36"
 			],
-      "icon": "Yieldlab.png",
-      "script": "static\\.yieldmo\\.com",
-      "website": "http://yieldlab.de"
+      "script": ["static\\.yieldmo\\.com"]
     },
     "Zabbix": {
       "cats": [
 				"19"
 			],
-      "env": "^zbxCallPostScripts$",
-      "html": "<body[^>]+zbxCallPostScripts",
-      "icon": "Zabbix.png",
-      "implies": "PHP",
-      "meta": {
-        "Author": "ZABBIX SIA\\;confidence:70"
-      },
-      "url": "\\/zabbix\\/\\;confidence:30",
-      "website": "http://zabbix.com"
+      "script": ["<body[^>]+zbxCallPostScripts"]
     },
     "Zanox": {
       "cats": [
 				"36"
 			],
-      "env": "^zanox$",
-      "html": "<img [^>]*src=\"[^\"]+ad\\.zanox\\.com",
-      "icon": "Zanox.png",
-      "script": "zanox\\.com/scripts/zanox\\.js$",
-      "website": "http://zanox.com"
+      "html": [
+        "<img [^>]*src=\"[^\"]+ad\\.zanox\\.com",
+        "zanox\\.com/scripts/zanox\\.js$"
+      ]
     },
     "cgit": {
       "cats": [
 				"19"
 			],
-      "html": [
+      "script": [
 				"<[^>]+id='cgit'",
-				"generated by <a href='http://git.zx2c4.com/cgit/about/'>cgit v([\\d.a-z-]+)</a>\\;version:\\1"
-			],
-      "icon": "cgit.png",
-      "implies": "git",
-      "meta": {
-        "generator": "^cgit v([\\d.a-z-]+)$\\;version:\\1"
-      },
-      "website": "http://git.zx2c4.com/cgit"
+				"generated by <a href='http://git.zx2c4.com/cgit/about/'>cgit v([\\d.a-z-]+)</a>\\;version:\\1",
+                "^cgit v([\\d.a-z-]+)$\\;version:\\1"
+			]
     },
     "comScore": {
       "cats": [
 				"10"
 			],
-      "env": "^_?COMSCORE$",
       "script": [
               "\\.scorecardresearch\\.com/beacon\\.js|COMSCORE\\.beacon",
               "<iframe[^>]* (?:id=\"comscore\"|scr=[^>]+comscore)|\\.scorecardresearch\\.com/beacon\\.js|COMSCORE\\.beacon",
               "sb\\.scorecardresearch\\.com"
             ]
-    },
-    "ownCloud": {
-      "cats": [
-				"19"
-			],
-      "html": "<a href=\"https://owncloud.com\" target=\"_blank\">ownCloud Inc.</a><br/>Your Cloud, Your Data, Your Way!",
-      "icon": "ownCloud.png",
-      "implies": "PHP",
-      "meta": {
-        "apple-itunes-app": "app-id=543672169"
-      },
-      "website": "http://owncloud.org"
     }
   },
 
