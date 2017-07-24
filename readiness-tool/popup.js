@@ -13,8 +13,6 @@ let supportedAnalytics;
 let notSupportedAds;
 /* @const {!Element} */
 let notSupportedAnalytics;
-/* @const {!Element} */
-let notSupportedOther;
 /* @const {string} */
 const loadingMessage = 'Loading...';
 /* @const {string} */
@@ -37,8 +35,9 @@ window.onload = function onWindowLoad() {
   supportedAnalytics = document.getElementById('analytics-supported');
   notSupportedAds = document.getElementById('ads-notSupported');
   notSupportedAnalytics = document.getElementById('analytics-notSupported');
-  notSupportedOther = document.getElementById('other-notSupported');
-  supportedAds.innerHTML = supportedAnalytics.innerHTML = notSupportedAds.innerHTML = notSupportedAnalytics.innerHTML = notSupportedOther.innerHTML = loadingMessage;
+  supportedAds.innerHTML = supportedAnalytics.innerHTML = 
+    notSupportedAds.innerHTML = notSupportedAnalytics.innerHTML =
+    loadingMessage;
   // Gets the DOM of the current web page and converts it to a string
   chrome.tabs.executeScript(null, {
     file: 'getPagesSource.js',
@@ -71,12 +70,12 @@ function findDetectedApps(html) {
  * @param {Objected} detectedApps - All 3rd Party Applications found on page
  */
 function showSupportedAppsInView(detectedApps) {
-  supportedAds.innerHTML = supportedAnalytics.innerHTML = notSupportedAds.innerHTML = notSupportedAnalytics.innerHTML = notSupportedOther.innerHTML = blankMessage;
+  supportedAds.innerHTML = supportedAnalytics.innerHTML = notSupportedAds.innerHTML = 
+    notSupportedAnalytics.innerHTML = blankMessage;
   supportedAds.appendChild(makeList(detectedApps.supported.ads));
   supportedAnalytics.appendChild(makeList(detectedApps.supported.analytics));
   notSupportedAds.appendChild(makeList(detectedApps.notSupported.ads));
   notSupportedAnalytics.appendChild(makeList(detectedApps.notSupported.analytics));
-  notSupportedOther.appendChild(makeList(detectedApps.notSupported.other));
 }
 /**
  * Splits all detected apps into 'supported' and 'not supported'
@@ -92,8 +91,7 @@ function filterApps(apps, htmlString) {
     },
     'notSupported': {
       'ads': [],
-      'analytics': [],
-      'other': [],
+      'analytics': []
     },
   };
   // for all the app objects in the apps.JSON file
