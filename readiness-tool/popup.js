@@ -5,7 +5,6 @@
  */
 self.popups = {};
 self.popups.isSupported = isSupported;
-self.popups.doesRegexExist = doesRegexExist;
 let supportedAds;
 let supportedAnalytics;
 let notSupportedAds;
@@ -115,7 +114,7 @@ function specifySupport(apps, htmlString) {
 function addToDict(tempScript, htmlString, foundThis, key, category) {
   tempScript = tempScript.split('\\;');
   let regX = new RegExp(tempScript[0]);
-  if (doesRegexExist(regX, htmlString)) {
+  if (regX.test(htmlString)) {
     if (isKeyUnique(foundThis, key)) {
       if (isSupported(key)) {
         findCategory(category, foundThis.supported, key);
@@ -155,16 +154,7 @@ function findCategory(category, objectList, key) {
     objectList.other.push(key);
   }
 }
-/**
- * Determines if regular expression exists within the HTML of the page
- * @param {String} regexString - Regular expression of app
- * @param {String} htmlString - String containing all HTML on the page
- * @return {boolean} 
- */
-function doesRegexExist(regexString, htmlString) {
-  let value = regexString.test(htmlString);
-  return (value);
-}
+
 /**
  * TODO (alwalton@): get list of supported ads/analytics programatically
  * Check if app is in supported list of app names

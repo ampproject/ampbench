@@ -10,7 +10,7 @@
   "main": "lib/foo.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/alannawalton/ampbench/tree/master/readiness-tool"
+    "url": "https://github.com/ampproject/ampbench"
   },
   "dependencies": {
     "builtwith": "^1.0.1"
