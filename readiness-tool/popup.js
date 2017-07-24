@@ -5,25 +5,18 @@
  */
 self.popups = {};
 self.popups.isSupported = isSupported;
-
 /* @const {!Element} */
 let supportedAds;
-
 /* @const {!Element} */
 let supportedAnalytics;
-
 /* @const {!Element} */
 let notSupportedAds;
-
 /* @const {!Element} */
 let notSupportedAnalytics;
-
 /* @const {!Element} */
 let notSupportedOther;
-
 /* @const {string} */
 const loadingMessage = 'Loading...';
-
 /* @const {string} */
 const blankMessage = '';
 /**
@@ -57,26 +50,21 @@ window.onload = function onWindowLoad() {
  * @return {Object} 
  */
 function findDetectedApps(html) {
-  fetch('apps.json')
-    .then(
-      function (response) {
-        if (response.status !== 200) {
-          console.log('Looks like there was a problem. Status Code: ' +
-            response.status);
-          return;
-        }
-        // Examine the text in the response  
-        response.json().then(function (data) {
-          listAllApps = data.apps;
-          detectedApps = filterApps(listAllApps, html);
-          showSupportedAppsInView(detectedApps);
-          return detectedApps;
-        });
-      }
-    )
-    .catch(function (err) {
-      console.log('Fetch Error :-S', err);
+  fetch('apps.json').then(function (response) {
+    if (response.status !== 200) {
+      console.log('Looks like there was a problem. Status Code: ' + response.status);
+      return;
+    }
+    // Examine the text in the response  
+    response.json().then(function (data) {
+      listAllApps = data.apps;
+      detectedApps = filterApps(listAllApps, html);
+      showSupportedAppsInView(detectedApps);
+      return detectedApps;
     });
+  }).catch(function (err) {
+    console.log('Fetch Error :-S', err);
+  });
 }
 /**
  * Add supported and unsupported applications to the view
@@ -133,11 +121,7 @@ function addToDict(tempScript, htmlString, foundThis, key, category) {
   let regX = new RegExp(tempScript[0]);
   if (regX.test(htmlString)) {
     if (isKeyUnique(foundThis, key)) {
-      isSupported(key) ? 
-        (category == 10 ? foundThis.supported.analytics.push(key) :
-         foundThis.supported.ads.push(key)) : 
-      (category == 10 ? foundThis.notSupportedd.analytics.push(key) :
-       foundThis.notSupported.ads.push(key));
+      isSupported(key) ? (category == 10 ? foundThis.supported.analytics.push(key) : foundThis.supported.ads.push(key)) : (category == 10 ? foundThis.notSupportedd.analytics.push(key) : foundThis.notSupported.ads.push(key));
     }
   }
 }
@@ -151,8 +135,6 @@ function isKeyUnique(obj, key) {
   let truthValue = obj.supported.ads.indexOf(key) + obj.supported.analytics.indexOf(key) + obj.notSupported.ads.indexOf(key) + obj.notSupported.analytics.indexOf(key);
   return truthValue == -4;
 }
-
-
 /**
  * TODO (alwalton@): get list of supported ads/analytics programatically
  * Check if app is in supported list of app names
@@ -167,15 +149,15 @@ function isSupported(key) {
     , 'Ad Up Technology', 'Adverline', 'Adverticum', 'AdvertServe'
     , 'Affiliate-B', 'AMoAd', 'AppNexus', 'Atomx', 'Bidtellect', 'brainy'
     , 'CA A.J.A. Infeed', 'CA-ProFit-X', 'Chargeads', 'Colombia', 'Content.ad'
-    , 'Criteo', 'CSA', 'CxenseDisplay', 'Dianomi', 'DistroScale', 'Dot and Media'
-    , 'Doubleclick', 'DoubleClick for Publishers (DFP)'
+    , 'Criteo', 'CSA', 'CxenseDisplay', 'Dianomi', 'DistroScale'
+    , 'Dot and Media', 'Doubleclick', 'DoubleClick for Publishers (DFP)'
     , 'DoubleClick Ad Exchange (AdX)', 'E-Planning', 'Ezoic', 'FlexOneELEPHANT'
     , 'FlexOneHARRIER', 'fluct', 'Felmat', 'Flite', 'Fusion', 'Google AdSense'
     , 'GenieeSSP', 'GMOSSP', 'GumGum', 'Holder', 'Imedia', 'I-Mobile'
     , 'iBillboard', 'Improve Digital', 'Index Exchange', 'Industrybrains'
-    , 'InMobi', 'Kargo', 'Kiosked', 'Kixer', 'Ligatus', 'LOKA', 'MADS', 'MANTIS'
-    , 'MediaImpact', 'Media.net', 'Mediavine', 'Meg', 'MicroAd', 'Mixpo'
-    , 'myWidget', 'Nativo', 'Navegg', 'Nend', 'NETLETIX', 'Nokta'
+    , 'InMobi', 'Kargo', 'Kiosked', 'Kixer', 'Ligatus', 'LOKA', 'MADS'
+    , 'MANTIS', 'MediaImpact', 'Media.net', 'Mediavine', 'Meg', 'MicroAd'
+    , 'Mixpo', 'myWidget', 'Nativo', 'Navegg', 'Nend', 'NETLETIX', 'Nokta'
     , 'Open AdStream (OAS)', 'OpenX', 'plista', 'polymorphicAds', 'popin'
     , 'PubMatic', 'Pubmine', 'PulsePoint', 'Purch', 'Rambler&Co', 'Relap'
     , 'Revcontent', 'Rubicon Project', 'Sharethrough', 'Sklik', 'SlimCut Media'
