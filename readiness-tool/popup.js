@@ -5,12 +5,26 @@
  */
 self.popups = {};
 self.popups.isSupported = isSupported;
+
+/* @const {!Element} */
 let supportedAds;
+
+/* @const {!Element} */
 let supportedAnalytics;
+
+/* @const {!Element} */
 let notSupportedAds;
+
+/* @const {!Element} */
 let notSupportedAnalytics;
+
+/* @const {!Element} */
 let notSupportedOther;
+
+/* @const {string} */
 const loadingMessage = 'Loading...';
+
+/* @const {string} */
 const blankMessage = '';
 /**
  * Callback function that sends a response upon receiving message
@@ -34,8 +48,8 @@ window.onload = function onWindowLoad() {
   supportedAds.innerHTML = supportedAnalytics.innerHTML = notSupportedAds.innerHTML = notSupportedAnalytics.innerHTML = notSupportedOther.innerHTML = loadingMessage;
   // Gets the DOM of the current web page and converts it to a string
   chrome.tabs.executeScript(null, {
-    file: 'getPagesSource.js'
-  , }, function () {});
+    file: 'getPagesSource.js',
+  }, function () {});
 };
 /**
  * Returns all the 3rd party applications found on the website
@@ -43,22 +57,26 @@ window.onload = function onWindowLoad() {
  * @return {Object} 
  */
 function findDetectedApps(html) {
-  const htmlString = html;
-  const linkToApps = (chrome.runtime.getURL('apps.json'));
-  const xhr = new XMLHttpRequest();
-  let detectedApps;
-  let listAllApps;
-  xhr.open('GET', linkToApps, true);
-  xhr.onreadystatechange = function () {
-    // Wait until the response is done (onload or onerror).
-    if (xhr.readyState === 4) {
-      listAllApps = JSON.parse(xhr.response).apps;
-      detectedApps = specifySupport(listAllApps, htmlString);
-      showSupportedAppsInView(detectedApps);
-    }
-  };
-  xhr.send();
-  return detectedApps;
+  fetch('apps.json')
+    .then(
+      function (response) {
+        if (response.status !== 200) {
+          console.log('Looks like there was a problem. Status Code: ' +
+            response.status);
+          return;
+        }
+        // Examine the text in the response  
+        response.json().then(function (data) {
+          listAllApps = data.apps;
+          detectedApps = filterApps(listAllApps, html);
+          showSupportedAppsInView(detectedApps);
+          return detectedApps;
+        });
+      }
+    )
+    .catch(function (err) {
+      console.log('Fetch Error :-S', err);
+    });
 }
 /**
  * Add supported and unsupported applications to the view
@@ -78,27 +96,26 @@ function showSupportedAppsInView(detectedApps) {
  * @param {String} htmlString - String containing all HTML on the page
  * @return {Object} 
  */
-function specifySupport(apps, htmlString) {
-  const obj = apps;
-  let foundThis = {
+function filterApps(apps, htmlString) {
+  const foundThis = {
     'supported': {
-      'ads': []
-      , 'analytics': []
-    , }
-    , 'notSupported': {
-      'ads': []
-      , 'analytics': []
-      , 'other': []
-    , }
-  , };
+      'ads': [],
+      'analytics': [],
+    },
+    'notSupported': {
+      'ads': [],
+      'analytics': [],
+      'other': [],
+    },
+  };
   // for all the app objects in the apps.JSON file
-  Object.keys(obj).forEach(function (key) {
-    let val = obj[key];
+  Object.keys(apps).forEach(function (key) {
+    let val = apps[key];
     // If object has a 'script' key
     if (val.script != null) {
-        Object.keys(val.script).forEach(function (x) {
-          addToDict(val.script[x], htmlString, foundThis, key, val.cats);
-        });
+      Object.keys(val.script).forEach(function (x) {
+        addToDict(val.script[x], htmlString, foundThis, key, val.cats);
+      });
     }
   });
   return foundThis;
@@ -116,12 +133,11 @@ function addToDict(tempScript, htmlString, foundThis, key, category) {
   let regX = new RegExp(tempScript[0]);
   if (regX.test(htmlString)) {
     if (isKeyUnique(foundThis, key)) {
-      if (isSupported(key)) {
-        findCategory(category, foundThis.supported, key);
-      }
-      else {
-        findCategory(category, foundThis.notSupported, key);
-      }
+      isSupported(key) ? 
+        (category == 10 ? foundThis.supported.analytics.push(key) :
+         foundThis.supported.ads.push(key)) : 
+      (category == 10 ? foundThis.notSupportedd.analytics.push(key) :
+       foundThis.notSupported.ads.push(key));
     }
   }
 }
@@ -135,25 +151,7 @@ function isKeyUnique(obj, key) {
   let truthValue = obj.supported.ads.indexOf(key) + obj.supported.analytics.indexOf(key) + obj.notSupported.ads.indexOf(key) + obj.notSupported.analytics.indexOf(key);
   return truthValue == -4;
 }
-/**
- * Figures out thae category the key belongs to (Ads or Analytics)
- * @param {String} category - number representing the category of each item
- * @param {Object} objectList - The found supported/unsupported 3p services
- * @param {String} key - name of third party service
- */
-function findCategory(category, objectList, key) {
-  // '10' is Analytics
-  if (category == '10') {
-    objectList.analytics.push(key);
-    // '36' is Ads
-  }
-  else if (category == '36') {
-    objectList.ads.push(key);
-  }
-  else {
-    objectList.other.push(key);
-  }
-}
+
 
 /**
  * TODO (alwalton@): get list of supported ads/analytics programatically
