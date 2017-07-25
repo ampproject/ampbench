@@ -99,7 +99,7 @@ function filterApps(htmlString) {
     // If object has a 'script' key
     if (val.script != null) {
       Object.keys(val.script).forEach(function (x) {
-        addToDict(val.script[x], htmlString, foundThis, key, val.cats);
+        addToDict(val.script[x].split('\\;')[0], htmlString, foundThis, key, val.cats);
       });
     }
   });
@@ -114,8 +114,7 @@ function filterApps(htmlString) {
  * @param {String} category - the category that the key belongs to
  */
 function addToDict(tempScript, htmlString, foundThis, key, category) {
-  tempScript = tempScript.split('\\;');
-  const regX = new RegExp(tempScript[0]);
+  const regX = new RegExp(tempScript);
   if (regX.test(htmlString)) {
     if (isKeyUnique(foundThis, key)) {
       switch (true) {
