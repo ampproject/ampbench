@@ -5,7 +5,8 @@
  */
 self.popups = {};
 self.popups.isSupported = isSupported;
-/* @const {!Element} */
+self.pip
+  /* @const {!Element} */
 let supportedAds;
 /* @const {!Element} */
 let supportedAnalytics;
@@ -37,13 +38,11 @@ window.onload = function onWindowLoad() {
   supportedAnalytics = document.getElementById('analytics-supported');
   notSupportedAds = document.getElementById('ads-notSupported');
   notSupportedAnalytics = document.getElementById('analytics-notSupported');
-  supportedAds.innerHTML = supportedAnalytics.innerHTML = 
-    notSupportedAds.innerHTML = notSupportedAnalytics.innerHTML =
-    loadingMessage;
+  supportedAds.innerHTML = supportedAnalytics.innerHTML = notSupportedAds.innerHTML = notSupportedAnalytics.innerHTML = loadingMessage;
   // Gets the DOM of the current web page and converts it to a string
   chrome.tabs.executeScript(null, {
-    file: 'getPagesSource.js',
-  }, function () {});
+    file: 'getPagesSource.js'
+  , }, function () {});
 };
 /**
  * Returns all the 3rd party applications found on the website
@@ -72,8 +71,7 @@ function findDetectedApps(html) {
  * @param {Objected} detectedApps - All 3rd Party Applications found on page
  */
 function showSupportedAppsInView(detectedApps) {
-  supportedAds.innerHTML = supportedAnalytics.innerHTML = notSupportedAds.innerHTML = 
-    notSupportedAnalytics.innerHTML = blankMessage;
+  supportedAds.innerHTML = supportedAnalytics.innerHTML = notSupportedAds.innerHTML = notSupportedAnalytics.innerHTML = blankMessage;
   supportedAds.appendChild(makeList(detectedApps.supported.ads, false));
   supportedAnalytics.appendChild(makeList(detectedApps.supported.analytics, false));
   notSupportedAds.appendChild(makeList(detectedApps.notSupported.ads, true));
@@ -87,14 +85,14 @@ function showSupportedAppsInView(detectedApps) {
 function filterApps(htmlString) {
   const foundThis = {
     'supported': {
-      'ads': [],
-      'analytics': [],
-    },
-    'notSupported': {
-      'ads': [],
-      'analytics': []
-    },
-  };
+      'ads': []
+      , 'analytics': []
+    , }
+    , 'notSupported': {
+      'ads': []
+      , 'analytics': []
+    }
+  , };
   // for all the app objects in the apps.JSON file
   Object.keys(listAllApps).forEach(function (key) {
     let val = listAllApps[key];
@@ -121,18 +119,18 @@ function addToDict(tempScript, htmlString, foundThis, key, category) {
   if (regX.test(htmlString)) {
     if (isKeyUnique(foundThis, key)) {
       switch (true) {
-        case (isSupported(key) == true) && category == 10:
-          foundThis.supported.analytics.push(key);
-          break;
-        case (isSupported(key) == true) && category == 36:
-          foundThis.supported.ads.push(key);
-          break;
-        case (isSupported(key) ==  false) && category == 10:
-          foundThis.notSupported.analytics.push(key);
-          break;
-        case isSupported(key) == false && category == 36:
-          foundThis.notSupported.ads.push(key);
-          break;
+      case (isSupported(key) == true) && category == 10:
+        foundThis.supported.analytics.push(key);
+        break;
+      case (isSupported(key) == true) && category == 36:
+        foundThis.supported.ads.push(key);
+        break;
+      case (isSupported(key) == false) && category == 10:
+        foundThis.notSupported.analytics.push(key);
+        break;
+      case isSupported(key) == false && category == 36:
+        foundThis.notSupported.ads.push(key);
+        break;
       }
     }
   }
@@ -148,7 +146,6 @@ function isKeyUnique(obj, key) {
         obj.supported.analytics.includes(key) + 
         obj.notSupported.ads.includes(key) + 
         obj.notSupported.analytics.includes(key);
-  console.log(truthValue)
   return truthValue == false;
 }
 /**
