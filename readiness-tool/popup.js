@@ -85,12 +85,12 @@ function showSupportedAppsInView(detectedApps) {
 function filterApps(htmlString) {
   const foundThis = {
     'supported': {
-      'ads': []
-      , 'analytics': []
-    , }
-    , 'notSupported': {
-      'ads': []
-      , 'analytics': []
+      'ads': [],
+      'analytics': []
+    },
+    'notSupported': {
+      'ads': [], 
+      'analytics': []
     }
   };
   // for all the app objects in the apps.JSON file
