@@ -13,6 +13,8 @@ let supportedAnalytics;
 let notSupportedAds;
 /* @const {!Element} */
 let notSupportedAnalytics;
+/* @const {!Object} */
+let listAllApps;
 /* @const {string} */
 const loadingMessage = 'Loading...';
 /* @const {string} */
@@ -57,7 +59,7 @@ function findDetectedApps(html) {
     // Examine the text in the response  
     response.json().then(function (data) {
       listAllApps = data.apps;
-      detectedApps = filterApps(listAllApps, html);
+      detectedApps = filterApps(html);
       showSupportedAppsInView(detectedApps);
       return detectedApps;
     });
@@ -72,18 +74,17 @@ function findDetectedApps(html) {
 function showSupportedAppsInView(detectedApps) {
   supportedAds.innerHTML = supportedAnalytics.innerHTML = notSupportedAds.innerHTML = 
     notSupportedAnalytics.innerHTML = blankMessage;
-  supportedAds.appendChild(makeList(detectedApps.supported.ads));
-  supportedAnalytics.appendChild(makeList(detectedApps.supported.analytics));
-  notSupportedAds.appendChild(makeList(detectedApps.notSupported.ads));
-  notSupportedAnalytics.appendChild(makeList(detectedApps.notSupported.analytics));
+  supportedAds.appendChild(makeList(detectedApps.supported.ads, false));
+  supportedAnalytics.appendChild(makeList(detectedApps.supported.analytics, false));
+  notSupportedAds.appendChild(makeList(detectedApps.notSupported.ads, true));
+  notSupportedAnalytics.appendChild(makeList(detectedApps.notSupported.analytics, true));
 }
 /**
  * Splits all detected apps into 'supported' and 'not supported'
- * @param {Object} apps - All possible services that could exist on the page
  * @param {String} htmlString - String containing all HTML on the page
  * @return {Object} 
  */
-function filterApps(apps, htmlString) {
+function filterApps(htmlString) {
   const foundThis = {
     'supported': {
       'ads': [],
@@ -95,8 +96,8 @@ function filterApps(apps, htmlString) {
     },
   };
   // for all the app objects in the apps.JSON file
-  Object.keys(apps).forEach(function (key) {
-    let val = apps[key];
+  Object.keys(listAllApps).forEach(function (key) {
+    let val = listAllApps[key];
     // If object has a 'script' key
     if (val.script != null) {
       Object.keys(val.script).forEach(function (x) {
@@ -116,10 +117,23 @@ function filterApps(apps, htmlString) {
  */
 function addToDict(tempScript, htmlString, foundThis, key, category) {
   tempScript = tempScript.split('\\;');
-  let regX = new RegExp(tempScript[0]);
+  const regX = new RegExp(tempScript[0]);
   if (regX.test(htmlString)) {
     if (isKeyUnique(foundThis, key)) {
-      isSupported(key) ? (category == 10 ? foundThis.supported.analytics.push(key) : foundThis.supported.ads.push(key)) : (category == 10 ? foundThis.notSupportedd.analytics.push(key) : foundThis.notSupported.ads.push(key));
+      switch (true) {
+        case (isSupported(key) == true) && category == 10:
+          foundThis.supported.analytics.push(key);
+          break;
+        case (isSupported(key) == true) && category == 36:
+          foundThis.supported.ads.push(key);
+          break;
+        case (isSupported(key) ==  false) && category == 10:
+          foundThis.notSupported.analytics.push(key);
+          break;
+        case isSupported(key) == false && category == 36:
+          foundThis.notSupported.ads.push(key);
+          break;
+      }
     }
   }
 }
@@ -130,8 +144,12 @@ function addToDict(tempScript, htmlString, foundThis, key, category) {
  * @return {boolean} 
  */
 function isKeyUnique(obj, key) {
-  let truthValue = obj.supported.ads.indexOf(key) + obj.supported.analytics.indexOf(key) + obj.notSupported.ads.indexOf(key) + obj.notSupported.analytics.indexOf(key);
-  return truthValue == -4;
+  const truthValue = obj.supported.ads.includes(key) + 
+        obj.supported.analytics.includes(key) + 
+        obj.notSupported.ads.includes(key) + 
+        obj.notSupported.analytics.includes(key);
+  console.log(truthValue)
+  return truthValue == false;
 }
 /**
  * TODO (alwalton@): get list of supported ads/analytics programatically
@@ -180,9 +198,10 @@ function isSupported(key) {
 /**
  * Make list of supported/unsupported apps into an unordered list
  * @param {[String]} array - array of app names
+ * @param {boolean} allowToolTips - check to see if tooltip allowed
  * @return {e} 
  */
-function makeList(array) {
+function makeList(array, allowToolTips) {
   // Create the list element:
   const list = document.createElement('ul');
   for (let i = 0; i < array.length; i++) {
@@ -190,6 +209,11 @@ function makeList(array) {
     let item = document.createElement('li');
     // Set its contents:
     item.appendChild(document.createTextNode(array[i]));
+    // Tooltip is only allowed for unsupported venodrs
+    if (allowToolTips && listAllApps[array[i]].tooltip != null) {
+      item.className += "tooltip";
+      item.setAttribute("data-tooltip", listAllApps[array[i]].tooltip);
+    }
     // Add it to the list:
     list.appendChild(item);
   }
