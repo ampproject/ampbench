@@ -5,7 +5,7 @@
  */
 self.popups = {};
 self.popups.isSupported = isSupported;
-self.pip
+self.popups.addToDict = addToDict;
   /* @const {!Element} */
 let supportedAds;
 /* @const {!Element} */
