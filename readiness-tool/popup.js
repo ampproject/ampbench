@@ -92,7 +92,7 @@ function filterApps(htmlString) {
       'ads': []
       , 'analytics': []
     }
-  , };
+  };
   // for all the app objects in the apps.JSON file
   Object.keys(listAllApps).forEach(function (key) {
     let val = listAllApps[key];
