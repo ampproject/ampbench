@@ -207,7 +207,7 @@ function makeList(array, allowToolTips) {
     item.appendChild(document.createTextNode(array[i]));
     // Tooltip is only allowed for unsupported venodrs
     if (allowToolTips && listAllApps[array[i]].tooltip != null) {
-      item.className += "tooltip";
+      item.classList.add('tooltip');
       item.setAttribute("data-tooltip", listAllApps[array[i]].tooltip);
     }
     // Add it to the list:
