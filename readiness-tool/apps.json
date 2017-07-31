@@ -692,216 +692,163 @@
 
   "categories": {
     "1": {
-      "name": "CMS",
-      "priority": "1"
+      "name": "CMS"
     },
     "2": {
-      "name": "Message Boards",
-      "priority": "1"
+      "name": "Message Boards"
     },
     "3": {
-      "name": "Database Managers",
-      "priority": "9"
+      "name": "Database Managers"
     },
     "4": {
-      "name": "Documentation Tools",
-      "priority": "9"
+      "name": "Documentation Tools"
     },
     "5": {
-      "name": "Widgets",
-      "priority": "9"
+      "name": "Widgets"
     },
     "6": {
-      "name": "Ecommerce",
-      "priority": "1"
+      "name": "Ecommerce"
     },
     "7": {
-      "name": "Photo Galleries",
-      "priority": "1"
+      "name": "Photo Galleries"
     },
     "8": {
-      "name": "Wikis",
-      "priority": "1"
+      "name": "Wikis"
     },
     "9": {
-      "name": "Hosting Panels",
-      "priority": "1"
+      "name": "Hosting Panels"
     },
     "10": {
-      "name": "Analytics",
-      "priority": "9"
+      "name": "Analytics"
     },
     "11": {
-      "name": "Blogs",
-      "priority": "1"
+      "name": "Blogs"
     },
     "12": {
-      "name": "JavaScript Frameworks",
-      "priority": "3"
+      "name": "JavaScript Frameworks"
     },
     "13": {
-      "name": "Issue Trackers",
-      "priority": "9"
+      "name": "Issue Trackers"
     },
     "14": {
-      "name": "Video Players",
-      "priority": "9"
+      "name": "Video Players"
     },
     "15": {
-      "name": "Comment Systems",
-      "priority": "9"
+      "name": "Comment Systems"
     },
     "16": {
-      "name": "Captchas",
-      "priority": "9"
+      "name": "Captchas"
     },
     "17": {
-      "name": "Font Scripts",
-      "priority": "9"
+      "name": "Font Scripts"
     },
     "18": {
-      "name": "Web Frameworks",
-      "priority": "2"
+      "name": "Web Frameworks"
     },
     "19": {
-      "name": "Miscellaneous",
-      "priority": "9"
+      "name": "Miscellaneous"
     },
     "20": {
-      "name": "Editors",
-      "priority": "9"
+      "name": "Editors"
     },
     "21": {
-      "name": "LMS",
-      "priority": "1"
+      "name": "LMS"
     },
     "22": {
-      "name": "Web Servers",
-      "priority": "9"
+      "name": "Web Servers"
     },
     "23": {
-      "name": "Cache Tools",
-      "priority": "9"
+      "name": "Cache Tools"
     },
     "24": {
-      "name": "Rich Text Editors",
-      "priority": "9"
+      "name": "Rich Text Editors"
     },
     "25": {
-      "name": "JavaScript Graphics",
-      "priority": "3"
+      "name": "JavaScript Graphics"
     },
     "26": {
-      "name": "Mobile Frameworks",
-      "priority": "3"
+      "name": "Mobile Frameworks"
     },
     "27": {
-      "name": "Programming Languages",
-      "priority": "4"
+      "name": "Programming Languages"
     },
     "28": {
-      "name": "Operating Systems",
-      "priority": "5"
+      "name": "Operating Systems"
     },
     "29": {
-      "name": "Search Engines",
-      "priority": "9"
+      "name": "Search Engines"
     },
     "30": {
-      "name": "Web Mail",
-      "priority": "9"
+      "name": "Web Mail"
     },
     "31": {
-      "name": "CDN",
-      "priority": "9"
+      "name": "CDN"
     },
     "32": {
-      "name": "Marketing Automation",
-      "priority": "9"
+      "name": "Marketing Automation"
     },
     "33": {
-      "name": "Web Server Extensions",
-      "priority": "9"
+      "name": "Web Server Extensions"
     },
     "34": {
-      "name": "Databases",
-      "priority": "9"
+      "name": "Databases"
     },
     "35": {
-      "name": "Maps",
-      "priority": "9"
+      "name": "Maps"
     },
     "36": {
-      "name": "Advertising Networks",
-      "priority": "9"
+      "name": "Advertising Networks"
     },
     "37": {
-      "name": "Network Devices",
-      "priority": "9"
+      "name": "Network Devices"
     },
     "38": {
-      "name": "Media Servers",
-      "priority": "1"
+      "name": "Media Servers"
     },
     "39": {
-      "name": "Webcams",
-      "priority": "9"
+      "name": "Webcams"
     },
     "40": {
-      "name": "Printers",
-      "priority": "9"
+      "name": "Printers"
     },
     "41": {
-      "name": "Payment Processors",
-      "priority": "9"
+      "name": "Payment Processors"
     },
     "42": {
-      "name": "Tag Managers",
-      "priority": "9"
+      "name": "Tag Managers"
     },
     "43": {
-      "name": "Paywalls",
-      "priority": "9"
+      "name": "Paywalls"
     },
     "44": {
-      "name": "Build CI Systems",
-      "priority": "9"
+      "name": "Build CI Systems"
     },
     "45": {
-      "name": "Control Systems",
-      "priority": "9"
+      "name": "Control Systems"
     },
     "46": {
-      "name": "Remote Access",
-      "priority": "9"
+      "name": "Remote Access"
     },
     "47": {
-      "name": "Dev Tools",
-      "priority": "9"
+      "name": "Dev Tools"
     },
     "48": {
-      "name": "Network Storage",
-      "priority": "9"
+      "name": "Network Storage"
     },
     "49": {
-      "name": "Feed Readers",
-      "priority": "1"
+      "name": "Feed Readers"
     },
     "50": {
-      "name": "Document Management Systems",
-      "priority": "1"
+      "name": "Document Management Systems"
     },
     "51": {
-      "name": "Landing Page Builders",
-      "priority": "2"
+      "name": "Landing Page Builders"
     },
     "52": {
-      "name": "Live Chat",
-      "priority": "9"
+      "name": "Live Chat"
     },
     "53": {
-      "name": "CRM",
-      "priority": "9"
+      "name": "CRM"
     }
   }
 }

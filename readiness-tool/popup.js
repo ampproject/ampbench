@@ -6,7 +6,7 @@
 self.popups = {};
 self.popups.isSupported = isSupported;
 self.popups.addToDict = addToDict;
-  /* @const {!Element} */
+/* @const {!Element} */
 let supportedAds;
 /* @const {!Element} */
 let supportedAnalytics;
@@ -14,8 +14,6 @@ let supportedAnalytics;
 let notSupportedAds;
 /* @const {!Element} */
 let notSupportedAnalytics;
-/* @const {!Object} */
-let listAllApps;
 /* @const {string} */
 const loadingMessage = 'Loading...';
 /* @const {string} */
@@ -38,11 +36,13 @@ window.onload = function onWindowLoad() {
   supportedAnalytics = document.getElementById('analytics-supported');
   notSupportedAds = document.getElementById('ads-notSupported');
   notSupportedAnalytics = document.getElementById('analytics-notSupported');
-  supportedAds.innerHTML = supportedAnalytics.innerHTML = notSupportedAds.innerHTML = notSupportedAnalytics.innerHTML = loadingMessage;
+  supportedAds.innerHTML = supportedAnalytics.innerHTML =
+    notSupportedAds.innerHTML = notSupportedAnalytics.innerHTML = 
+    loadingMessage;
   // Gets the DOM of the current web page and converts it to a string
   chrome.tabs.executeScript(null, {
-    file: 'getPagesSource.js'
-  , }, function () {});
+    file: 'getPagesSource.js',
+  }, function () {});
 };
 /**
  * Returns all the 3rd party applications found on the website
@@ -50,46 +50,61 @@ window.onload = function onWindowLoad() {
  * @return {Object} 
  */
 function findDetectedApps(html) {
-  fetch('apps.json').then(function (response) {
-    if (response.status !== 200) {
-      console.log('Looks like there was a problem. Status Code: ' + response.status);
+  fetch('apps.json')
+    .then(function (response) {
+    if (response.status >= 400) {
+      console.error('Fetching apps.json failed with this status Code: ' + 
+                  response.status);
       return;
     }
-    // Examine the text in the response  
-    response.json().then(function (data) {
-      listAllApps = data.apps;
-      detectedApps = filterApps(html);
-      showSupportedAppsInView(detectedApps);
-      return detectedApps;
-    });
+    if (response.statusIsOK) {
+        console.error(response.status);
+      }
+    if (!response.statusIsOK) {
+      // Examine the text in the response  
+      response.json().then(function (data) {
+        let listAllApps = data.apps;
+        detectedApps = filteredApps(html, listAllApps);
+        showSupportedAppsInView(detectedApps, listAllApps);
+        return detectedApps;
+      });
+    }
+    
   }).catch(function (err) {
     console.log('Fetch Error :-S', err);
   });
 }
 /**
  * Add supported and unsupported applications to the view
- * @param {Objected} detectedApps - All 3rd Party Applications found on page
+ * @param {Objecte} detectedApps - All 3rd Party Applications found on page
+ * @param {!Object} listAllApps - JSON of all 3p vendors
  */
-function showSupportedAppsInView(detectedApps) {
-  supportedAds.innerHTML = supportedAnalytics.innerHTML = notSupportedAds.innerHTML = notSupportedAnalytics.innerHTML = blankMessage;
-  supportedAds.appendChild(makeList(detectedApps.supported.ads, false));
-  supportedAnalytics.appendChild(makeList(detectedApps.supported.analytics, false));
-  notSupportedAds.appendChild(makeList(detectedApps.notSupported.ads, true));
-  notSupportedAnalytics.appendChild(makeList(detectedApps.notSupported.analytics, true));
+function showSupportedAppsInView(detectedApps, listAllApps) {
+  supportedAds.innerHTML = supportedAnalytics.innerHTML =
+    notSupportedAds.innerHTML = notSupportedAnalytics.innerHTML = blankMessage;
+  supportedAds.appendChild(
+    makeList(detectedApps.supported.ads, false, listAllApps));
+  supportedAnalytics.appendChild(
+    makeList(detectedApps.supported.analytics, false, listAllApps));
+  notSupportedAds.appendChild(
+    makeList(detectedApps.notSupported.ads, true, listAllApps));
+  notSupportedAnalytics.appendChild(
+    makeList(detectedApps.notSupported.analytics, true, listAllApps));
 }
 /**
  * Splits all detected apps into 'supported' and 'not supported'
  * @param {String} htmlString - String containing all HTML on the page
+ * @param {!Object} listAllApps - JSON of all the 3p vendors 
  * @return {Object} 
  */
-function filterApps(htmlString) {
+function filteredApps(htmlString, listAllApps) {
   const foundThis = {
     'supported': {
       'ads': [],
       'analytics': []
     },
     'notSupported': {
-      'ads': [], 
+      'ads': [],
       'analytics': []
     }
   };
@@ -99,37 +114,41 @@ function filterApps(htmlString) {
     // If object has a 'script' key
     if (val.script != null) {
       Object.keys(val.script).forEach(function (x) {
-        addToDict(val.script[x].split('\\;')[0], htmlString, foundThis, key, val.cats);
+        addToDict(val.script[x]
+                  .split('\\;')[0], htmlString, foundThis, key, val.cats[0]);
       });
     }
   });
   return foundThis;
 }
 /**
- * Pushes keys to the supported or not supported list of the object 'found this'
- * @param {String} tempScript - String representation of regular expression
+ * Pushes keys to the supported or not supported list of the object
+ 'found this'
+ * @param {String} regexString - String representation of regular expression
  * @param {!String} htmlString - String containing all HTML on the page
  * @param {Object} foundThis - Object separating the 3P services by support
  * @param {String} key - name of third party service
  * @param {String} category - the category that the key belongs to
  */
-function addToDict(tempScript, htmlString, foundThis, key, category) {
-  const regX = new RegExp(tempScript);
+function addToDict(regexString, htmlString, foundThis, key, category) {
+  const regX = new RegExp(regexString);
   if (regX.test(htmlString)) {
     if (isKeyUnique(foundThis, key)) {
-      switch (true) {
-      case (isSupported(key) == true) && category == 10:
-        foundThis.supported.analytics.push(key);
-        break;
-      case (isSupported(key) == true) && category == 36:
-        foundThis.supported.ads.push(key);
-        break;
-      case (isSupported(key) == false) && category == 10:
-        foundThis.notSupported.analytics.push(key);
-        break;
-      case isSupported(key) == false && category == 36:
-        foundThis.notSupported.ads.push(key);
-        break;
+      switch (category) {
+        case '10':
+          if (isSupported(key)) {
+            foundThis.supported.analytics.push(key);
+          } else {
+            foundThis.notSupported.analytics.push(key);
+          }
+          break;
+        case '36':
+          if (isSupported(key)) {
+            foundThis.supported.ads.push(key);
+          } else {
+            foundThis.notSupported.ads.push(key);
+          }
+          break;
       }
     }
   }
@@ -141,11 +160,11 @@ function addToDict(tempScript, htmlString, foundThis, key, category) {
  * @return {boolean} 
  */
 function isKeyUnique(obj, key) {
-  const truthValue = obj.supported.ads.includes(key) + 
+  const doesKeyExist = obj.supported.ads.includes(key) + 
         obj.supported.analytics.includes(key) + 
         obj.notSupported.ads.includes(key) + 
         obj.notSupported.analytics.includes(key);
-  return truthValue == false;
+  return !doesKeyExist;
 }
 /**
  * TODO (alwalton@): get list of supported ads/analytics programatically
@@ -177,8 +196,8 @@ function isSupported(key) {
     , 'Swoop', 'Teads', 'TripleLift', 'ValueCommerce', 'Webediads', 'Weborama'
     , 'Widespace', 'Xlift', 'Yahoo', 'YahooJP', 'Yandex', 'Yieldbot', 'Yieldmo'
     , 'Yieldone', 'Zedo', 'Zucks', 'Bringhub', 'Outbrain', 'Taboola', 'ZergNet'
-    , 'Acquia Lift', 'Adobe Analytics', 'AFS Analytics', 'AT Internet'
-    , 'Baidu Analytics', 'Burt', 'Chartbeat', 'Clicky Web Analytics', 'comScore'
+    , 'Acquia Lift', 'Adobe Analytics', 'AFS Analytics', 'AT Internet', 'Burt'
+    , 'Baidu Analytics', 'Chartbeat', 'Clicky Web Analytics', 'comScore'
     , 'Cxense', 'Dynatrace', 'Eulerian Analytics', 'Gemius', 'Google AdWords'
     , 'Google Analytics', 'INFOnline / IVW', 'Krux', 'Linkpulse', 'Lotame'
     , 'Médiamétrie', 'mParticle', 'Nielsen', 'OEWA', 'Parsely', 'Piano'
@@ -193,11 +212,12 @@ function isSupported(key) {
 }
 /**
  * Make list of supported/unsupported apps into an unordered list
- * @param {[String]} array - array of app names
+ * @param {!Array<string>} array - array of app names
  * @param {boolean} allowToolTips - check to see if tooltip allowed
+ * @param {!Object} listAllApps - JSON of all 3p vendors
  * @return {e} 
  */
-function makeList(array, allowToolTips) {
+function makeList(array, allowToolTips, listAllApps) {
   // Create the list element:
   const list = document.createElement('ul');
   for (let i = 0; i < array.length; i++) {
