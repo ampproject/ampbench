@@ -6,17 +6,17 @@
 self.popups = {};
 self.popups.isSupported = isSupported;
 self.popups.addToDict = addToDict;
-/* @const {!Element} */
+/** @const {!Element} */
 let supportedAds;
 /* @const {!Element} */
 let supportedAnalytics;
-/* @const {!Element} */
+/** @const {!Element} */
 let notSupportedAds;
-/* @const {!Element} */
+/** @const {!Element} */
 let notSupportedAnalytics;
 /* @const {string} */
 const loadingMessage = 'Loading...';
-/* @const {string} */
+/** @const {string} */
 const blankMessage = '';
 /**
  * Callback function that sends a response upon receiving message
@@ -36,9 +36,7 @@ window.onload = function onWindowLoad() {
   supportedAnalytics = document.getElementById('analytics-supported');
   notSupportedAds = document.getElementById('ads-notSupported');
   notSupportedAnalytics = document.getElementById('analytics-notSupported');
-  supportedAds.innerHTML = supportedAnalytics.innerHTML =
-    notSupportedAds.innerHTML = notSupportedAnalytics.innerHTML = 
-    loadingMessage;
+  supportedAds.innerHTML = supportedAnalytics.innerHTML = notSupportedAds.innerHTML = notSupportedAnalytics.innerHTML = loadingMessage;
   // Gets the DOM of the current web page and converts it to a string
   chrome.tabs.executeScript(null, {
     file: 'getPagesSource.js',
@@ -46,54 +44,34 @@ window.onload = function onWindowLoad() {
 };
 /**
  * Returns all the 3rd party applications found on the website
- * @param {String} html - String containing all HTML on the page
+ * @param {string} html - String containing all HTML on the page
  * @return {Object} 
  */
 function findDetectedApps(html) {
-  fetch('apps.json')
-    .then(function (response) {
-    if (response.status >= 400) {
-      console.error('Fetching apps.json failed with this status Code: ' + 
-                  response.status);
-      return;
-    }
-    if (response.statusIsOK) {
-        console.error(response.status);
-      }
-    if (!response.statusIsOK) {
-      // Examine the text in the response  
-      response.json().then(function (data) {
-        let listAllApps = data.apps;
-        detectedApps = filteredApps(html, listAllApps);
-        showSupportedAppsInView(detectedApps, listAllApps);
-        return detectedApps;
-      });
-    }
-    
-  }).catch(function (err) {
-    console.log('Fetch Error :-S', err);
-  });
+  fetch('apps.json').then(function (response) {
+    response.json().then(function (data) {
+      let listAllApps = data.apps;
+      detectedApps = filteredApps(html, listAllApps);
+      showSupportedAppsInView(detectedApps, listAllApps);
+      return detectedApps;
+    });
+  }).then(data => console.log('data is', data)).catch(error => console.log('error is', error))
 }
 /**
  * Add supported and unsupported applications to the view
- * @param {Objecte} detectedApps - All 3rd Party Applications found on page
+ * @param {Object} detectedApps - All 3rd Party Applications found on page
  * @param {!Object} listAllApps - JSON of all 3p vendors
  */
 function showSupportedAppsInView(detectedApps, listAllApps) {
-  supportedAds.innerHTML = supportedAnalytics.innerHTML =
-    notSupportedAds.innerHTML = notSupportedAnalytics.innerHTML = blankMessage;
-  supportedAds.appendChild(
-    makeList(detectedApps.supported.ads, false, listAllApps));
-  supportedAnalytics.appendChild(
-    makeList(detectedApps.supported.analytics, false, listAllApps));
-  notSupportedAds.appendChild(
-    makeList(detectedApps.notSupported.ads, true, listAllApps));
-  notSupportedAnalytics.appendChild(
-    makeList(detectedApps.notSupported.analytics, true, listAllApps));
+  supportedAds.innerHTML = supportedAnalytics.innerHTML = notSupportedAds.innerHTML = notSupportedAnalytics.innerHTML = blankMessage;
+  supportedAds.appendChild(makeList(detectedApps.supported.ads, false, listAllApps));
+  supportedAnalytics.appendChild(makeList(detectedApps.supported.analytics, false, listAllApps));
+  notSupportedAds.appendChild(makeList(detectedApps.notSupported.ads, true, listAllApps));
+  notSupportedAnalytics.appendChild(makeList(detectedApps.notSupported.analytics, true, listAllApps));
 }
 /**
  * Splits all detected apps into 'supported' and 'not supported'
- * @param {String} htmlString - String containing all HTML on the page
+ * @param {string} htmlString - String containing all HTML on the page
  * @param {!Object} listAllApps - JSON of all the 3p vendors 
  * @return {Object} 
  */
@@ -109,44 +87,43 @@ function filteredApps(htmlString, listAllApps) {
     }
   };
   // for all the app objects in the apps.JSON file
-  Object.keys(listAllApps).forEach(function (key) {
-    let val = listAllApps[key];
+  Object.keys(listAllApps).forEach(function (appName) {
+    let val = listAllApps[appName];
     // If object has a 'script' key
-    if (val.script != null) {
-      Object.keys(val.script).forEach(function (x) {
-        addToDict(val.script[x]
-                  .split('\\;')[0], htmlString, foundThis, key, val.cats[0]);
+    if (val.script) {
+      val.script.forEach(function (x) {
+        addToDict(x.split('\\;')[0], htmlString, foundThis, appName, val.cats[0]);
       });
     }
   });
   return foundThis;
 }
 /**
- * Pushes keys to the supported or not supported list of the object
+ * Pushes app names to the supported or not supported list of the object
  'found this'
- * @param {String} regexString - String representation of regular expression
- * @param {!String} htmlString - String containing all HTML on the page
+ * @param {string} regexString - String representation of regular expression
+ * @param {!string} htmlString - String containing all HTML on the page
  * @param {Object} foundThis - Object separating the 3P services by support
- * @param {String} key - name of third party service
- * @param {String} category - the category that the key belongs to
+ * @param {string} appName - name of third party service
+ * @param {string} category - the category that the key belongs to
  */
-function addToDict(regexString, htmlString, foundThis, key, category) {
+function addToDict(regexString, htmlString, foundThis, appName, category) {
   const regX = new RegExp(regexString);
   if (regX.test(htmlString)) {
-    if (isKeyUnique(foundThis, key)) {
+    if (isAppNameUnique(foundThis, appName)) {
       switch (category) {
         case '10':
-          if (isSupported(key)) {
-            foundThis.supported.analytics.push(key);
+          if (isSupported(appName)) {
+            foundThis.supported.analytics.push(appName);
           } else {
-            foundThis.notSupported.analytics.push(key);
+            foundThis.notSupported.analytics.push(appName);
           }
           break;
         case '36':
-          if (isSupported(key)) {
-            foundThis.supported.ads.push(key);
+          if (isSupported(appName)) {
+            foundThis.supported.ads.push(appName);
           } else {
-            foundThis.notSupported.ads.push(key);
+            foundThis.notSupported.ads.push(appName);
           }
           break;
       }
@@ -154,58 +131,55 @@ function addToDict(regexString, htmlString, foundThis, key, category) {
   }
 }
 /**
- * Checks to see if key is unique within the object
+ * Checks to see if appName is unique within the object
  * @param {Object} obj - Object separating the 3p services by support
- * @param {String} key - name of third party service
+ * @param {string} appName - name of third party service
  * @return {boolean} 
  */
-function isKeyUnique(obj, key) {
-  const doesKeyExist = obj.supported.ads.includes(key) + 
-        obj.supported.analytics.includes(key) + 
-        obj.notSupported.ads.includes(key) + 
-        obj.notSupported.analytics.includes(key);
-  return !doesKeyExist;
+function isAppNameUnique(obj, appName) {
+  const doesAppNameExist = obj.supported.ads.includes(appName) + obj.supported.analytics.includes(appName) + obj.notSupported.ads.includes(appName) + obj.notSupported.analytics.includes(appName);
+  return !doesAppNameExist;
 }
 /**
  * TODO (alwalton@): get list of supported ads/analytics programatically
  * Check if app is in supported list of app names
- * @param {String} key - name of app
+ * @param {string} appName - name of app
  * @return {boolean} 
  */
-function isSupported(key) {
+function isSupported(appName) {
   const ampSupported = [
-    'A8', 'A9', 'AcccessTrade', 'Adblade', 'Adform', 'Adfox', 'Ad Generation'
-    , 'Adhese', 'ADITION', 'Adman', 'AdmanMedia', 'AdReactor', 'AdSense'
-    , 'AdsNative', 'AdSpirit', 'AdSpeed', 'AdStir', 'AdTech', 'AdThrive'
-    , 'Ad Up Technology', 'Adverline', 'Adverticum', 'AdvertServe'
-    , 'Affiliate-B', 'AMoAd', 'AppNexus', 'Atomx', 'Bidtellect', 'brainy'
-    , 'CA A.J.A. Infeed', 'CA-ProFit-X', 'Chargeads', 'Colombia', 'Content.ad'
-    , 'Criteo', 'CSA', 'CxenseDisplay', 'Dianomi', 'DistroScale'
-    , 'Dot and Media', 'Doubleclick', 'DoubleClick for Publishers (DFP)'
-    , 'DoubleClick Ad Exchange (AdX)', 'E-Planning', 'Ezoic', 'FlexOneELEPHANT'
-    , 'FlexOneHARRIER', 'fluct', 'Felmat', 'Flite', 'Fusion', 'Google AdSense'
-    , 'GenieeSSP', 'GMOSSP', 'GumGum', 'Holder', 'Imedia', 'I-Mobile'
-    , 'iBillboard', 'Improve Digital', 'Index Exchange', 'Industrybrains'
-    , 'InMobi', 'Kargo', 'Kiosked', 'Kixer', 'Ligatus', 'LOKA', 'MADS'
-    , 'MANTIS', 'MediaImpact', 'Media.net', 'Mediavine', 'Meg', 'MicroAd'
-    , 'Mixpo', 'myWidget', 'Nativo', 'Navegg', 'Nend', 'NETLETIX', 'Nokta'
-    , 'Open AdStream (OAS)', 'OpenX', 'plista', 'polymorphicAds', 'popin'
-    , 'PubMatic', 'Pubmine', 'PulsePoint', 'Purch', 'Rambler&Co', 'Relap'
-    , 'Revcontent', 'Rubicon Project', 'Sharethrough', 'Sklik', 'SlimCut Media'
-    , 'Smart AdServer', 'smartclip', 'Sortable', 'SOVRN', 'SpotX', 'SunMedia'
-    , 'Swoop', 'Teads', 'TripleLift', 'ValueCommerce', 'Webediads', 'Weborama'
-    , 'Widespace', 'Xlift', 'Yahoo', 'YahooJP', 'Yandex', 'Yieldbot', 'Yieldmo'
-    , 'Yieldone', 'Zedo', 'Zucks', 'Bringhub', 'Outbrain', 'Taboola', 'ZergNet'
-    , 'Acquia Lift', 'Adobe Analytics', 'AFS Analytics', 'AT Internet', 'Burt'
-    , 'Baidu Analytics', 'Chartbeat', 'Clicky Web Analytics', 'comScore'
-    , 'Cxense', 'Dynatrace', 'Eulerian Analytics', 'Gemius', 'Google AdWords'
-    , 'Google Analytics', 'INFOnline / IVW', 'Krux', 'Linkpulse', 'Lotame'
-    , 'Médiamétrie', 'mParticle', 'Nielsen', 'OEWA', 'Parsely', 'Piano'
-    , 'Quantcast Measurement', 'Segment', 'SOASTA mPulse', 'SimpleReach'
-    , 'Snowplow Analytics', 'Webtrekk', 'Yandex Metrica'
+    'A8', 'A9', 'AcccessTrade', 'Adblade', 'Adform', 'Adfox', 'Ad Generation',
+    'Adhese', 'ADITION', 'Adman', 'AdmanMedia', 'AdReactor', 'AdSense',
+    'AdsNative', 'AdSpirit', 'AdSpeed', 'AdStir', 'AdTech', 'AdThrive',
+    'Ad Up Technology', 'Adverline', 'Adverticum', 'AdvertServe',
+    'Affiliate-B', 'AMoAd', 'AppNexus', 'Atomx', 'Bidtellect',
+    'brainy', 'CA A.J.A. Infeed', 'CA-ProFit-X', 'Chargeads', 'Colombia',
+    'Content.ad', 'Criteo', 'CSA', 'CxenseDisplay', 'Dianomi', 'DistroScale',
+    'Dot and Media', 'Doubleclick', 'DoubleClick for Publishers (DFP)',
+    'DoubleClick Ad Exchange (AdX)', 'E-Planning', 'Ezoic', 'FlexOneELEPHANT',
+    'FlexOneHARRIER', 'fluct', 'Felmat', 'Flite', 'Fusion', 'Google AdSense',
+    'GenieeSSP', 'GMOSSP', 'GumGum', 'Holder', 'Imedia', 'I-Mobile',
+    'iBillboard', 'Improve Digital', 'Index Exchange', 'Industrybrains',
+    'InMobi', 'Kargo', 'Kiosked', 'Kixer', 'Ligatus', 'LOKA', 'MADS',
+    'MANTIS', 'MediaImpact', 'Media.net', 'Mediavine', 'Meg', 'MicroAd',
+    'Mixpo', 'myWidget', 'Nativo', 'Navegg', 'Nend', 'NETLETIX', 'Nokta',
+    'Open AdStream (OAS)', 'OpenX', 'plista', 'polymorphicAds', 'popin',
+    'PubMatic', 'Pubmine', 'PulsePoint', 'Purch', 'Rambler&Co', 'Relap',
+    'Revcontent', 'Rubicon Project', 'Sharethrough', 'Sklik', 'SlimCut Media',
+    'Smart AdServer', 'smartclip', 'Sortable', 'SOVRN', 'SpotX', 'SunMedia',
+    'Swoop', 'Teads', 'TripleLift', 'ValueCommerce', 'Webediads', 'Weborama',
+    'Widespace', 'Xlift', 'Yahoo', 'YahooJP', 'Yandex', 'Yieldbot', 'Yieldmo',
+    'Yieldone', 'Zedo', 'Zucks', 'Bringhub', 'Outbrain', 'Taboola', 'ZergNet',
+    'Acquia Lift', 'Adobe Analytics', 'AFS Analytics', 'AT Internet', 'Burt',
+    'Baidu Analytics', 'Chartbeat', 'Clicky Web Analytics', 'comScore',
+    'Cxense', 'Dynatrace', 'Eulerian Analytics', 'Gemius', 'Google AdWords',
+    'Google Analytics', 'INFOnline / IVW', 'Krux', 'Linkpulse', 'Lotame',
+    'Médiamétrie', 'mParticle', 'Nielsen', 'OEWA', 'Parsely', 'Piano',
+    'Quantcast Measurement', 'Segment', 'SOASTA mPulse', 'SimpleReach',
+    'Snowplow Analytics', 'Webtrekk', 'Yandex Metrica'
   , ];
   // If it is NOT in list of supported apps
-  if (ampSupported.indexOf(key) == -1) {
+  if (ampSupported.indexOf(appName) == -1) {
     return false;
   }
   return true;
