@@ -5,207 +5,182 @@
  value "popup.html".
  -->
 <html>
+  <head>
+    <title>Getting Started Extension's Popup</title>
+    <style>
+      html {
+        background-color: #f5f5f5;
+        width: 600px;
+      }
 
-<head>
-  <title>Getting Started Extension's Popup</title>
-  <style>
-    html {
-      background-color: #f5f5f5;
-      width: 600px;
-    }
-    
-    header {
-      min-height: 35px;
-      margin: -15px -15px 30px -15px;
-      padding: 15px;
-      background-color: #0379c4;
-      font-family: "Roboto", "Lucida Grande", Tahoma, sans-serif;
-      color: white;
-      text-align: center;
-    }
-    
-    body {
-      font-family: "Roboto", "Lucida Grande", Tahoma, sans-serif;
-      font-size: 100%;
-      min-width: 400px;
-    }
-    
-    #ampImg {
-      float: left;
-      height: 50px;
-      width: 50px;
-    }
-    
-    footer {
-      background-color: #f5f5f5;
-      clear: both;
-      height: 50px;
-      margin-top: 30px;
-      max-width: 900px;
-      padding: 0 20px 10px 20px;
-    }
-    
-    h2 {
-      display: block;
-      float: left;
-      height: 24px;
-      line-height: 24px;
-      margin-left: 30px;
-      padding: 5px 0 0 0;
-    }
-    
-    #leftSide {
-      float: left;
-      width: 30%;
-      text-align: center;
-    }
-    
-    #rightSide {
-      float: right;
-      text-align: center;
-      width: 30%;
-    }
-    
-    #rightSide ul {
-      margin-left: -20px;
-      text-align: center;
-    }
-    
-    #verifyImg {
-      height: 45px;
-      margin: 0px;
-      text-align: center;
-      width: 45px;
-    }
-    
-    span {
-      text-decoration: underline;
-    }
-    
-    ul {
-      font-size: 12px;
-      list-style: none;
-      margin: 0px;
-      text-align: left;
-      width: 75%;
-    }
-    
-    li {
-      margin: 5px;
-    }
-    
-    .supported-title {
-      color: #4BB543;
-    }
-    
-    .notSupported-title {
-      color: #ff0033;
-    }
-    
-    .tooltip {
-      text-decoration: underline;
-      text-decoration-color: red;
-      text-decoration-style: dashed;
-      text-underline-position: under;
-    }
-    /* Tooltip Styles */
-    /* Add this attribute to the element that needs a tooltip */
-    
-    [data-tooltip] {
-      position: relative;
-      z-index: 2;
-      cursor: pointer;
-    }
-    /* Hide the tooltip content by default */
-    
-    [data-tooltip]:before,
-    [data-tooltip]:after {
-      visibility: hidden;
-      -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-      filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
-      opacity: 0;
-      pointer-events: none;
-    }
-    /* Position tooltip above the element */
-    
-    [data-tooltip]:before {
-      position: absolute;
-      bottom: 150%;
-      left: 50%;
-      margin-bottom: 5px;
-      margin-left: -80px;
-      padding: 7px;
-      width: 160px;
-      -webkit-border-radius: 3px;
-      -moz-border-radius: 3px;
-      border-radius: 3px;
-      background-color: #000;
-      background-color: hsla(0, 0%, 20%, 0.9);
-      color: #fff;
-      content: attr(data-tooltip);
-      text-align: center;
-      font-size: 14px;
-      line-height: 1.2;
-    }
-    /* Triangle hack to make tooltip look like a speech bubble */
-    
-    [data-tooltip]:after {
-      position: absolute;
-      bottom: 150%;
-      left: 50%;
-      margin-left: -5px;
-      width: 0;
-      border-top: 5px solid #000;
-      border-top: 5px solid hsla(0, 0%, 20%, 0.9);
-      border-right: 5px solid transparent;
-      border-left: 5px solid transparent;
-      content: " ";
-      font-size: 0;
-      line-height: 0;
-    }
-    /* Show tooltip content on hover */
-    
-    [data-tooltip]:hover:before,
-    [data-tooltip]:hover:after {
-      visibility: visible;
-      -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-      filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
-      opacity: 1;
-    }
-  </style>
-  <!--
-          - JavaScript and HTML must be in separate files: see our Content Security
-          - Policy documentation[1] for details and explanation.
-          -
-          - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
-         -->
-  <script src="popup.js"></script>
-</head>
+      header {
+        min-height: 15px;
+        font-family: sans-serif;
+        font-size: 1.5em;
+        margin: 20px 0px 20px 0px;
+      }
 
-<body>
-  <header>
-    <h1>What Is On This Page?</h1> </header>
-  <div style="width: 100%;">
-    <div id="leftSide">
-      <h3 class="supported-title">Supported Ads</h3>
-      <div id="ads-supported"></div>
-    </div>
-    <div id="leftSide">
-      <h3 class="supported-title">Supported Analytics</h3>
-      <div id="analytics-supported"></div>
-    </div>
-    <div id="rightSide">
-      <h3 class="notSupported-title">Not Yet Supported</h3>
-      <h5>Ads</h5>
-      <div id="ads-notSupported"></div>
-      <div id="notSupported"> </div>
-      <h5>Analytics</h5>
-      <div id="analytics-notSupported"></div>
-    </div>
-  </div>
-  <div style="clear:both"></div>
-  <footer> <img id="ampImg" src="amp.png">
-    <h2> AMP READINESS TOOL </h2> </footer>
-</body>
+      body {
+        font-family: "Roboto", "Lucida Grande", Tahoma, sans-serif;
+        font-size: 100%;
+        min-width: 400px;
+      }
 
+      footer {
+        background-color: #f5f5f5;
+        clear: both;
+        height: 15px;
+        padding: 10px;
+      }
+
+      h2 {
+        display: block;
+        float: left;
+        height: 24px;
+        line-height: 24px;
+        padding: 5px 0 0 0;
+      }
+
+      #leftSide {
+        float: left;
+        width: 30%;
+        text-align: left;
+      }
+
+      #rightSide {
+        float: right;
+        text-align: left;
+        width: 30%;
+      }
+
+      span {
+        text-decoration: underline;
+      }
+
+      ul {
+        font-size: 12px;
+        list-style: none;
+        text-align: left;
+        margin-left: -45px;
+        width: 80%
+      }
+
+      li {
+        margin: 5px;
+      }
+
+      .supported-title {
+        color: #4BB543;
+      }
+
+      .notSupported-title {
+        color: #ff0033;
+      }
+
+      .tooltip {
+        text-decoration: underline;
+        text-decoration-color: red;
+        text-decoration-style: dashed;
+        text-underline-position: under;
+      }
+      /* Tooltip Styles */
+      /* Add this attribute to the element that needs a tooltip */
+
+      [data-tooltip] {
+        position: relative;
+        z-index: 2;
+        cursor: pointer;
+      }
+      /* Hide the tooltip content by default */
+
+      [data-tooltip]:before,
+      [data-tooltip]:after {
+        visibility: hidden;
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+        filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
+        opacity: 0;
+        pointer-events: none;
+      }
+      /* Position tooltip above the element */
+
+      [data-tooltip]:before {
+        position: absolute;
+        bottom: 150%;
+        left: 50%;
+        margin-bottom: 5px;
+        margin-left: -80px;
+        padding: 7px;
+        width: 160px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        background-color: #000;
+        background-color: hsla(0, 0%, 20%, 0.9);
+        color: #fff;
+        content: attr(data-tooltip);
+        text-align: center;
+        font-size: 14px;
+        line-height: 1.2;
+      }
+      /* Triangle hack to make tooltip look like a speech bubble */
+
+      [data-tooltip]:after {
+        position: absolute;
+        bottom: 150%;
+        left: 50%;
+        margin-left: -5px;
+        width: 0;
+        border-top: 5px solid #000;
+        border-top: 5px solid hsla(0, 0%, 20%, 0.9);
+        border-right: 5px solid transparent;
+        border-left: 5px solid transparent;
+        content: " ";
+        font-size: 0;
+        line-height: 0;
+      }
+      /* Show tooltip content on hover */
+
+      [data-tooltip]:hover:before,
+      [data-tooltip]:hover:after {
+        visibility: visible;
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+        filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
+        opacity: 1;
+      }
+
+    </style>
+    <!--
+            - JavaScript and HTML must be in separate files: see our Content Security
+            - Policy documentation[1] for details and explanation.
+            -
+            - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
+           -->
+    <script src="popup.js"></script>
+  </head>
+
+  <body>
+    <header>
+      Third Party Technology Found on This Page
+    </header>
+    <div style="width: 100%;">
+      <div id="leftSide">
+        <h3 class="supported-title">Supported Ads</h3>
+        <div id="ads-supported"></div>
+      </div>
+      <div id="leftSide">
+        <h3 class="supported-title">Supported Analytics</h3>
+        <div id="analytics-supported"></div>
+      </div>
+      <div id="rightSide">
+        <h3 class="notSupported-title">Not Yet Supported</h3>
+        <h5>Ads</h5>
+        <div id="ads-notSupported"></div>
+        <div id="notSupported"> </div>
+        <h5>Analytics</h5>
+        <div id="analytics-notSupported"></div>
+      </div>
+    </div>
+    <div style="clear:both"></div>
+    <footer> </footer>
+  </body>
 </html>

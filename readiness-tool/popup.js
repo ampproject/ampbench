@@ -18,6 +18,9 @@ let notSupportedAnalytics;
 const loadingMessage = 'Loading...';
 /** @const {string} */
 const blankMessage = '';
+/** @const {string} */
+const appsRegexDelimeter = '\\;';
+
 /**
  * Callback function that sends a response upon receiving message
  * @param {!Object} request - Message Object
@@ -36,7 +39,9 @@ window.onload = function onWindowLoad() {
   supportedAnalytics = document.getElementById('analytics-supported');
   notSupportedAds = document.getElementById('ads-notSupported');
   notSupportedAnalytics = document.getElementById('analytics-notSupported');
-  supportedAds.innerHTML = supportedAnalytics.innerHTML = notSupportedAds.innerHTML = notSupportedAnalytics.innerHTML = loadingMessage;
+  supportedAds.textContent = supportedAnalytics.textContent =
+    notSupportedAds.textContent = notSupportedAnalytics.textContent =
+    loadingMessage;
   // Gets the DOM of the current web page and converts it to a string
   chrome.tabs.executeScript(null, {
     file: 'getPagesSource.js',
@@ -49,13 +54,14 @@ window.onload = function onWindowLoad() {
  */
 function findDetectedApps(html) {
   fetch('apps.json').then(function (response) {
-    response.json().then(function (data) {
-      let listAllApps = data.apps;
-      detectedApps = filteredApps(html, listAllApps);
-      showSupportedAppsInView(detectedApps, listAllApps);
-      return detectedApps;
-    });
-  }).then(data => console.log('data is', data)).catch(error => console.log('error is', error))
+      response.json().then(function (data) {
+        let listAllApps = data.apps;
+        detectedApps = filteredApps(html, listAllApps);
+        showSupportedAppsInView(detectedApps, listAllApps);
+        return detectedApps;
+      });
+    }).then(data => console.log('data is', data))
+    .catch(error => console.log('error is', error))
 }
 /**
  * Add supported and unsupported applications to the view
@@ -63,11 +69,18 @@ function findDetectedApps(html) {
  * @param {!Object} listAllApps - JSON of all 3p vendors
  */
 function showSupportedAppsInView(detectedApps, listAllApps) {
-  supportedAds.innerHTML = supportedAnalytics.innerHTML = notSupportedAds.innerHTML = notSupportedAnalytics.innerHTML = blankMessage;
-  supportedAds.appendChild(makeList(detectedApps.supported.ads, false, listAllApps));
-  supportedAnalytics.appendChild(makeList(detectedApps.supported.analytics, false, listAllApps));
-  notSupportedAds.appendChild(makeList(detectedApps.notSupported.ads, true, listAllApps));
-  notSupportedAnalytics.appendChild(makeList(detectedApps.notSupported.analytics, true, listAllApps));
+  supportedAds.textContent = supportedAnalytics.textContent =
+    notSupportedAds.textContent = notSupportedAnalytics.textContent =
+    blankMessage;
+  supportedAds.appendChild(makeList(detectedApps.supported.ads, false,
+    listAllApps));
+  supportedAnalytics.appendChild(makeList(detectedApps.supported.analytics,
+    false, listAllApps));
+  notSupportedAds.appendChild(makeList(detectedApps.notSupported.ads, true,
+    listAllApps));
+  notSupportedAnalytics.appendChild(makeList(
+    detectedApps.notSupported.analytics,
+    true, listAllApps));
 }
 /**
  * Splits all detected apps into 'supported' and 'not supported'
@@ -88,11 +101,22 @@ function filteredApps(htmlString, listAllApps) {
   };
   // for all the app objects in the apps.JSON file
   Object.keys(listAllApps).forEach(function (appName) {
-    let val = listAllApps[appName];
+    const appConfig = listAllApps[appName];
     // If object has a 'script' key
-    if (val.script) {
-      val.script.forEach(function (x) {
-        addToDict(x.split('\\;')[0], htmlString, foundThis, appName, val.cats[0]);
+    if (appConfig.script) {
+      appConfig.script.forEach(function (x) {
+        if (appConfig.cats.length == 0) {
+          console.error('The app', appName,
+            'does not have a value for "cats" in apps.json');
+          return;
+        } else if (appConfig.cats != "36" && appConfig.cats != "10") {
+          console.error('The app',
+            appName,
+            'is not declared as an ads or analytics vendor in apps.json');
+          return;
+        }
+        addToDict(x.split(appsRegexDelimeter)[0], htmlString, foundThis, appName,
+          appConfig.cats[0]);
       });
     }
   });
@@ -137,8 +161,21 @@ function addToDict(regexString, htmlString, foundThis, appName, category) {
  * @return {boolean} 
  */
 function isAppNameUnique(obj, appName) {
-  const doesAppNameExist = obj.supported.ads.includes(appName) + obj.supported.analytics.includes(appName) + obj.notSupported.ads.includes(appName) + obj.notSupported.analytics.includes(appName);
-  return !doesAppNameExist;
+  let count = 0;
+  if (obj.supported.ads.includes(appName)) {
+    count ++;
+  }
+  if (obj.supported.analytics.includes(appName)) {
+    count ++;
+  }
+  if (obj.notSupported.ads.includes(appName)) {
+    count ++;
+  }
+  if (obj.notSupported.analytics.includes(appName)) {
+    count ++;
+  }
+  
+  return count <= 1;
 }
 /**
  * TODO (alwalton@): get list of supported ads/analytics programatically
@@ -179,10 +216,7 @@ function isSupported(appName) {
     'Snowplow Analytics', 'Webtrekk', 'Yandex Metrica'
   , ];
   // If it is NOT in list of supported apps
-  if (ampSupported.indexOf(appName) == -1) {
-    return false;
-  }
-  return true;
+  return ampSupported.includes(appName);
 }
 /**
  * Make list of supported/unsupported apps into an unordered list
