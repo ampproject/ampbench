@@ -6,18 +6,25 @@
 self.popups = {};
 self.popups.isSupported = isSupported;
 self.popups.addToDict = addToDict;
+
 /** @const {!Element} */
 let supportedAds;
+
 /* @const {!Element} */
 let supportedAnalytics;
+
 /** @const {!Element} */
 let notSupportedAds;
+
 /** @const {!Element} */
 let notSupportedAnalytics;
+
 /* @const {string} */
 const loadingMessage = 'Loading...';
+
 /** @const {string} */
 const blankMessage = '';
+
 /** @const {string} */
 const appsRegexDelimeter = '\\;';
 
@@ -33,6 +40,7 @@ chrome.runtime.onMessage.addListener(function (request, sender) {
     findDetectedApps(htmlOfTab);
   }
 });
+
 window.onload = function onWindowLoad() {
   // When page is loaded, display 'Loading...' so the user expects content
   supportedAds = document.getElementById('ads-supported');
@@ -47,22 +55,31 @@ window.onload = function onWindowLoad() {
     file: 'getPagesSource.js',
   }, function () {});
 };
+
 /**
  * Returns all the 3rd party applications found on the website
  * @param {string} html - String containing all HTML on the page
  * @return {Object} 
  */
 function findDetectedApps(html) {
-  fetch('apps.json').then(function (response) {
-      response.json().then(function (data) {
+  fetch('apps.json')
+  .then(response => {
+    return response.json().then(data => {
+      if (response.ok) {
         let listAllApps = data.apps;
         detectedApps = filteredApps(html, listAllApps);
         showSupportedAppsInView(detectedApps, listAllApps);
         return detectedApps;
-      });
-    }).then(data => console.log('data is', data))
-    .catch(error => console.log('error is', error))
+      } else {
+        return Promise.reject({status: response.status});
+      }
+    });
+  })
+  .catch(error => console.error('apps.json in the readiness tool is invalid.', 
+                                error));
+  
 }
+
 /**
  * Add supported and unsupported applications to the view
  * @param {Object} detectedApps - All 3rd Party Applications found on page
@@ -82,6 +99,7 @@ function showSupportedAppsInView(detectedApps, listAllApps) {
     detectedApps.notSupported.analytics,
     true, listAllApps));
 }
+
 /**
  * Splits all detected apps into 'supported' and 'not supported'
  * @param {string} htmlString - String containing all HTML on the page
@@ -122,6 +140,7 @@ function filteredApps(htmlString, listAllApps) {
   });
   return foundThis;
 }
+
 /**
  * Pushes app names to the supported or not supported list of the object
  'found this'
@@ -154,6 +173,7 @@ function addToDict(regexString, htmlString, foundThis, appName, category) {
     }
   }
 }
+
 /**
  * Checks to see if appName is unique within the object
  * @param {Object} obj - Object separating the 3p services by support
@@ -174,9 +194,9 @@ function isAppNameUnique(obj, appName) {
   if (obj.notSupported.analytics.includes(appName)) {
     count ++;
   }
-  
-  return count <= 1;
+  return count < 1;
 }
+
 /**
  * TODO (alwalton@): get list of supported ads/analytics programatically
  * Check if app is in supported list of app names
@@ -218,6 +238,7 @@ function isSupported(appName) {
   // If it is NOT in list of supported apps
   return ampSupported.includes(appName);
 }
+
 /**
  * Make list of supported/unsupported apps into an unordered list
  * @param {!Array<string>} array - array of app names
