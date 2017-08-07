@@ -18,8 +18,8 @@
       min-height: 15px;
       font-family: sans-serif;
       font-size: 1.5em;
-      font-weight: 500;
-      margin: 20px 0px 20px 0px;
+      font-weight: normal;
+      margin: 20px 0px 0px 0px;
     }
     
     body {
@@ -75,10 +75,12 @@
     
     .supported-title {
       color: #4BB543;
+      font-size: 14px;
     }
     
     .notSupported-title {
       color: #ff0033;
+      font-size: 14px;
     }
     
     .tooltip {
@@ -164,6 +166,10 @@
     input[type="checkbox"]:checked+label:after,
     input[type="checkbox"].current+label:after {
       content: "\25B2";
+    }
+    
+    label {
+      font-size: 14px;
     }
     
     input {
