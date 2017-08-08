@@ -14,38 +14,62 @@
  * limitations under the License.
  */
 require("../readiness-tool/popup");
+
 describe('isSupported(key)', function () {
+  
   it('should return true when the key given is in the supported list', function () {
     expect(self.popups.isSupported('Adhese')).to.be.true;
-  });
-  it('should return false when the key given is in NOT in the supported list', function () {
-    expect(self.popups.isSupported('alannalytics')).to.be.false;
-  });
-});
-describe('addToDict(tempScript, htmlString, foundThis, key, category)', function () {
-  var htmlString = "candycanes";
-  var foundThis = {
-    'supported': {
-      'ads': []
-      , 'analytics': []
-    }
-    , 'notSupported': {
-      'ads': []
-      , 'analytics': []
-    }
-  };
-      
-  it('should push analytics to the analytics array', function () {
-    var tempScript = "candy";
-    var category = "10";
-    const key = "Candy";
-    self.popups.addToDict(tempScript, htmlString, foundThis, key, category);
-    expect(foundThis.supported.analytics).to.equal(['Candy']);
-    var tempScript = "peppermint";
-    expect(foundThis.notSupported.analytics).to.equal(['Candy']);
   });
   
   it('should return false when the key given is in NOT in the supported list', function () {
     expect(self.popups.isSupported('alannalytics')).to.be.false;
   });
+});
+
+describe('addToDict(tempScript, htmlString, foundThis, key, category)', function () {
+ 
+  var htmlString;
+  var foundThis;
+  
+  beforeEach(() => {
+    htmlString = "candycanes";
+    foundThis = {
+      'supported': {
+        'ads': [],
+        'analytics': []
+      },
+      'notSupported': {
+        'ads': [],
+        'analytics': []
+      }
+    };
+  });
+      
+  it('should push analytics to the analytics array', function () {
+    var tempScript = "candy";
+    var category = "10";
+    var key = "comScore";
+    self.popups.addToDict(tempScript, htmlString, foundThis, key, category);
+    expect(foundThis.supported.analytics).to.include('comScore');
+    var tempScript = "peppermint";
+    key = "Swoop"
+    expect(foundThis.supported.analytics).to.not.include('Swoop');
+    expect(foundThis.notSupported.analytics).to.not.include('Swoop');
+  });
+  
+  it('should push ads to the ads array', function () {
+    var tempScript = "candy";
+    var category = "36";
+    var key = "comScore";
+    self.popups.addToDict(tempScript, htmlString, foundThis, key, category);
+    expect(foundThis.supported.ads).to.include('comScore');
+    var tempScript = "peppermint";
+    key = "Swoop"
+    expect(foundThis.supported.ads).to.not.include('Swoop');
+    expect(foundThis.notSupported.ads).to.not.include('Swoop');
+  });
+});
+
+describe('apps.json should be valid json', function () {
+  
 });
