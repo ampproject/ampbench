@@ -16,21 +16,21 @@
 require("../readiness-tool/popup");
 
 describe('isSupported(key)', function () {
-  
+
   it('should return true when the key given is in the supported list', function () {
     expect(self.popups.isSupported('Adhese')).to.be.true;
   });
-  
+
   it('should return false when the key given is in NOT in the supported list', function () {
     expect(self.popups.isSupported('alannalytics')).to.be.false;
   });
 });
 
 describe('addToDict(tempScript, htmlString, foundThis, key, category)', function () {
- 
+
   var htmlString;
   var foundThis;
-  
+
   beforeEach(() => {
     htmlString = "candycanes";
     foundThis = {
@@ -44,8 +44,9 @@ describe('addToDict(tempScript, htmlString, foundThis, key, category)', function
       }
     };
   });
-      
+
   it('should push analytics to the analytics array', function () {
+    console.log('check', htmlString);
     var tempScript = "candy";
     var category = "10";
     var key = "comScore";
@@ -56,7 +57,7 @@ describe('addToDict(tempScript, htmlString, foundThis, key, category)', function
     expect(foundThis.supported.analytics).to.not.include('Swoop');
     expect(foundThis.notSupported.analytics).to.not.include('Swoop');
   });
-  
+
   it('should push ads to the ads array', function () {
     var tempScript = "candy";
     var category = "36";
@@ -71,5 +72,19 @@ describe('addToDict(tempScript, htmlString, foundThis, key, category)', function
 });
 
 describe('apps.json should be valid json', function () {
-  
+
+  var fileIsOk;
+
+  beforeEach(() => {
+    sinon.stub(window, 'fetch');
+  });
+
+  afterEach(() => {
+    window.fetch.restore();
+  });
+
+
+  it('should return valid JSON', function () {
+    expect(1).to.equal(true);
+  });
 });

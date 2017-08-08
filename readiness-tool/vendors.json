@@ -1,0 +1,11 @@
+{
+  'Optimizely': {
+    'uniqueExp': '//cdn\\.optimizely\\.com/js/',
+    'category': 'Ads'
+  },
+  'Quantcast': {
+    'uniqueExp': '\\.quantserve\\.com/*',
+    'category': 'Analytics'
+  },
+  ''
+}
