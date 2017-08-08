@@ -49,7 +49,7 @@ window.onload = function onWindowLoad() {
   notSupportedAnalytics = document.getElementById('analytics-notSupported');
   supportedAds.textContent = supportedAnalytics.textContent =
     notSupportedAds.textContent = notSupportedAnalytics.textContent =
-    loadingMessage;
+      loadingMessage;
   // Gets the DOM of the current web page and converts it to a string
   chrome.tabs.executeScript(null, {
     file: 'getPagesSource.js',
@@ -100,6 +100,23 @@ function showSupportedAppsInView(detectedApps, listAllApps) {
     true, listAllApps));
 }
 
+/** @typedef {{ads: !Array<string>, analytics: !Array<string>}} */
+let CategorizedAppsDef;
+
+/** @typedef {{supported: CategorizedAppsDef, notSupported: CategorizedAppsDef}} */
+let FilteredAppsDef;
+
+/** @type {FilteredAppsDef} */
+const filteredApps = {
+  'supported': {
+    'ads': [],
+    'analytics': []
+  },
+  'notSupported': {
+    'ads': [],
+    'analytics': []
+  }
+};
 
 /**
  * Splits all detected apps into 'supported' and 'not supported'
@@ -108,16 +125,6 @@ function showSupportedAppsInView(detectedApps, listAllApps) {
  * @return {Object} 
  */
 function filterApps(htmlString, listAllApps) {
-  const filteredApps = {
-    'supported': {
-      'ads': [],
-      'analytics': []
-    },
-    'notSupported': {
-      'ads': [],
-      'analytics': []
-    }
-  };
   // for all the app objects in the apps.JSON file
   Object.keys(listAllApps).forEach(function (appName) {
     const appConfig = listAllApps[appName];
@@ -134,8 +141,8 @@ function filterApps(htmlString, listAllApps) {
             'is not declared as an ads or analytics vendor in apps.json');
           return;
         }
-        addToDict(x.split(appsRegexDelimeter)[0], htmlString, filteredApps, appName,
-          appConfig.cats[0]);
+        addToDict(x.split(appsRegexDelimeter)[0], htmlString, filteredApps,
+                  appName, appConfig.cats[0]);
       });
     }
   });
@@ -143,16 +150,12 @@ function filterApps(htmlString, listAllApps) {
 }
 
 /**
- * An object contained by 2 more objects that each hold two string arrays
- * @typedef {{[String][String]}{[String][String]}} filteringObject
- */
-
-/**
  * Pushes app names to the supported or not supported list of the object
- 'found this'
+ * 'filtedApss'
  * @param {string} regexString - String representation of regular expression
  * @param {!string} htmlString - String containing all HTML on the page
- * @param {filteringObject} filteredApps - Object separating the 3P services by support
+ * @param {FilteredAppsDef} filteredApps - Object separating the 3P services by 
+ * support
  * @param {string} appName - name of third party service
  * @param {string} category - the category that the key belongs to
  */
