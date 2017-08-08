@@ -67,7 +67,7 @@ function findDetectedApps(html) {
     return response.json().then(data => {
       if (response.ok) {
         let listAllApps = data.apps;
-        detectedApps = filteredApps(html, listAllApps);
+        detectedApps = filterApps(html, listAllApps);
         showSupportedAppsInView(detectedApps, listAllApps);
         return detectedApps;
       } else {
@@ -100,14 +100,15 @@ function showSupportedAppsInView(detectedApps, listAllApps) {
     true, listAllApps));
 }
 
+
 /**
  * Splits all detected apps into 'supported' and 'not supported'
  * @param {string} htmlString - String containing all HTML on the page
  * @param {!Object} listAllApps - JSON of all the 3p vendors 
  * @return {Object} 
  */
-function filteredApps(htmlString, listAllApps) {
-  const foundThis = {
+function filterApps(htmlString, listAllApps) {
+  const filteredApps = {
     'supported': {
       'ads': [],
       'analytics': []
@@ -133,40 +134,45 @@ function filteredApps(htmlString, listAllApps) {
             'is not declared as an ads or analytics vendor in apps.json');
           return;
         }
-        addToDict(x.split(appsRegexDelimeter)[0], htmlString, foundThis, appName,
+        addToDict(x.split(appsRegexDelimeter)[0], htmlString, filteredApps, appName,
           appConfig.cats[0]);
       });
     }
   });
-  return foundThis;
+  return filteredApps;
 }
+
+/**
+ * An object contained by 2 more objects that each hold two string arrays
+ * @typedef {{[String][String]}{[String][String]}} filteringObject
+ */
 
 /**
  * Pushes app names to the supported or not supported list of the object
  'found this'
  * @param {string} regexString - String representation of regular expression
  * @param {!string} htmlString - String containing all HTML on the page
- * @param {Object} foundThis - Object separating the 3P services by support
+ * @param {filteringObject} filteredApps - Object separating the 3P services by support
  * @param {string} appName - name of third party service
  * @param {string} category - the category that the key belongs to
  */
-function addToDict(regexString, htmlString, foundThis, appName, category) {
+function addToDict(regexString, htmlString, filteredApps, appName, category) {
   const regX = new RegExp(regexString);
   if (regX.test(htmlString)) {
-    if (isAppNameUnique(foundThis, appName)) {
+    if (isAppNameUnique(filteredApps, appName)) {
       switch (category) {
         case '10':
           if (isSupported(appName)) {
-            foundThis.supported.analytics.push(appName);
+            filteredApps.supported.analytics.push(appName);
           } else {
-            foundThis.notSupported.analytics.push(appName);
+            filteredApps.notSupported.analytics.push(appName);
           }
           break;
         case '36':
           if (isSupported(appName)) {
-            foundThis.supported.ads.push(appName);
+            filteredApps.supported.ads.push(appName);
           } else {
-            foundThis.notSupported.ads.push(appName);
+            filteredApps.notSupported.ads.push(appName);
           }
           break;
       }
