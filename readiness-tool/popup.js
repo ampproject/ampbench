@@ -106,18 +106,6 @@ let CategorizedAppsDef;
 /** @typedef {{supported: CategorizedAppsDef, notSupported: CategorizedAppsDef}} */
 let FilteredAppsDef;
 
-/** @type {FilteredAppsDef} */
-const filteredApps = {
-  'supported': {
-    'ads': [],
-    'analytics': []
-  },
-  'notSupported': {
-    'ads': [],
-    'analytics': []
-  }
-};
-
 /**
  * Splits all detected apps into 'supported' and 'not supported'
  * @param {string} htmlString - String containing all HTML on the page
@@ -125,6 +113,17 @@ const filteredApps = {
  * @return {Object} 
  */
 function filterApps(htmlString, listAllApps) {
+  /** @type {FilteredAppsDef} */
+  const filteredApps = {
+    'supported': {
+      'ads': [],
+      'analytics': []
+    },
+    'notSupported': {
+      'ads': [],
+      'analytics': []
+    }
+  };
   // for all the app objects in the apps.JSON file
   Object.keys(listAllApps).forEach(function (appName) {
     const appConfig = listAllApps[appName];
@@ -151,7 +150,7 @@ function filterApps(htmlString, listAllApps) {
 
 /**
  * Pushes app names to the supported or not supported list of the object
- * 'filtedApss'
+ * 'filteredApps'
  * @param {string} regexString - String representation of regular expression
  * @param {!string} htmlString - String containing all HTML on the page
  * @param {FilteredAppsDef} filteredApps - Object separating the 3P services by 
