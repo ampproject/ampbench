@@ -122,9 +122,9 @@ function filteredVendors(htmlString, listAllVendors) {
   // for all the vendor objects in the vendors.json file
   Object.keys(listAllVendors).forEach(function (vendorName) {
     const vendorConfig = listAllVendors[vendorName];
-    // If object has a 'uniqueRegExp' key
-    if (vendorConfig.uniqueRegExp) {
-      vendorConfig.uniqueRegExp.forEach(function (x) {
+    // If object has a 'regex' key
+    if (vendorConfig.regex) {
+      vendorConfig.regex.forEach(function (x) {
         if (vendorConfig.category.length == 0) {
           console.error('The vendor', vendorName,
             'does not have a value for "category" in vendors.json');
@@ -136,7 +136,7 @@ function filteredVendors(htmlString, listAllVendors) {
           return;
         }
         addToDict(x, htmlString, filteredVendors, vendorName,
-          vendorConfig.category[0]);
+          vendorConfig.category);
       });
     }
   });
