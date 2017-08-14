@@ -6,16 +6,22 @@
 self.popups = {};
 self.popups.isSupported = isSupported;
 self.popups.addToDict = addToDict;
+
 /** @const {!Element} */
 let supportedAds;
+
 /* @const {!Element} */
 let supportedAnalytics;
+
 /** @const {!Element} */
 let notSupportedAds;
+
 /** @const {!Element} */
 let notSupportedAnalytics;
+
 /* @const {string} */
 const loadingMessage = 'Loading...';
+
 /** @const {string} */
 const blankMessage = '';
 
@@ -31,6 +37,7 @@ chrome.runtime.onMessage.addListener(function (request, sender) {
     findDetectedApps(htmlOfTab);
   }
 });
+
 window.onload = function onWindowLoad() {
   // When page is loaded, display 'Loading...' so the user expects content
   supportedAds = document.getElementById('ads-supported');
@@ -39,12 +46,13 @@ window.onload = function onWindowLoad() {
   notSupportedAnalytics = document.getElementById('analytics-notSupported');
   supportedAds.textContent = supportedAnalytics.textContent =
     notSupportedAds.textContent = notSupportedAnalytics.textContent =
-    loadingMessage;
+      loadingMessage;
   // Gets the DOM of the current web page and converts it to a string
   chrome.tabs.executeScript(null, {
     file: 'getPagesSource.js',
   }, function () {});
 };
+
 /**
  * Returns all the 3rd party applications found on the website
  * @param {string} html - String containing all HTML on the page
@@ -53,14 +61,21 @@ window.onload = function onWindowLoad() {
 function findDetectedApps(html) {
   fetch('vendors.json').then(function (response) {
       response.json().then(function (data) {
+      if (response.ok) {
         let listAllApps = data.apps;
-        detectedApps = filteredApps(html, listAllApps);
+        detectedApps = filterApps(html, listAllApps);
         showSupportedAppsInView(detectedApps, listAllApps);
         return detectedApps;
-      });
-    }).then(data => console.log('data is', data))
-    .catch(error => console.log('error is', error))
+      } else {
+        return Promise.reject({status: response.status});
+      }
+    });
+  })
+  .catch(error => console.error('apps.json in the readiness tool is invalid.', 
+                                error));
+  
 }
+
 /**
  * Add supported and unsupported applications to the view
  * @param {Object} detectedApps - All 3rd Party Applications found on page
@@ -80,14 +95,22 @@ function showSupportedAppsInView(detectedApps, listAllApps) {
     detectedApps.notSupported.analytics,
     true, listAllApps));
 }
+
+/** @typedef {{ads: !Array<string>, analytics: !Array<string>}} */
+let CategorizedAppsDef;
+
+/** @typedef {{supported: CategorizedAppsDef, notSupported: CategorizedAppsDef}} */
+let FilteredAppsDef;
+
 /**
  * Splits all detected apps into 'supported' and 'not supported'
  * @param {string} htmlString - String containing all HTML on the page
  * @param {!Object} listAllApps - JSON of all the 3p vendors 
  * @return {Object} 
  */
-function filteredApps(htmlString, listAllApps) {
-  const foundThis = {
+function filterApps(htmlString, listAllApps) {
+  /** @type {FilteredAppsDef} */
+  const filteredApps = {
     'supported': {
       'ads': [],
       'analytics': []
@@ -118,40 +141,43 @@ function filteredApps(htmlString, listAllApps) {
       });
     }
   });
-  return foundThis;
+  return filteredApps;
 }
+
 /**
  * Pushes app names to the supported or not supported list of the object
- 'found this'
+ * 'filteredApps'
  * @param {string} regexString - String representation of regular expression
  * @param {!string} htmlString - String containing all HTML on the page
- * @param {Object} foundThis - Object separating the 3P services by support
+ * @param {FilteredAppsDef} filteredApps - Object separating the 3P services by 
+ * support
  * @param {string} appName - name of third party service
  * @param {string} category - the category that the key belongs to
  */
-function addToDict(regexString, htmlString, foundThis, appName, category) {
+function addToDict(regexString, htmlString, filteredApps, appName, category) {
   const regX = new RegExp(regexString);
   if (regX.test(htmlString)) {
-    if (isAppNameUnique(foundThis, appName)) {
+    if (isAppNameUnique(filteredApps, appName)) {
       switch (category) {
         case 'Analytics':
           if (isSupported(appName)) {
-            foundThis.supported.analytics.push(appName);
+            filteredApps.supported.analytics.push(appName);
           } else {
-            foundThis.notSupported.analytics.push(appName);
+            filteredApps.notSupported.analytics.push(appName);
           }
           break;
         case 'Ads':
           if (isSupported(appName)) {
-            foundThis.supported.ads.push(appName);
+            filteredApps.supported.ads.push(appName);
           } else {
-            foundThis.notSupported.ads.push(appName);
+            filteredApps.notSupported.ads.push(appName);
           }
           break;
       }
     }
   }
 }
+
 /**
  * Checks to see if appName is unique within the object
  * @param {Object} obj - Object separating the 3p services by support
@@ -172,9 +198,9 @@ function isAppNameUnique(obj, appName) {
   if (obj.notSupported.analytics.includes(appName)) {
     count ++;
   }
-  
-  return count <= 1;
+  return count < 1;
 }
+
 /**
  * TODO (alwalton@): get list of supported ads/analytics programatically
  * Check if app is in supported list of app names
@@ -216,6 +242,7 @@ function isSupported(appName) {
   // If it is NOT in list of supported apps
   return ampSupported.includes(appName);
 }
+
 /**
  * Make list of supported/unsupported apps into an unordered list
  * @param {!Array<string>} array - array of app names
