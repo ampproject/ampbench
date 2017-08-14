@@ -18,8 +18,6 @@ let notSupportedAnalytics;
 const loadingMessage = 'Loading...';
 /** @const {string} */
 const blankMessage = '';
-/** @const {string} */
-const appsRegexDelimeter = '\\;';
 
 /**
  * Callback function that sends a response upon receiving message
@@ -115,7 +113,7 @@ function filteredApps(htmlString, listAllApps) {
             'is not declared as an ads or analytics vendor in vendors.json');
           return;
         }
-        addToDict(x.split(appsRegexDelimeter)[0], htmlString, foundThis, appName,
+        addToDict(x, htmlString, foundThis, appName,
           appConfig.category[0]);
       });
     }
