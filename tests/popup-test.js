@@ -15,6 +15,10 @@
  */
 require("../readiness-tool/popup");
 
+var chai = require('chai');
+
+var vendors = require("../readiness-tool/vendors");
+
 describe('isSupported(key)', function () {
 
   it('should return true when the key given is in the supported list', function () {
@@ -46,9 +50,8 @@ describe('addToDict(tempScript, htmlString, foundThis, key, category)', function
   });
 
   it('should push analytics to the analytics array', function () {
-    console.log('check', htmlString);
     var tempScript = "candy";
-    var category = "10";
+    var category = "Analytics";
     var key = "comScore";
     self.popups.addToDict(tempScript, htmlString, foundThis, key, category);
     expect(foundThis.supported.analytics).to.include('comScore');
@@ -60,7 +63,7 @@ describe('addToDict(tempScript, htmlString, foundThis, key, category)', function
 
   it('should push ads to the ads array', function () {
     var tempScript = "candy";
-    var category = "36";
+    var category = "Ads";
     var key = "comScore";
     self.popups.addToDict(tempScript, htmlString, foundThis, key, category);
     expect(foundThis.supported.ads).to.include('comScore');
@@ -71,20 +74,10 @@ describe('addToDict(tempScript, htmlString, foundThis, key, category)', function
   });
 });
 
-describe('apps.json should be valid json', function () {
-
-  var fileIsOk;
-
-  beforeEach(() => {
-    sinon.stub(window, 'fetch');
-  });
-
-  afterEach(() => {
-    window.fetch.restore();
-  });
-
-
-  it('should return valid JSON', function () {
-    expect(1).to.equal(true);
+describe('vendors.json should be valid json', function () {
+  it('should say that the file exists', function () {
+    var vendorsString = vendors.apps.toString();
+    console.log(vendorsString);
+    expect(JSON.parse(vendorsString)).to.not.include('Swoop');
   });
 });

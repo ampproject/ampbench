@@ -1,11 +1,627 @@
 {
-  'Optimizely': {
-    'uniqueExp': '//cdn\\.optimizely\\.com/js/',
-    'category': 'Ads'
-  },
-  'Quantcast': {
-    'uniqueExp': '\\.quantserve\\.com/*',
-    'category': 'Analytics'
-  },
-  ''
+  "apps": {
+    "AD EBiS": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": [
+				"<!-- EBiS contents tag",
+				"<!--EBiS tag",
+				"<!-- Tag EBiS",
+				"<!-- EBiS common tag"
+			]
+    },
+    "AT Internet XiTi": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["xiti\\.com/hit\\.xiti"]
+    },
+    "AdInfinity": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": ["adinfinity\\.com\\.au"]
+    },
+    "AdRiver": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": [
+                "(?:adriver\\.core\\.\\d\\.js|https?://(?:content|ad|masterh\\d)\\.adriver\\.ru/)",
+                "(?:<embed[^>]+(?:src=\"https?://mh\\d?\\.adriver\\.ru/|flashvars=\"[^\"]*(?:http:%3A//(?:ad|mh\\d?)\\.adriver\\.ru/|adriver_banner))|<(?:(?:iframe|img)[^>]+src|a[^>]+href)=\"https?://ad\\.adriver\\.ru/)"
+            ],
+      "website": "http://adriver.ru"
+    },
+    "AdRoll": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": ["(?:a|s)\\.adroll\\.com"]
+    },
+    "Adcash": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": ["^[^\\/]*//(?:[^\\/]+\\.)?adcash\\.com/(?:script|ad)/"]
+    },
+    "Adnegah": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": [
+                "[^a-z]adnegah.*\\.js",
+                "<iframe [^>]*src=\"[^\"]+adnegah\\.net"
+            ]
+    },
+    "Advert Stream": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": ["(?:ad\\.advertstream\\.com|adxcore\\.com)"]
+    },
+    "Adzerk": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": [
+                "adzerk\\.net/ados\\.js",
+                "<iframe [^>]*src=\"[^\"]+adzerk\\.net"
+            ]
+    },
+    "AppNexus": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": [
+                "adnxs\\.(?:net|com)",
+                "<(?:iframe|img)[^>]+adnxs\\.(?:net|com)"
+            ]
+    },
+    "BittAds": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": ["bittads\\.com/js/bitt\\.js$"]
+    },
+    "Branch": {
+      "uniqueRegExp": ["cdn\\.branch\\.io/"],
+      "category": "Analytics"
+    },
+    "BugSense": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["bugsense\\.js"]
+    },
+    "BugSnag": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["bugsnag.*\\.js"]
+    },
+    "BuySellAds": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": [
+                "^https?://s\\d\\.buysellads\\.com/",
+                "<script[^>]*>[^<]+?bsa.src\\s*=\\s*['\"](?:https?:)?\\/{2}\\w\\d\\.buysellads\\.com\\/[\\w\\d\\/]+?bsa\\.js['\"]"
+            ]
+    },
+    "CO2Stats": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["src=[^>]+co2stats\\.com/propres\\.php"]
+    },
+    "Carbon Ads": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": [
+                "[^\\/]*\\/\\/(?:engine|srv)\\.carbonads\\.com\\/",
+                "<[a-z]+ [^>]*id=\"carbonads-container\""
+            ]
+    },
+    "Chartbeat": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["chartbeat\\.js"]
+    },
+    "Chitika": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": ["scripts\\.chitika\\.net/"]
+    },
+    "Clicky": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["static\\.getclicky\\.com"]
+    },
+    "ConversionLab": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": [
+        "conversionlab\\.trackset\\.com/track/tsend\\.js"
+      ]
+    },
+    "Crazy Egg": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["cetrk\\.com/pages/scripts/\\d+/\\d+\\.js"]
+    },
+    "Criteo": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": [
+        "gum\\.criteo\\.com\/syncframe",
+        "static\\.criteo\\.net/js/",
+        "rtax\\.criteo\\.com"
+      ]
+    },
+    "Cross Pixel": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["tag\\.crsspxl\\.com/s1\\.js"]
+    },
+    "DoubleClick Ad Exchange (AdX)": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": [
+				"googlesyndication\\.com/pagead/show_ads\\.js",
+				"tpc\\.googlesyndication\\.com",
+				"googlesyndication\\.com.*abg\\.js"
+			]
+    },
+    "DoubleClick Campaign Manager (DCM)": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": ["2mdn\\.net"]
+    },
+    "DoubleClick Floodlight": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": ["https?://fls.doubleclick.net"]
+    },
+    "DoubleClick for Publishers (DFP)": {
+      "category": [
+				"Ads"
+			],
+      "icon": "DoubleClick.svg",
+      "uniqueRegExp": ["googletagservices\\.com/tag/js/gpt(?:_mobile)?\\.js"]
+    },
+    "Dynatrace": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["dtagent.*\\.js"]
+    },
+    "Epom": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": ["^https?://(?:[^/]+\\.)?ad(?:op)?shost1\\.com/"]
+    },
+    "Fusion Ads": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": [
+        "^[^\\/]*//[ac]dn\\.fusionads\\.net/(?:api/([\\d.]+)/)?"
+      ]
+    },
+    "Google AdSense": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": [
+				"googlesyndication\\.com/",
+				"ad\\.ca\\.doubleclick\\.net",
+				"2mdn\\.net",
+				"ad\\.ca\\.doubleclick\\.net"
+			]
+    },
+    "Google Analytics": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": [
+        "google-analytics\\.com\\/(?:ga|urchin|(analytics))\\.js"
+      ]
+    },
+    "Heap": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["heap-\\d+.js"]
+    },
+    "Hotjar": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["^//static\\.hotjar\\.com/c/hotjar-"]
+    },
+    "IBM Coremetrics": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["cmdatatagutils\\.js"]
+    },
+    "INFOnline": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["^https?://(?:[^/]+\\.)?i(?:oam|v)wbox\\.de/"]
+    },
+    "Intercom": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["(?:api\\.intercom\\.io/api|static\\.intercomcdn\\.com/intercom\\.v1)"]
+    },
+    "Koego": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["tracking\\.koego\\.com/end/ego\\.js"]
+    },
+    "Krux": {
+      "uniqueRegExp": [
+        "cdn\\.krxd\\.net/userdata",
+        "beacon\\.krxd\\.net",
+        "cdn\\.krxd\\.net/ctjs",
+        "cdn\\.krxd\\.net/partnerjs"
+      ],
+      "category": "Analytics"
+    },
+    "LinkSmart": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": [
+        "^https?://cdn\\.linksmart\\.com/linksmart_([\\d.]+?)(?:\\.min)?\\.js"
+      ]
+    },
+    "Liveinternet": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": [
+				"<script[^<>]*>[^]{0,128}?src\\s*=\\s*['\"]//counter\\.yadro\\.ru/hit(?:;\\S+)?\\?(?:t\\d+\\.\\d+;)?r",
+				"<!--LiveInternet counter-->",
+				"<!--/LiveInternet-->",
+				"<a href=\"http://www.liveinternet.ru/click\"",
+                "/js/al/common.js\\?[0-9_]+"
+			]
+    },
+    "MadAdsMedia": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": ["^https?://(?:ads-by|pixel)\\.madadsmedia.com/"]
+    },
+    "Mint": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["mint/\\?js"]
+    },
+    "Mixpanel": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["api\\.mixpanel\\.com/track"]
+    },
+    "Navegg": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["tag.navdmp.com"]
+    },
+    "Netmonitor": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["netmonitor\\.fi/nmtracker\\.js"]
+    },
+    "New Relic": {
+      "uniqueRegExp": ["//bam.\\nr-data\\.net"],
+      "category": "Analytics"
+    },
+    "Open Web Analytics": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["<!-- (?:Start|End) Open Web Analytics Tracker -->"]
+    },
+    "OpenX": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": [
+				"https?://[^/]*\\.openx\\.net",
+				"https?://[^/]*\\.servedbyopenx\\.com"
+			]
+    },
+    "Optimizely": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": [
+        "//cdn\\.optimizely\\.com/js/",
+        "cdn3\\.optimizely\\.com/js/geo2.js"
+      ],
+      "tooltip": "Workaround is available. Use amp-experiment."
+    },
+    "Oracle Recommendations On Demand": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["atgsvcs.+atgsvcs\\.js"]
+    },
+    "Piwik": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["piwik\\.js|piwik\\.php"]
+    },
+    "Project Wonderful": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": [
+        "^https?://(?:www\\.)?projectwonderful\\.com/(?:pwa\\.js|gen\\.php)",
+        "<div[^>]+id=\"pw_adbox_"
+      ]
+    },
+    "Prospector": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": [
+        "processprospector\\.js",
+        "<[^>]+data-name=['\"]prospectscript"
+      ]
+    },
+    "PubMatic": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": ["https?://[^/]*\\.pubmatic\\.com"]
+    },
+    "Quantcast Measurement": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["\\.quantserve\\.com/*"]
+    },
+    "Rubicon Project": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": ["https?://[^/]*\\.rubiconproject\\.com"]
+    },
+    "Ruxit": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["ruxitagentjs"]
+    },
+    "Segment": {
+      "category": [
+				"Analytics"
+			], 
+      "uniqueRegExp": [
+        "cdn\\.segment\\.com/analytics\\.js",
+        "<script[\\s\\S]*cdn\\.segment\\.com/analytics.js[\\s\\S]*script>"
+      ]
+    },
+    "Sharethrough": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": ["\\.sharethrough\\.com"]
+    },
+    "ShinyStat": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": [
+        "^https?://codice(?:business|ssl|pro|isp)?\\.shinystat\\.com/cgi-bin/getcod\\.cgi",
+        "<img[^>]*\\s+src=['\"]?https?://www\\.shinystat\\.com/cgi-bin/shinystat\\.cgi\\?[^'\"\\s>]*['\"\\s/>]"
+      ]
+    },
+    "Site Meter": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["sitemeter\\.com/js/counter\\.js\\?site="]
+    },
+    "SiteCatalyst": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["/s[_-]code.*\\.js"]
+    },
+    "Sizmek": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": [
+        "[^/]*//[^/]*serving-sys\\.com/",
+        "(?:<a [^>]*href=\"[^/]*//[^/]*serving-sys\\.com/|<img [^>]*src=\"[^/]*//[^/]*serving-sys\\.com/)"
+      ]
+    },
+    "Skimlinks": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": ["skimlinks.*\\.js"]
+    },
+    "Sklik": {
+      "uniqueExp": ["c\\.imedia\\.cz/js/script.js"],
+      "category": "Ads"
+    },
+    "Smart Ad Server": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": ["<img[^>]+smartadserver\\.com\\/call"]
+    },
+    "Snoobi": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["snoobi\\.com/snoop\\.php"]
+    },
+    "StatCounter": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["statcounter\\.com/counter/counter"]
+    },
+    "Tealium": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": [
+				"^//tags\\.tiqcdn\\.com/",
+				"/tealium/utag\\.js$"
+			]
+    },
+    "Titan": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": ["<script[^>]+>var titan"]
+    },
+    "TrackJs": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["tracker.js"]
+    },
+    "Usabilla": {
+      "uniqueExp": ["*\\.usabilla\\.com"],
+      "category": "Analytics"
+    },
+    "Veoxa": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": [
+        "tracking\\.veoxa\\.com",
+        "<img [^>]*src=\"[^\"]+tracking\\.veoxa\\.com"
+      ]
+    },
+    "VigLink": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": ["(?:^[^/]*//[^/]*viglink\\.com/api/|vglnk\\.js)"]
+    },
+    "VisualPath": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["visualpath[^/]*\\.trackset\\.it/[^/]+/track/include\\.js"]
+    },
+    "W3Counter": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["w3counter\\.com/tracker\\.js"]
+    },
+    "Web Optimizer": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["<title [^>]*lang=\"wo\">"]
+    },
+    "Webtrends": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["<img[^>]+id=\"DCSIMG\"[^>]+webtrends"]
+    },
+    "Woopra": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["static\\.woopra\\.com"]
+    },
+    "Yahoo Advertising": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": [
+				"<iframe[^>]+adserver\\.yahoo\\.com",
+				"<img[^>]+clicks\\.beap\\.bc\\.yahoo\\.com",
+                "adinterax\\.com"
+			]
+    },
+    "Yahoo! Web Analytics": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["d\\.yimg\\.com/mi/ywa\\.js"]
+    },
+    "Yandex.Direct": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": [
+				"<yatag class=\"ya-partner__ads\">",
+				"https?://an\\.yandex\\.ru/"
+			]
+    },
+    "Yandex.Metrika": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": ["mc\\.yandex\\.ru\\/metrika\\/watch\\.js"]
+    },
+    "Yieldlab": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": ["^https?://(?:[^/]+\\.)?yieldlab\\.net/"]
+    },
+    "Yieldmo": {
+      "category": [
+				"Ads"
+			],
+      "uniqueRegExp": ["static\\.yieldmo\\.com"]
+    },
+    "Zanox": {
+      "category": [
+				"Ads"
+			],
+      "html": [
+        "<img [^>]*src=\"[^\"]+ad\\.zanox\\.com",
+        "zanox\\.com/scripts/zanox\\.js$"
+      ]
+    },
+    "comScore": {
+      "category": [
+				"Analytics"
+			],
+      "uniqueRegExp": [
+              "\\.scorecardresearch\\.com/beacon\\.js|COMSCORE\\.beacon",
+              "<iframe[^>]* (?:id=\"comscore\"|scr=[^>]+comscore)|\\.scorecardresearch\\.com/beacon\\.js|COMSCORE\\.beacon",
+              "sb\\.scorecardresearch\\.com"
+            ]
+    }
+  }
 }

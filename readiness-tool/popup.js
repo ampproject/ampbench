@@ -53,7 +53,7 @@ window.onload = function onWindowLoad() {
  * @return {Object} 
  */
 function findDetectedApps(html) {
-  fetch('apps.json').then(function (response) {
+  fetch('vendors.json').then(function (response) {
       response.json().then(function (data) {
         let listAllApps = data.apps;
         detectedApps = filteredApps(html, listAllApps);
@@ -99,24 +99,24 @@ function filteredApps(htmlString, listAllApps) {
       'analytics': []
     }
   };
-  // for all the app objects in the apps.JSON file
+  // for all the app objects in the vendors.json file
   Object.keys(listAllApps).forEach(function (appName) {
     const appConfig = listAllApps[appName];
-    // If object has a 'script' key
-    if (appConfig.script) {
-      appConfig.script.forEach(function (x) {
-        if (appConfig.cats.length == 0) {
+    // If object has a 'uniqueRegExp' key
+    if (appConfig.uniqueRegExp) {
+      appConfig.uniqueRegExp.forEach(function (x) {
+        if (appConfig.category.length == 0) {
           console.error('The app', appName,
-            'does not have a value for "cats" in apps.json');
+            'does not have a value for "category" in vendors.json');
           return;
-        } else if (appConfig.cats != "36" && appConfig.cats != "10") {
+        } else if (appConfig.category != "Ads" && appConfig.category != "Analytics") {
           console.error('The app',
             appName,
-            'is not declared as an ads or analytics vendor in apps.json');
+            'is not declared as an ads or analytics vendor in vendors.json');
           return;
         }
         addToDict(x.split(appsRegexDelimeter)[0], htmlString, foundThis, appName,
-          appConfig.cats[0]);
+          appConfig.category[0]);
       });
     }
   });
@@ -136,14 +136,14 @@ function addToDict(regexString, htmlString, foundThis, appName, category) {
   if (regX.test(htmlString)) {
     if (isAppNameUnique(foundThis, appName)) {
       switch (category) {
-        case '10':
+        case 'Analytics':
           if (isSupported(appName)) {
             foundThis.supported.analytics.push(appName);
           } else {
             foundThis.notSupported.analytics.push(appName);
           }
           break;
-        case '36':
+        case 'Ads':
           if (isSupported(appName)) {
             foundThis.supported.ads.push(appName);
           } else {
