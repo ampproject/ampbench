@@ -20,21 +20,21 @@ The AMP Readiness Tool (ART) is designed to assist in determining whether AMP ca
 
 ## Updating the list of Third Party Vendors:
 
-Here is a sample of how the third party vendor should be included in the apps.json file. This file contains the names of all applicable third party vendors on the page. Each vendor contains a "cats" value and a "script" value.
+Here is a sample of how the third party vendor should be included in the apps.json file. This file contains the names of all applicable third party vendors on the page. Each vendor contains a "catgory" value and a "uniqueRegExp" value.
 
-`Cats` - (abbreviation of categories) it's value has a numeric representation that coordinates to the key of the same name inside the "categories" object at the foot of the page. A value of "36" indicates that it is an analytics service and a value of "10" indicates an ads network.
+`category` - (abbreviation of categories) it's value is a string denoting whether the specific vendor is part of ads or anaytics
 
-`Script` - a regular expression that is unique to that vendor
+`uniqueRegExp` - One or more regular expressions that are unique to that vendor
 
 Below is an example of the Google Analytics tag.
 ```
 {
     "apps": {
         "Google Analytics": {
-			      "cats": [
-				      "36"
+			      "catgory": [
+				      "Analytics"
 			      ],
-			    "script": [
+			      "uniqueRegExp": [
 				      "googlesyndication\\.com/",
 				      "ad\\.ca\\.doubleclick\\.net"
 			      ]
