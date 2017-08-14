@@ -6,16 +6,22 @@
 self.popups = {};
 self.popups.isSupported = isSupported;
 self.popups.addToDict = addToDict;
+
 /** @const {!Element} */
 let supportedAds;
+
 /* @const {!Element} */
 let supportedAnalytics;
+
 /** @const {!Element} */
 let notSupportedAds;
+
 /** @const {!Element} */
 let notSupportedAnalytics;
+
 /* @const {string} */
 const loadingMessage = 'Loading...';
+
 /** @const {string} */
 const blankMessage = '';
 
@@ -31,6 +37,7 @@ chrome.runtime.onMessage.addListener(function (request, sender) {
     findDetectedVendors(htmlOfTab);
   }
 });
+
 window.onload = function onWindowLoad() {
   // When page is loaded, display 'Loading...' so the user expects content
   supportedAds = document.getElementById('ads-supported');
@@ -39,12 +46,13 @@ window.onload = function onWindowLoad() {
   notSupportedAnalytics = document.getElementById('analytics-notSupported');
   supportedAds.textContent = supportedAnalytics.textContent =
     notSupportedAds.textContent = notSupportedAnalytics.textContent =
-    loadingMessage;
+      loadingMessage;
   // Gets the DOM of the current web page and converts it to a string
   chrome.tabs.executeScript(null, {
     file: 'getPagesSource.js',
   }, function () {});
 };
+
 /**
  * Returns all the 3rd party applications found on the website
  * @param {string} html - String containing all HTML on the page
@@ -53,14 +61,20 @@ window.onload = function onWindowLoad() {
 function findDetectedVendors(html) {
   fetch('vendors.json').then(function (response) {
       response.json().then(function (data) {
+      if (response.ok) {
         let listAllVendors = data.vendors;
         detectedVendors = filteredVendors(html, listAllVendors);
         showSupportedVendorsInView(detectedVendors, listAllVendors);
         return detectedVendors;
-      });
-    }).then(data => console.log('data is', data))
-    .catch(error => console.log('error is', error))
+      } else {
+        return Promise.reject({status: response.status});
+      }
+    });
+  })
+  .catch(error => console.error('vendors.json in the readiness tool is invalid.', 
+                                error));
 }
+
 /**
  * Add supported and unsupported applications to the view
  * @param {Object} detectedVendors - All 3rd Party Applications found on page
@@ -80,6 +94,13 @@ function showSupportedVendorsInView(detectedVendors, listAllVendors) {
     detectedVendors.notSupported.analytics,
     true, listAllVendors));
 }
+
+/** @typedef {{ads: !Array<string>, analytics: !Array<string>}} */
+let CategorizedVendorsDef;
+
+/** @typedef {{supported: CategorizedVendorsDef, notSupported: CategorizedVendorsDef}} */
+let FilteredVendorsDef;
+
 /**
  * Splits all detected vendors into 'supported' and 'not supported'
  * @param {string} htmlString - String containing all HTML on the page
@@ -87,7 +108,8 @@ function showSupportedVendorsInView(detectedVendors, listAllVendors) {
  * @return {Object} 
  */
 function filteredVendors(htmlString, listAllVendors) {
-  const foundThis = {
+  /** @type {FilteredVendorsDef} */
+  const filteredVendors = {
     'supported': {
       'ads': [],
       'analytics': []
@@ -113,45 +135,48 @@ function filteredVendors(htmlString, listAllVendors) {
             'is not declared as an ads or analytics vendor in vendors.json');
           return;
         }
-        addToDict(x, htmlString, foundThis, vendorName,
+        addToDict(x, htmlString, filteredVendors, vendorName,
           vendorConfig.category[0]);
       });
     }
   });
-  return foundThis;
+  return filteredVendors;
 }
+
 /**
  * Pushes vendor names to the supported or not supported list of the object
- 'found this'
+ * 'filteredVendors'
  * @param {string} regexString - String representation of regular expression
  * @param {!string} htmlString - String containing all HTML on the page
- * @param {Object} foundThis - Object separating the 3P services by support
+ * @param {FilteredVendorsDef} filteredVendors - Object separating the 3P services by 
+ * support
  * @param {string} vendorName - name of third party service
  * @param {string} category - the category that the key belongs to
  */
-function addToDict(regexString, htmlString, foundThis, vendorName, category) {
+function addToDict(regexString, htmlString, filteredVendors, vendorName, category) {
   const regX = new RegExp(regexString);
   if (regX.test(htmlString)) {
-    if (isVendorNameUnique(foundThis, vendorName)) {
+    if (isVendorNameUnique(filteredVendors, vendorName)) {
       switch (category) {
         case 'Analytics':
           if (isSupported(vendorName)) {
-            foundThis.supported.analytics.push(vendorName);
+            filteredVendors.supported.analytics.push(vendorName);
           } else {
-            foundThis.notSupported.analytics.push(vendorName);
+            filteredVendors.notSupported.analytics.push(vendorName);
           }
           break;
         case 'Ads':
           if (isSupported(vendorName)) {
-            foundThis.supported.ads.push(vendorName);
+            filteredVendors.supported.ads.push(vendorName);
           } else {
-            foundThis.notSupported.ads.push(vendorName);
+            filteredVendors.notSupported.ads.push(vendorName);
           }
           break;
       }
     }
   }
 }
+
 /**
  * Checks to see if vendorName is unique within the object
  * @param {Object} obj - Object separating the 3p services by support
@@ -172,9 +197,9 @@ function isVendorNameUnique(obj, vendorName) {
   if (obj.notSupported.analytics.includes(vendorName)) {
     count ++;
   }
-  
-  return count <= 1;
+  return count < 1;
 }
+
 /**
  * TODO (alwalton@): get list of supported ads/analytics programatically
  * Check if vendor is in supported list of vendor names
@@ -216,6 +241,7 @@ function isSupported(vendorName) {
   // If it is NOT in list of supported vendors
   return ampSupported.includes(vendorName);
 }
+
 /**
  * Make list of supported/unsupported vendors into an unordered list
  * @param {!Array<string>} array - array of vendor names
