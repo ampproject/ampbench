@@ -3,9 +3,6 @@
  * Scans the current page against the vendors in the vendors.json file and
  * specifies them as either supported or not supported.
  */
-self.popups = {};
-self.popups.isSupported = isSupported;
-self.popups.addToDict = addToDict;
 
 /** @const {!Element} */
 let supportedAds;
@@ -268,3 +265,5 @@ function makeList(array, allowToolTips, listAllVendors) {
   // Finally, return the constructed list:
   return list;
 }
+
+module.exports = {isSupported, addToDict};

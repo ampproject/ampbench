@@ -13,20 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-require('../readiness-tool/popup');
+const popup = require('../readiness-tool/popup');
 
 const vendors = require('../readiness-tool/vendors');
 
-import {isSupported, addToDict} from '../readiness-tool/popup';
 
 describe('isSupported(key)', function () {
 
   it('should return true when the key given is in the supported list', function () {
-    expect(self.popups.isSupported('Adhese')).to.be.true;
+    expect(popup.isSupported('Adhese')).to.be.true;
   });
 
   it('should return false when the key given is in NOT in the supported list', function () {
-    expect(self.popups.isSupported('alannalytics')).to.be.false;
+    expect(popup.isSupported('alannalytics')).to.be.false;
   });
 });
 
@@ -53,7 +52,7 @@ describe('addToDict(tempScript, htmlString, foundThis, key, category)', function
     let tempScript = 'candy';
     const category = 'Analytics';
     let key = 'comScore';
-    self.popups.addToDict(tempScript, htmlString, foundThis, key, category);
+    popup.addToDict(tempScript, htmlString, foundThis, key, category);
     expect(foundThis.supported.analytics).to.include('comScore');
     tempScript = 'peppermint';
     key = 'Swoop';
@@ -65,7 +64,7 @@ describe('addToDict(tempScript, htmlString, foundThis, key, category)', function
     let tempScript = 'candy';
     const category = 'Ads';
     let key = 'comScore';
-    self.popups.addToDict(tempScript, htmlString, foundThis, key, category);
+    popup.addToDict(tempScript, htmlString, foundThis, key, category);
     expect(foundThis.supported.ads).to.include('comScore');
     tempScript = 'peppermint';
     key = 'Swoop';
