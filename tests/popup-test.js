@@ -17,6 +17,11 @@ const popup = require('../readiness-tool/popup');
 
 const vendors = require('../readiness-tool/vendors');
 
+const file = require('file-system');
+
+const fs = require('fs');
+
+const text = fs.readFile('../readiness-tool/vendors');
 
 describe('isSupported(key)', function () {
 
@@ -55,7 +60,6 @@ describe('addToDict(tempScript, htmlString, foundThis, key, category)', function
     popup.addToDict(tempScript, htmlString, foundThis, key, category);
     expect(foundThis.supported.analytics).to.include('comScore');
     tempScript = 'peppermint';
-    key = 'Swoop';
     expect(foundThis.supported.analytics).to.not.include('Swoop');
     expect(foundThis.notSupported.analytics).to.not.include('Swoop');
   });
@@ -67,17 +71,22 @@ describe('addToDict(tempScript, htmlString, foundThis, key, category)', function
     popup.addToDict(tempScript, htmlString, foundThis, key, category);
     expect(foundThis.supported.ads).to.include('comScore');
     tempScript = 'peppermint';
-    key = 'Swoop';
     expect(foundThis.supported.ads).to.not.include('Swoop');
     expect(foundThis.notSupported.ads).to.not.include('Swoop');
   });
 });
 
 describe('vendors.json should be valid json', function () {
-  it('should say that the file exists', function () {
-//    var vendorsString = vendors.apps.toString();
-//    console.log(vendorsString);
-//    expect(JSON.parse(vendorsString)).to.not.include('Swoop');
+  
+  beforeEach(() => {
+    sinon.stub(window, 'fetch');
+  });
+  
+  afterEach(() => {
+    window.fetch.restore();
+  });
+  
+  it('should be a valid file', function () {
     
   });
 });
