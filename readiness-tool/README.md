@@ -20,7 +20,7 @@ The AMP Readiness Tool (ART) is designed to assist in determining whether AMP ca
 
 ## Updating the list of Third Party Vendors:
 
-Here is a sample of how the third party vendor should be included in the apps.json file. This file contains the names of all applicable third party vendors on the page. Each vendor contains a "catgory" value and a "uniqueRegExp" value.
+Here is a sample of how the third party vendor should be included in the apps.json file. This file contains the names of all applicable third party vendors on the page. Each vendor contains a "category" value and a "uniqueRegExp" value.
 
 `category` - (abbreviation of categories) it's value is a string denoting whether the specific vendor is part of ads or anaytics
 
@@ -31,7 +31,7 @@ Below is an example of the Google Analytics tag.
 {
     "apps": {
         "Google Analytics": {
-			      "catgory": [
+			      "category": [
 				      "Analytics"
 			      ],
 			      "uniqueRegExp": [
