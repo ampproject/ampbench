@@ -17,11 +17,6 @@ const popup = require('../readiness-tool/popup');
 
 const vendors = require('../readiness-tool/vendors');
 
-const file = require('file-system');
-
-const fs = require('fs');
-
-const text = fs.readFile('../readiness-tool/vendors');
 
 describe('isSupported(key)', function () {
 
@@ -76,6 +71,23 @@ describe('addToDict(tempScript, htmlString, foundThis, key, category)', function
   });
 });
 
+
+const loadJSON = (callback) => {
+    let xobj = new XMLHttpRequest();
+    xobj.overrideMimeType("application/json");
+    xobj.open('GET', 'my_data.json', true);
+    // Replace 'my_data' with the path to your file
+    xobj.onreadystatechange = () => {
+        if (xobj.readyState === 4 && xobj.status === "200") {
+            // Required use of an anonymous callback 
+            // as .open() will NOT return a value but simply returns undefined in asynchronous mode
+            callback(xobj.responseText);
+        }
+    };
+    xobj.send(null);
+}
+
+
 describe('vendors.json should be valid json', function () {
   
   beforeEach(() => {
@@ -87,6 +99,13 @@ describe('vendors.json should be valid json', function () {
   });
   
   it('should be a valid file', function () {
-    
+    fetch('../readiness-tool/vendors')
+      .then(function(response) {
+        console.log('response', response);
+        console.log('response text', response.text);
+
+      }).catch(function(err) {
+          // Error :(
+      });
   });
 });
