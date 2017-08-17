@@ -21,98 +21,94 @@ const Validator = require('jsonschema').Validator;
 
 const v = new Validator();
 
-describe('isSupported(key)', function () {
+describe('popup', function () {
+  describe('isSupported(key)', function () {
 
-  it('should return true when the key given is in the supported list', function () {
-    expect(popup.isSupported('Adhese')).to.be.true;
+    it('should return true when the key given is in the supported list', function () {
+      expect(popup.isSupported('Adhese')).to.be.true;
+    });
+
+    it('should return false when the key given is in NOT in the supported list', function () {
+      expect(popup.isSupported('alannalytics')).to.be.false;
+    });
   });
 
-  it('should return false when the key given is in NOT in the supported list', function () {
-    expect(popup.isSupported('alannalytics')).to.be.false;
+  describe('addToDict(tempScript, htmlString, foundThis, key, category)', function () {
+
+    let htmlString;
+    let foundThis;
+
+    beforeEach(() => {
+      htmlString = 'candycanes';
+      foundThis = {
+        'supported': {
+          'ads': [],
+          'analytics': []
+        },
+        'notSupported': {
+          'ads': [],
+          'analytics': []
+        }
+      };
+    });
+
+    it('should push analytics to the analytics array', function () {
+      let tempScript = 'candy';
+      const category = 'Analytics';
+      let key = 'comScore';
+      popup.addToDict(tempScript, htmlString, foundThis, key, category);
+      expect(foundThis.supported.analytics).to.include('comScore');
+      tempScript = 'peppermint';
+      expect(foundThis.supported.analytics).to.not.include('Swoop');
+      expect(foundThis.notSupported.analytics).to.not.include('Swoop');
+    });
+
+    it('should push ads to the ads array', function () {
+      let tempScript = 'candy';
+      const category = 'Ads';
+      let key = 'comScore';
+      popup.addToDict(tempScript, htmlString, foundThis, key, category);
+      expect(foundThis.supported.ads).to.include('comScore');
+      tempScript = 'peppermint';
+      expect(foundThis.supported.ads).to.not.include('Swoop');
+      expect(foundThis.notSupported.ads).to.not.include('Swoop');
+    });
   });
-});
 
-describe('addToDict(tempScript, htmlString, foundThis, key, category)', function () {
+  describe('vendors.json should be valid json', function () {
 
-  let htmlString;
-  let foundThis;
+    it('should be a valid file', function () {
 
-  beforeEach(() => {
-    htmlString = 'candycanes';
-    foundThis = {
-      'supported': {
-        'ads': [],
-        'analytics': []
-      },
-      'notSupported': {
-        'ads': [],
-        'analytics': []
-      }
-    };
-  });
-
-  it('should push analytics to the analytics array', function () {
-    let tempScript = 'candy';
-    const category = 'Analytics';
-    let key = 'comScore';
-    popup.addToDict(tempScript, htmlString, foundThis, key, category);
-    expect(foundThis.supported.analytics).to.include('comScore');
-    tempScript = 'peppermint';
-    expect(foundThis.supported.analytics).to.not.include('Swoop');
-    expect(foundThis.notSupported.analytics).to.not.include('Swoop');
-  });
-
-  it('should push ads to the ads array', function () {
-    let tempScript = 'candy';
-    const category = 'Ads';
-    let key = 'comScore';
-    popup.addToDict(tempScript, htmlString, foundThis, key, category);
-    expect(foundThis.supported.ads).to.include('comScore');
-    tempScript = 'peppermint';
-    expect(foundThis.supported.ads).to.not.include('Swoop');
-    expect(foundThis.notSupported.ads).to.not.include('Swoop');
-  });
-});
-
-describe('vendors.json should be valid json', function () {
-
-  it('should be a valid file', function () {
-    
-    let isJSONValid;
-    
-    const vendorSchema = {
-      'id': '/SimpleVendors',
-      'type': 'object',
-      'properties': {
-        'regex': {
-          'type': 'array',
-          'items': {
+      const vendorSchema = {
+        'id': '/SimpleVendors',
+        'type': 'object',
+        'properties': {
+          'regex': {
+            'type': 'array',
+            'items': {
+              'type': 'string'
+            }
+          },
+          'tooltip': {
             'type': 'string'
-          }
+          },
+          'category': {
+            'type': 'string'
+          },
         },
-        'tooltip': {
-          'type': 'string'
-        },
-        'category': {
-          'type': 'string'
-        },
-      },
-      'required': ['category', 'regex']
-    };
+        'required': ['category', 'regex']
+      };
 
-    v.addSchema(vendorSchema, '/SimpleVendors');
-    
-    const result = v.validate(vendors.vendor, vendorSchema);
-    const jsonObj = JSON.parse(JSON.stringify(vendors));
-    
-    if (jsonObj && typeof jsonObj == 'object') {
-      isJSONValid = true;
-    }
-    else {
-      isJSONValid = false;
-    }
-    
-    expect(isJSONValid).to.be.true;
-    expect(result.valid).to.be.true;
+      v.addSchema(vendorSchema, '/SimpleVendors');
+
+      const result = v.validate(vendors.vendor, vendorSchema);
+      const jsonObj = JSON.parse(JSON.stringify(vendors));
+
+      const isJsonValid = (jsonObj && typeof jsonObj == 'object');
+
+
+      expect(isJsonValid).to.be.true;
+      expect(result.valid).to.be.true;
+    });
   });
 });
