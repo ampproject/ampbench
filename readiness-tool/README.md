@@ -32,7 +32,7 @@ Below is an example of the Google Analytics tag.
 {
     "apps": {
         "Google Analytics": {
-                "category": [
+                	     "category": [
 				      "Analytics"
 			      ],
 			    "regex": [
