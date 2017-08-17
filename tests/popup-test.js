@@ -17,8 +17,6 @@ const popup = require('../readiness-tool/popup');
 
 const vendors = require('../readiness-tool/vendors');
 
-const isJSON = require('is-valid-json');
-
 const Validator = require('jsonschema').Validator;
 
 const v = new Validator();
@@ -76,10 +74,11 @@ describe('addToDict(tempScript, htmlString, foundThis, key, category)', function
   });
 });
 
-
 describe('vendors.json should be valid json', function () {
 
   it('should be a valid file', function () {
+    
+    let isJSONValid;
     
     const vendorSchema = {
       'id': '/SimpleVendors',
@@ -102,9 +101,18 @@ describe('vendors.json should be valid json', function () {
     };
 
     v.addSchema(vendorSchema, '/SimpleVendors');
+    
     const result = v.validate(vendors.vendor, vendorSchema);
-
-    expect(isJSON(vendors)).to.be.true;
+    const jsonObj = JSON.parse(JSON.stringify(vendors));
+    
+    if (jsonObj && typeof jsonObj == 'object') {
+      isJSONValid = true;
+    }
+    else {
+      isJSONValid = false;
+    }
+    
+    expect(isJSONValid).to.be.true;
     expect(result.valid).to.be.true;
   });
 });

@@ -22,7 +22,7 @@ The AMP Readiness Tool (ART) is designed to assist in determining whether AMP ca
 
 Here is a sample of how the third party vendor should be included in the apps.json file. This file contains the names of all applicable third party vendors on the page. Each vendor contains a "category" attribute, a "regex" attribute and occassionally a tooltip.
 
-`category` - it's value is a string denoting whether the specific vendor is part of ads or anaytics
+`category` - its value is a string denoting whether the specific vendor is part of ads or anaytics
 
 `regex` - One or more regular expressions that are unique to that vendor
 
@@ -32,10 +32,10 @@ Below is an example of the Google Analytics tag.
 {
     "apps": {
         "Google Analytics": {
-                	     "category": [
+                  "category": [
 				      "Analytics"
 			      ],
-			    "regex": [
+                  "regex": [
 				      "googlesyndication\\.com/",
 				      "ad\\.ca\\.doubleclick\\.net"
 			     ]

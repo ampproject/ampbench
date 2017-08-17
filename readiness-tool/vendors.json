@@ -563,7 +563,7 @@
       "category": "Ads",
       "html": [
         "<img [^>]*src=\"[^\"]+ad\\.zanox\\.com",
-        "zanox\\.com/scripts/zanox\\.js$",
+        "zanox\\.com/scripts/zanox\\.js$"
       ]
     },
     "comScore": {
