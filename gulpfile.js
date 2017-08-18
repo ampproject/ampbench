@@ -15,10 +15,19 @@
  */
 
 const gulp = require('gulp');
+const gutil = require('gulp-util');
 const Karma = require('karma').Server;
 const karmaDefault = require('./karma.conf');
 
+
 gulp.task('test', function(done) {
+   try {
+      require('./readiness-tool/vendors.json');
+      console.log("vendors.json was found with no problems");
+    } catch (err){
+      gutil.log(gutil.colors.red('vendors.json failed to load because this error: ' + err.message));
+      return;
+    }
    new Karma(karmaDefault, function(exitCode) {
      $$.util.log($$.util.colors.yellow(
          'Shutting down test responses server on localhost:31862'));

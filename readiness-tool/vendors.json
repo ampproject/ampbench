@@ -1,0 +1,578 @@
+{
+  "vendors": {
+    "AD EBiS": {
+      "category": "Analytics",
+      "regex": [
+        "<!-- EBiS contents tag",
+        "<!--EBiS tag",
+        "<!-- Tag EBiS",
+        "<!-- EBiS common tag"
+      ]
+    },
+    "AT Internet XiTi": {
+      "category": "Analytics",
+      "regex": [
+        "xiti\\.com/hit\\.xiti"
+      ]
+    },
+    "AdInfinity": {
+      "category": "Ads",
+      "regex": [
+        "adinfinity\\.com\\.au"
+      ]
+    },
+    "AdRiver": {
+      "category": "Ads",
+      "regex": [
+        "(?:adriver\\.core\\.\\d\\.js|https?://(?:content|ad|masterh\\d)\\.adriver\\.ru/)",
+        "(?:<embed[^>]+(?:src=\"https?://mh\\d?\\.adriver\\.ru/|flashvars=\"[^\"]*(?:http:%3A//(?:ad|mh\\d?)\\.adriver\\.ru/|adriver_banner))|<(?:(?:iframe|img)[^>]+src|a[^>]+href)=\"https?://ad\\.adriver\\.ru/)"
+      ]
+    },
+    "AdRoll": {
+      "category": "Ads",
+      "regex": [
+        "(?:a|s)\\.adroll\\.com"
+      ]
+    },
+    "Adcash": {
+      "category": "Ads",
+      "regex": [
+        "^[^\\/]*//(?:[^\\/]+\\.)?adcash\\.com/(?:script|ad)/"
+      ]
+    },
+    "Adnegah": {
+      "category": "Ads",
+      "regex": [
+        "[^a-z]adnegah.*\\.js",
+        "<iframe [^>]*src=\"[^\"]+adnegah\\.net"
+      ]
+    },
+    "Advert Stream": {
+      "category": "Ads",
+      "regex": [
+        "(?:ad\\.advertstream\\.com|adxcore\\.com)"
+      ]
+    },
+    "Adzerk": {
+      "category": "Ads",
+      "regex": [
+        "adzerk\\.net/ados\\.js",
+        "<iframe [^>]*src=\"[^\"]+adzerk\\.net"
+      ]
+    },
+    "AppNexus": {
+      "category": "Ads",
+      "regex": [
+        "adnxs\\.(?:net|com)",
+        "<(?:iframe|img)[^>]+adnxs\\.(?:net|com)"
+      ]
+    },
+    "BittAds": {
+      "category": "Ads",
+      "regex": [
+        "bittads\\.com/js/bitt\\.js$"
+      ]
+    },
+    "Branch": {
+      "regex": [
+        "cdn\\.branch\\.io/"
+      ],
+      "category": "Analytics"
+    },
+    "BugSense": {
+      "category": "Analytics",
+      "regex": [
+        "bugsense\\.js"
+      ]
+    },
+    "BugSnag": {
+      "category": "Analytics",
+      "regex": [
+        "bugsnag.*\\.js"
+      ]
+    },
+    "BuySellAds": {
+      "category": "Ads",
+      "regex": [
+        "^https?://s\\d\\.buysellads\\.com/",
+        "<script[^>]*>[^<]+?bsa.src\\s*=\\s*['\"](?:https?:)?\\/{2}\\w\\d\\.buysellads\\.com\\/[\\w\\d\\/]+?bsa\\.js['\"]"
+      ]
+    },
+    "CO2Stats": {
+      "category": "Analytics",
+      "regex": [
+        "src=[^>]+co2stats\\.com/propres\\.php"
+      ]
+    },
+    "Carbon Ads": {
+      "category": "Ads",
+      "regex": [
+        "[^\\/]*\\/\\/(?:engine|srv)\\.carbonads\\.com\\/",
+        "<[a-z]+ [^>]*id=\"carbonads-container\""
+      ]
+    },
+    "Chartbeat": {
+      "category": "Analytics",
+      "regex": [
+        "chartbeat\\.js"
+      ]
+    },
+    "Chitika": {
+      "category": "Ads",
+      "regex": [
+        "scripts\\.chitika\\.net/"
+      ]
+    },
+    "Clicky": {
+      "category": "Analytics",
+      "regex": [
+        "static\\.getclicky\\.com"
+      ]
+    },
+    "ConversionLab": {
+      "category": "Analytics",
+      "regex": [
+        "conversionlab\\.trackset\\.com/track/tsend\\.js"
+      ]
+    },
+    "Crazy Egg": {
+      "category": "Analytics",
+      "regex": [
+        "cetrk\\.com/pages/scripts/\\d+/\\d+\\.js"
+      ]
+    },
+    "Criteo": {
+      "category": "Ads",
+      "regex": [
+        "gum\\.criteo\\.com/syncframe",
+        "static\\.criteo\\.net/js/",
+        "rtax\\.criteo\\.com"
+      ]
+    },
+    "Cross Pixel": {
+      "category": "Analytics",
+      "regex": [
+        "tag\\.crsspxl\\.com/s1\\.js"
+      ]
+    },
+    "DoubleClick Ad Exchange (AdX)": {
+      "category": "Ads",
+      "regex": [
+        "googlesyndication\\.com/pagead/show_ads\\.js",
+        "tpc\\.googlesyndication\\.com",
+        "googlesyndication\\.com.*abg\\.js"
+      ]
+    },
+    "DoubleClick Campaign Manager (DCM)": {
+      "category": "Ads",
+      "regex": [
+        "2mdn\\.net"
+      ]
+    },
+    "DoubleClick Floodlight": {
+      "category": "Ads",
+      "regex": [
+        "https?://fls.doubleclick.net"
+      ]
+    },
+    "DoubleClick for Publishers (DFP)": {
+      "category": "Ads",
+      "icon": "DoubleClick.svg",
+      "regex": [
+        "googletagservices\\.com/tag/js/gpt(?:_mobile)?\\.js"
+      ]
+    },
+    "Dynatrace": {
+      "category": "Analytics",
+      "regex": [
+        "dtagent.*\\.js"
+      ]
+    },
+    "Epom": {
+      "category": "Ads",
+      "regex": [
+        "^https?://(?:[^/]+\\.)?ad(?:op)?shost1\\.com/"
+      ]
+    },
+    "Fusion Ads": {
+      "category": "Ads",
+      "regex": [
+        "^[^\\/]*//[ac]dn\\.fusionads\\.net/(?:api/([\\d.]+)/)?"
+      ]
+    },
+    "Google AdSense": {
+      "category": "Ads",
+      "regex": [
+        "googlesyndication\\.com/",
+        "ad\\.ca\\.doubleclick\\.net",
+        "2mdn\\.net",
+        "ad\\.ca\\.doubleclick\\.net"
+      ]
+    },
+    "Google Analytics": {
+      "category": "Analytics",
+      "regex": [
+        "google-analytics\\.com\\/(?:ga|urchin|(analytics))\\.js"
+      ]
+    },
+    "Heap": {
+      "category": "Analytics",
+      "regex": [
+        "heap-\\d+.js"
+      ]
+    },
+    "Hotjar": {
+      "category": "Analytics",
+      "regex": [
+        "^//static\\.hotjar\\.com/c/hotjar-"
+      ]
+    },
+    "IBM Coremetrics": {
+      "category": "Analytics",
+      "regex": [
+        "cmdatatagutils\\.js"
+      ]
+    },
+    "INFOnline": {
+      "category": "Analytics",
+      "regex": [
+        "^https?://(?:[^/]+\\.)?i(?:oam|v)wbox\\.de/"
+      ]
+    },
+    "Intercom": {
+      "category": "Analytics",
+      "regex": [
+        "(?:api\\.intercom\\.io/api|static\\.intercomcdn\\.com/intercom\\.v1)"
+      ]
+    },
+    "Koego": {
+      "category": "Analytics",
+      "regex": [
+        "tracking\\.koego\\.com/end/ego\\.js"
+      ]
+    },
+    "Krux": {
+      "category": "Analytics",
+      "regex": [
+        "cdn\\.krxd\\.net/userdata",
+        "beacon\\.krxd\\.net",
+        "cdn\\.krxd\\.net/ctjs",
+        "cdn\\.krxd\\.net/partnerjs"
+      ]
+    },
+    "LinkSmart": {
+      "category": "Ads",
+      "regex": [
+        "^https?://cdn\\.linksmart\\.com/linksmart_([\\d.]+?)(?:\\.min)?\\.js"
+      ]
+    },
+    "Liveinternet": {
+      "category": "Analytics",
+      "regex": [
+        "<script[^<>]*>[^]{0,128}?src\\s*=\\s*['\"]//counter\\.yadro\\.ru/hit(?:;\\S+)?\\?(?:t\\d+\\.\\d+;)?r",
+        "<!--LiveInternet counter-->",
+        "<!--/LiveInternet-->",
+        "<a href=\"http://www.liveinternet.ru/click\"",
+        "/js/al/common.js\\?[0-9_]+"
+      ]
+    },
+    "MadAdsMedia": {
+      "category": "Ads",
+      "regex": [
+        "^https?://(?:ads-by|pixel)\\.madadsmedia.com/"
+      ]
+    },
+    "Mint": {
+      "category": "Analytics",
+      "regex": [
+        "mint/\\?js"
+      ]
+    },
+    "Mixpanel": {
+      "category": "Analytics",
+      "regex": [
+        "api\\.mixpanel\\.com/track"
+      ]
+    },
+    "Navegg": {
+      "category": "Analytics",
+      "regex": [
+        "tag.navdmp.com"
+      ]
+    },
+    "Netmonitor": {
+      "category": "Analytics",
+      "regex": [
+        "netmonitor\\.fi/nmtracker\\.js"
+      ]
+    },
+    "New Relic": {
+      "category": "Analytics",
+      "regex": [
+        "//bam.\\nr-data\\.net"
+      ]
+    },
+    "Open Web Analytics": {
+      "category": "Analytics",
+      "regex": [
+        "<!-- (?:Start|End) Open Web Analytics Tracker -->"
+      ]
+    },
+    "OpenX": {
+      "category": "Ads",
+      "regex": [
+        "https?://[^/]*\\.openx\\.net",
+        "https?://[^/]*\\.servedbyopenx\\.com"
+      ]
+    },
+    "Optimizely": {
+      "category": "Analytics",
+      "regex": [
+        "//cdn\\.optimizely\\.com/js/",
+        "cdn3\\.optimizely\\.com/js/geo2.js"
+      ],
+      "tooltip": "Workaround is available. Use amp-experiment."
+    },
+    "Oracle Recommendations On Demand": {
+      "category": "Analytics",
+      "regex": [
+        "atgsvcs.+atgsvcs\\.js"
+      ]
+    },
+    "Piwik": {
+      "category": "Analytics",
+      "regex": [
+        "piwik\\.js|piwik\\.php"
+      ]
+    },
+    "Project Wonderful": {
+      "category": "Ads",
+      "regex": [
+        "^https?://(?:www\\.)?projectwonderful\\.com/(?:pwa\\.js|gen\\.php)",
+        "<div[^>]+id=\"pw_adbox_"
+      ]
+    },
+    "Prospector": {
+      "category": "Ads",
+      "regex": [
+        "processprospector\\.js",
+        "<[^>]+data-name=['\"]prospectscript"
+      ]
+    },
+    "PubMatic": {
+      "category": "Ads",
+      "regex": [
+        "https?://[^/]*\\.pubmatic\\.com"
+      ]
+    },
+    "Quantcast Measurement": {
+      "category": "Analytics",
+      "regex": [
+        "\\.quantserve\\.com/*"
+      ]
+    },
+    "Rubicon Project": {
+      "category": "Ads",
+      "regex": [
+        "https?://[^/]*\\.rubiconproject\\.com"
+      ]
+    },
+    "Ruxit": {
+      "category": "Analytics",
+      "regex": [
+        "ruxitagentjs"
+      ]
+    },
+    "Segment": {
+      "category": "Analytics",
+      "regex": [
+        "cdn\\.segment\\.com/analytics\\.js",
+        "<script[\\s\\S]*cdn\\.segment\\.com/analytics.js[\\s\\S]*script>"
+      ]
+    },
+    "Sharethrough": {
+      "category": "Ads",
+      "regex": [
+        "\\.sharethrough\\.com"
+      ]
+    },
+    "ShinyStat": {
+      "category": "Analytics",
+      "regex": [
+        "^https?://codice(?:business|ssl|pro|isp)?\\.shinystat\\.com/cgi-bin/getcod\\.cgi",
+        "<img[^>]*\\s+src=['\"]?https?://www\\.shinystat\\.com/cgi-bin/shinystat\\.cgi\\?[^'\"\\s>]*['\"\\s/>]"
+      ]
+    },
+    "Site Meter": {
+      "category": "Analytics",
+      "regex": [
+        "sitemeter\\.com/js/counter\\.js\\?site="
+      ]
+    },
+    "SiteCatalyst": {
+      "category": "Analytics",
+      "regex": [
+        "/s[_-]code.*\\.js"
+      ]
+    },
+    "Sizmek": {
+      "category": "Ads",
+      "regex": [
+        "[^/]*//[^/]*serving-sys\\.com/",
+        "(?:<a [^>]*href=\"[^/]*//[^/]*serving-sys\\.com/|<img [^>]*src=\"[^/]*//[^/]*serving-sys\\.com/)"
+      ]
+    },
+    "Skimlinks": {
+      "category": "Ads",
+      "regex": [
+        "skimlinks.*\\.js"
+      ]
+    },
+    "Sklik": {
+      "category": "Ads",
+      "uniqueExp": [
+        "c\\.imedia\\.cz/js/script.js"
+      ]
+    },
+    "Smart Ad Server": {
+      "category": "Ads",
+      "regex": [
+        "<img[^>]+smartadserver\\.com\\/call"
+      ]
+    },
+    "Snoobi": {
+      "category": "Analytics",
+      "regex": [
+        "snoobi\\.com/snoop\\.php"
+      ]
+    },
+    "StatCounter": {
+      "category": "Analytics",
+      "regex": [
+        "statcounter\\.com/counter/counter"
+      ]
+    },
+    "Tealium": {
+      "category": "Ads",
+      "regex": [
+        "^//tags\\.tiqcdn\\.com/",
+        "/tealium/utag\\.js$"
+      ]
+    },
+    "Titan": {
+      "category": "Ads",
+      "regex": [
+        "<script[^>]+>var titan"
+      ]
+    },
+    "TrackJs": {
+      "category": "Analytics",
+      "regex": [
+        "tracker.js"
+      ]
+    },
+    "Usabilla": {
+      "category": "Analytics",
+      "uniqueExp": [
+        "*\\.usabilla\\.com"
+      ]
+    },
+    "Veoxa": {
+      "category": "Ads",
+      "regex": [
+        "tracking\\.veoxa\\.com",
+        "<img [^>]*src=\"[^\"]+tracking\\.veoxa\\.com"
+      ]
+    },
+    "VigLink": {
+      "category": "Ads",
+      "regex": [
+        "(?:^[^/]*//[^/]*viglink\\.com/api/|vglnk\\.js)"
+      ]
+    },
+    "VisualPath": {
+      "category": "Analytics",
+      "regex": [
+        "visualpath[^/]*\\.trackset\\.it/[^/]+/track/include\\.js"
+      ]
+    },
+    "W3Counter": {
+      "category": "Analytics",
+      "regex": [
+        "w3counter\\.com/tracker\\.js"
+      ]
+    },
+    "Web Optimizer": {
+      "category": "Analytics",
+      "regex": [
+        "<title [^>]*lang=\"wo\">"
+      ]
+    },
+    "Webtrends": {
+      "category": "Analytics",
+      "regex": [
+        "<img[^>]+id=\"DCSIMG\"[^>]+webtrends"
+      ]
+    },
+    "Woopra": {
+      "category": "Analytics",
+      "regex": [
+        "static\\.woopra\\.com"
+      ]
+    },
+    "Yahoo Advertising": {
+      "category": "Ads",
+      "regex": [
+        "<iframe[^>]+adserver\\.yahoo\\.com",
+        "<img[^>]+clicks\\.beap\\.bc\\.yahoo\\.com",
+        "adinterax\\.com"
+      ]
+    },
+    "Yahoo! Web Analytics": {
+      "category": "Analytics",
+      "regex": [
+        "d\\.yimg\\.com/mi/ywa\\.js"
+      ]
+    },
+    "Yandex.Direct": {
+      "category": "Ads",
+      "regex": [
+        "<yatag class=\"ya-partner__ads\">",
+        "https?://an\\.yandex\\.ru/"
+      ]
+    },
+    "Yandex.Metrika": {
+      "category": "Analytics",
+      "regex": [
+        "mc\\.yandex\\.ru\\/metrika\\/watch\\.js"
+      ]
+    },
+    "Yieldlab": {
+      "category": "Ads",
+      "regex": [
+        "^https?://(?:[^/]+\\.)?yieldlab\\.net/"
+      ]
+    },
+    "Yieldmo": {
+      "category": "Ads",
+      "regex": [
+        "static\\.yieldmo\\.com"
+      ]
+    },
+    "Zanox": {
+      "category": "Ads",
+      "html": [
+        "<img [^>]*src=\"[^\"]+ad\\.zanox\\.com",
+        "zanox\\.com/scripts/zanox\\.js$"
+      ]
+    },
+    "comScore": {
+      "category": "Analytics",
+      "regex": [
+        "\\.scorecardresearch\\.com/beacon\\.js|COMSCORE\\.beacon",
+        "<iframe[^>]* (?:id=\"comscore\"|scr=[^>]+comscore)|\\.scorecardresearch\\.com/beacon\\.js|COMSCORE\\.beacon",
+        "sb\\.scorecardresearch\\.com"
+      ]
+    }
+  }
+}
