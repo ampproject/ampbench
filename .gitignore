@@ -13,6 +13,7 @@
 # put any other files you don't want to check in here,
 # such as .DS_Store (OSX), *.bak, etc.
 .DS_Store 
+public/.DS_Store 
 
 # Visual Studio Code
 .vscode/*

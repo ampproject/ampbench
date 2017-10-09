@@ -940,12 +940,14 @@ function fetch_and_validate_url(validate_url, on_output_callback, as_json) {
                     http_response.setResponseEnded();
                     body = chunks.join('');
                     http_response.http_response_body = body;
-                    if (0 == as_json) { // return output as JSON or not
-                        output = lib_validate_lines(body, full_path); //!!!NOTE: gets a MULTILINE STRING
-                    } else {
-                        output = lib_validate_json(body, full_path); //!!!NOTE: gets an ARRAY
+                    if (http_response.statusIsOK()) {
+                        if (0 === as_json) { // return output as JSON or not
+                            output = lib_validate_lines(body, full_path); //!!!NOTE: gets a MULTILINE STRING
+                        } else {
+                            output = lib_validate_json(body, full_path); //!!!NOTE: gets an ARRAY
+                        }
+                        on_output_callback(http_response, output); // !!! RETURN to front-end  - - - - - - - - - - - - -
                     }
-                    on_output_callback(http_response, output); // !!! RETURN to front-end  - - - - - - - - - - - - -
                 });
             };
 

@@ -21,7 +21,7 @@ const handlers = require('./ampbench_handlers.js');
 // app version
 //
 
-const VERSION_STRING = '[AMPBench:v.1.0]';
+const VERSION_STRING = '[AMPBENCH:V.1.0]';
 
 function version_msg(msg){
     return VERSION_STRING + '[' + new Date().toISOString() + '] ' + msg;
@@ -29,6 +29,47 @@ function version_msg(msg){
 
 function validator_signature() {
     return '[validator-signature:' + benchlib.lib_amphtml_validator_signature() + ']';
+}
+
+function consoleLogHostAndRemoteIP(req) {
+    let remote_ip =
+        req.headers['x-forwarded-for'] ||
+        req.connection.remoteAddress ||
+        req.socket.remoteAddress ||
+        req.connection.socket.remoteAddress;
+    console.log(
+        '[HOST:' + req.headers.host + '] [REMOTE-IP:' + remote_ip + ']');
+}
+
+function consoleLogRequest(req, check_http_response, amp_url) {
+    print_dashes(80);
+    console.log(version_msg(validator_signature()));
+    consoleLogHostAndRemoteIP(req);
+    console.log(
+        '[HTTP:' + check_http_response.http_response_code + '] ' +
+        req.path + ' ' + amp_url);
+}
+
+function consoleLogRequestResponse(req, res) {
+    let check_http_response = new benchlib.HttpResponse(req.url);
+    check_http_response.setResponse(res);
+    consoleLogRequest(req, check_http_response, req.url);
+    return check_http_response; // useful but optional for callers
+}
+
+function ifdef(v) { // useful for outputting potentially undefined variable values
+    if(v)
+        return v;
+    else
+        return '';
+}
+
+function format_dashes(dash_count) { // needs: const S = require('string');
+    return ( S(('- ').repeat(dash_count)).s );
+}
+
+function print_dashes(dash_count) { // needs: const S = require('string');
+    console.log(format_dashes(dash_count));
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -115,17 +156,40 @@ app.use((err, req, res, next) => {
     });
 });
 
+/*** - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ CLI TESTS
+
+ curl http://localhost:8080/command_force_validator_update
+ curl http://localhost:8080/
+ curl http://localhost:8080/version
+ curl http://localhost:8080/validate?url=https://health.mail.ru/amp/news/chto_delaet_pechen/
+ curl http://localhost:8080/validate_ua_desktop?url=https://health.mail.ru/amp/news/chto_delaet_pechen/
+ curl http://localhost:8080/raw?url=https://health.mail.ru/amp/news/chto_delaet_pechen/
+ curl http://localhost:8080/check?url=https://health.mail.ru/amp/news/chto_delaet_pechen/
+ curl http://localhost:8080/api?url=https://health.mail.ru/amp/news/chto_delaet_pechen/
+ curl http://localhost:8080/api1?url=https://health.mail.ru/amp/news/chto_delaet_pechen/
+ curl http://localhost:8080/api2?url=https://health.mail.ru/amp/news/chto_delaet_pechen/
+ curl http://localhost:8080/debug?url=https://health.mail.ru/amp/news/chto_delaet_pechen/
+ curl http://localhost:8080/debug_cli?url=https://health.mail.ru/amp/news/chto_delaet_pechen/
+ curl http://localhost:8080/debug_curl?url=https://health.mail.ru/amp/news/chto_delaet_pechen/
+ curl http://localhost:8080/debug_curl_cli?url=https://health.mail.ru/amp/news/chto_delaet_pechen/
+
+ ***/
+
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // ROUTES
 //
 
 app.get('/', (req, res) => {
+    consoleLogRequestResponse(req, res);
     res.header("Content-Type", "text/html; charset=utf-8");
     res.write(handlebars.compile(index_template)());
     res.end();
 });
 
 app.get('/version', (req, res) => {
+    consoleLogRequestResponse(req, res);
     let __res = handlers.version('/version', req, res);
     res.status(200).send(__res);
 });
@@ -174,6 +238,10 @@ app.get('/validate', (req, res) => {
     const user_agent_name = 'MOBILE'; // mobile ua
     assert_url(req, res); // handle bad url
     const on_handler_validate = (__ret) => {
+        let check_http_response = __ret.http_response;
+        consoleLogRequest(req, check_http_response, __ret.url);
+        // console.log(`### [check_http_response.statusIsOK: ${check_http_response.statusIsOK()}]`);
+        // if (check_http_response.statusIsOK()) {
         res.header("Content-Type", "text/html; charset=utf-8");
         if (__ret) {
             res.write(handlebars.compile(results_template)(__ret));
@@ -181,15 +249,26 @@ app.get('/validate', (req, res) => {
         } else {
             res.status(200).send(version_msg('No data was retrieved from AMP validation service.'));
         }
+        // } else {
+        //     const http_msg = `\n[HTTP: ${check_http_response.http_response_code}] [URL: ${check_http_response.url}]\n`;
+        //     // return res.status(404).send();
+        //     return res.status(check_http_response.http_response_code).send(
+        //                 version_msg('No data was retrieved from AMP validation service.' +
+        //                 http_msg));
+        // }
     };
     handlers.validate('/validate', user_agent, user_agent_name, req, res, on_handler_validate);
 });
 
 app.get('/validate_ua_desktop', (req, res) => {
+    consoleLogRequestResponse(req, res);
     const user_agent = benchlib.UA_CURL; // desktop ua
     const user_agent_name = 'DESKTOP'; // desktop ua
     assert_url(req, res); // handle bad url
     const on_handler_validate = (__ret) => {
+        let check_http_response = __ret.http_response;
+        consoleLogRequest(req, check_http_response, __ret.url);
+        // console.log(`### [check_http_response.statusIsOK: ${check_http_response.statusIsOK()}]`);
         res.header("Content-Type", "text/html; charset=utf-8");
         if (__ret) {
             res.write(handlebars.compile(results_template)(__ret));
@@ -199,41 +278,35 @@ app.get('/validate_ua_desktop', (req, res) => {
         }
     };
     handlers.validate('/validate', user_agent, user_agent_name, req, res, on_handler_validate);
-});
-
-app.get('/raw/', (req, res) => {
-    assert_url(req, res); // handle bad url
-    let amp_url = req.query.url || '';
-    let check_http_response = null;
-    if ('' == amp_url.trim()) {
-        res.status(200).send(version_msg('No AMP URL parameter found.'));
-    } else {
-        const on_output = (http_response, output) => {
-            check_http_response = http_response;
-            console.log(version_msg(
-                validator_signature() +
-                '[HTTP:' + check_http_response.http_response_code + '] ' +
-                req.path + ' ' + amp_url)); //!!!USEFUL!!!
-            res.status(200).send(output + os.EOL);
-        };
-        benchlib.api_validate_url(amp_url, on_output, 0);
-    }
 });
 
 app.get('/check/', (req, res) => {
     assert_url(req, res); // handle bad url
     let amp_url = req.query.url || '';
     let check_http_response = null;
-    if ('' == amp_url.trim()) {
+    if ('' === amp_url.trim()) {
         res.status(200).send(version_msg('No AMP URL parameter found.'));
     } else {
         const on_output = (http_response, output) => {
             check_http_response = http_response;
-            console.log(version_msg(
-                validator_signature() +
-                '[HTTP:' + check_http_response.http_response_code + '] ' +
-                req.path + ' ' + amp_url)); //!!!USEFUL!!!
+            consoleLogRequest(req, check_http_response, amp_url);
             res.status(200).send(benchlib.multiline_to_html(output) + os.EOL);
+        };
+        benchlib.api_validate_url(amp_url, on_output, 0);
+    }
+});
+
+app.get('/raw/', (req, res) => {
+    assert_url(req, res); // handle bad url
+    let amp_url = req.query.url || '';
+    let check_http_response = null;
+    if ('' === amp_url.trim()) {
+        res.status(200).send(version_msg('No AMP URL parameter found.'));
+    } else {
+        const on_output = (http_response, output) => {
+            check_http_response = http_response;
+            consoleLogRequest(req, check_http_response, amp_url);
+            res.status(200).send(output + os.EOL);
         };
         benchlib.api_validate_url(amp_url, on_output, 0);
     }
@@ -262,12 +335,9 @@ require('request-debug')(request, function(type, data, req) {
 app.get('/debug/', (req, res) => {
     assert_url(req, res); // handle bad url
     let amp_url = req.query.url || '';
-    if ('' == amp_url.trim()) {
+    if ('' === amp_url.trim()) {
         res.status(200).send(version_msg('No AMP URL parameter found.'));
     } else {
-        console.log(version_msg(
-            '[DEBUG] ' +
-            req.path + ' ' + amp_url)); //!!!USEFUL!!!
         _debug_results =
             '\n==> GET: ' + amp_url + '\n\n' + '{"User-Agent": '
             + benchlib.UA_AMPBENCH_NAME + '}\n\n' + format_dashes(30) + '\n';
@@ -278,6 +348,9 @@ app.get('/debug/', (req, res) => {
             rejectUnauthorized: false
         }, function(err, res_debug, body) {
             // console.log(_debug_results);
+            let check_http_response = new benchlib.HttpResponse(amp_url);
+            check_http_response.setResponse(res_debug);
+            consoleLogRequest(req, check_http_response, amp_url);
             res.status(200).send(benchlib.multiline_to_html(_debug_results) + os.EOL);
         });
     }
@@ -287,12 +360,9 @@ app.get('/debug/', (req, res) => {
 app.get('/debug_cli/', (req, res) => {
     assert_url(req, res); // handle bad url
     let amp_url = req.query.url || '';
-    if ('' == amp_url.trim()) {
+    if ('' === amp_url.trim()) {
         res.status(200).send(version_msg('No AMP URL parameter found.'));
     } else {
-        console.log(version_msg(
-            '[DEBUG-CLI] ' +
-            req.path + ' ' + amp_url)); //!!!USEFUL!!!
         _debug_results =
             '\n==> GET: ' + amp_url + '\n\n' + '{"User-Agent": '
             + benchlib.UA_AMPBENCH_NAME + '}\n\n' + format_dashes(30) + '\n';
@@ -303,6 +373,9 @@ app.get('/debug_cli/', (req, res) => {
             rejectUnauthorized: false
         }, function(err, res_debug, body) {
             // console.log(_debug_results);
+            let check_http_response = new benchlib.HttpResponse(amp_url);
+            check_http_response.setResponse(res_debug);
+            consoleLogRequest(req, check_http_response, amp_url);
             res.status(200).send(_debug_results + os.EOL);
         });
     }
@@ -312,12 +385,9 @@ app.get('/debug_cli/', (req, res) => {
 app.get('/debug_curl/', (req, res) => {
     assert_url(req, res); // handle bad url
     let amp_url = req.query.url || '';
-    if ('' == amp_url.trim()) {
+    if ('' === amp_url.trim()) {
         res.status(200).send(version_msg('No AMP URL parameter found.'));
     } else {
-        console.log(version_msg(
-            '[DEBUG_CURL] ' +
-            req.path + ' ' + amp_url)); //!!!USEFUL!!!
         _debug_results =
             '\n==> GET: ' + amp_url + '\n\n' + '{"User-Agent": UA_CURL}\n\n' + format_dashes(30) + '\n';
         // do the request
@@ -327,6 +397,9 @@ app.get('/debug_curl/', (req, res) => {
             rejectUnauthorized: false
         }, function(err, res_debug, body) {
             // console.log(_debug_results);
+            let check_http_response = new benchlib.HttpResponse(amp_url);
+            check_http_response.setResponse(res_debug);
+            consoleLogRequest(req, check_http_response, amp_url);
             res.status(200).send(benchlib.multiline_to_html(_debug_results) + os.EOL);
         });
     }
@@ -336,12 +409,9 @@ app.get('/debug_curl/', (req, res) => {
 app.get('/debug_curl_cli/', (req, res) => {
     assert_url(req, res); // handle bad url
     let amp_url = req.query.url || '';
-    if ('' == amp_url.trim()) {
+    if ('' === amp_url.trim()) {
         res.status(200).send(version_msg('No AMP URL parameter found.'));
     } else {
-        console.log(version_msg(
-            '[DEBUG_CURL_CLI] ' +
-            req.path + ' ' + amp_url)); //!!!USEFUL!!!
         _debug_results =
             '\n==> GET: ' + amp_url + '\n\n' + '{"User-Agent": UA_CURL}\n\n' + format_dashes(30) + '\n';
         // do the request
@@ -351,6 +421,9 @@ app.get('/debug_curl_cli/', (req, res) => {
             rejectUnauthorized: false
         }, function(err, res_debug, body) {
             // console.log(_debug_results);
+            let check_http_response = new benchlib.HttpResponse(amp_url);
+            check_http_response.setResponse(res_debug);
+            consoleLogRequest(req, check_http_response, amp_url);
             res.status(200).send(_debug_results + os.EOL);
         });
     }
@@ -360,11 +433,15 @@ app.get('/debug_curl_cli/', (req, res) => {
 // /command_force_validator_update API that hot swaps the latest CDN validator
 // library into a running AMPBench instance
 app.get('/command_force_validator_update', (req, res) => {
+    print_dashes(80);
     console.log(version_msg(validator_signature()));
     let __res = '[VALIDATOR REFRESH] BEFORE: ' + validator_signature();
     const on_refresh_complete = (amphtml_validator_signature) => {
         __res += ' AFTER: ' + amphtml_validator_signature;
         console.log(__res);
+        let check_http_response = new benchlib.HttpResponse(req.url);
+        check_http_response.setResponse(res);
+        consoleLogRequest(req, check_http_response, req.url);
         res.status(200).send(__res);
     };
     benchlib.lib_refresh_validator_if_stale(on_refresh_complete);
@@ -430,18 +507,15 @@ app.get('/api/', (req, res) => {
     // console.log('==> api: amp_url: ' + amp_url);
     let check_http_response = null;
     let parse_amplinks = {};
-    if ('' == amp_url.trim()) {
+    if ('' === amp_url.trim()) {
         res.status(200).send(version_msg('No API URL parameter found.'));
     } else {
-        var on_output = (http_response, output) => {
+        let on_output = (http_response, output) => {
             check_http_response = http_response;
-            var status = output.shift();
-            console.log(version_msg(
-                validator_signature() +
-                '[HTTP:' + check_http_response.http_response_code + '] ' +
-                req.path + ' ' + amp_url)); //!!!USEFUL!!!
-            parse_amplinks = benchlib.parse_body_for_amplinks_and_robots_metatags(check_http_response);
+            let status = output.shift();
+            consoleLogRequest(req, check_http_response, amp_url);
             app.set('json spaces', 4);
+            parse_amplinks = benchlib.parse_body_for_amplinks_and_robots_metatags(check_http_response);
             res.status(200).json({
                 status: status,
                 url: amp_url,
@@ -510,10 +584,7 @@ app.get('/api1/', (req, res) => {
 
     let on_api_validate_amp = (http_response, api_return) => {
         check_http_response = http_response;
-        console.log(version_msg(
-            validator_signature() +
-            '[HTTP:' + check_http_response.http_response_code + '] ' +
-            req.path + ' ' + amp_url)); //!!!USEFUL!!!
+        consoleLogRequest(req, check_http_response, amp_url);
         api_validate_amp_return = api_return;
         // console.log('==> api_validate_amp_response_body: ' + api_validate_amp_response_body);
         parse_amplinks = benchlib.parse_body_for_amplinks_and_robots_metatags(check_http_response);
@@ -632,10 +703,7 @@ app.get('/api2/', (req, res) => {
 
     let on_api_validate_amp = (http_response, api_return) => {
         check_http_response = http_response;
-        console.log(version_msg(
-            validator_signature() +
-            '[HTTP:' + check_http_response.http_response_code + '] ' +
-            req.path + ' ' + amp_url)); //!!!USEFUL!!!
+        consoleLogRequest(req, check_http_response, amp_url);
         api_validate_amp_return = api_return;
         // parse_amplinks = benchlib.parse_body_for_amplinks_and_robots_metatags(check_http_response.http_response_body);
         parse_amplinks = benchlib.parse_page_content(check_http_response);
@@ -649,21 +717,6 @@ app.get('/api2/', (req, res) => {
         benchlib.api_validate_url(amp_url, on_api_validate_amp, 1);
     }
 });
-
-function ifdef(v) { // useful for outputting potentially undefined variable values
-    if(v)
-        return v;
-    else
-        return '';
-}
-
-function format_dashes(dash_count) { // needs: const S = require('string');
-    return ( S(('- ').repeat(dash_count)).s );
-}
-
-function print_dashes(dash_count) { // needs: const S = require('string');
-    console.log(format_dashes(dash_count));
-}
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // server utilities

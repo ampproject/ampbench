@@ -24,7 +24,7 @@ const sdlib = require('./ampbench_lib_sd.js');
 // app version
 //
 
-const VERSION_STRING = '[AMPBench:v.1.0]';
+const VERSION_STRING = '[AMPBENCH:V.1.0]';
 
 function version_msg(msg) {
     return VERSION_STRING + '[' + new Date().toISOString() + '] ' + msg;
@@ -97,10 +97,7 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
 
         const on_amp_validate = (http_response, output) => {
 
-            console.log(version_msg(
-                validator_signature() +
-                '[HTTP:' + http_response.http_response_code + '] ' +
-                req.path + ' ' + url_to_validate)); //!!!USEFUL!!!
+            // console.log(`### [http_response.statusIsOK: ${http_response.statusIsOK()}]`);
 
             let parse_amplinks = benchlib.parse_page_content(http_response);
 
@@ -401,7 +398,9 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                                         // https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
                                         response_timestamp: new Date().toISOString(), // The timezone is always zero UTC offset, as per suffix "Z"
                                         amphtml_validator_signature: validator_signature().substr(0, 21+16) + ']', // only show left 16 chars
-                                        // http_response: http_response,
+                                        http_response: http_response,
+                                        http_response_code: http_response.http_response_code,
+                                        http_response_statusIsOK: http_response.statusIsOK(),
                                         http_response_result: http_response_result,
                                         parse_amplinks: parse_amplinks,
                                         canonical_parsed_return: canonical_parsed_return,
@@ -465,6 +464,9 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
 
                                     on_validate_callback(__ret); // DONE!!!
                                 }
+
+                                // console.log(`### [DANGLING!][http_response.statusIsOK: ${http_response.statusIsOK()}]`);
+
                             };
                             sdlib.check_image_urls_are_reachable(publisher_logo_url, article_image_url, on_check_image_urls_are_reachable);
                         };
