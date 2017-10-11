@@ -392,6 +392,12 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                                     sniffer_raw_status_css = !sniffer.containsAmpHtmlSignature
                                         ? CHECK_FAIL_CSS : sniffer_raw_status_css;
 
+                                    const sniffer_contains_byte_order_mark = sniffer.containsByteOrderMark
+                                        ? `[${CHECK_WARN}] Byte Order Marks were detected on the page - ideally AMP pages should not contain any BOMs`
+                                        : `[${CHECK_PASS}] AMP page does not appear to contain any Byte Order Marks (BOMs)`;
+                                    const sniffer_contains_byte_order_mark_css = sniffer.containsByteOrderMark
+                                        ? CHECK_WARN_CSS : CHECK_PASS_CSS;
+
                                     __ret = {
                                         user_agent: benchlib.get_global_user_agent(),
                                         user_agent_name: benchlib.get_global_user_agent_name(),
@@ -443,6 +449,8 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                                             ? sniffer.ampCarouselStructuredDataTypesFound
                                             : CHECK_FAIL + ': No Structured Data markup for AMP Top Stories Carousel supported types was found',
                                         sd_containsIncompleteAmpCarouselStructuredData_result: sniffer_sd_carousel_result,
+                                        sniffer_contains_byte_order_mark: sniffer_contains_byte_order_mark,
+                                        sniffer_contains_byte_order_mark_css: sniffer_contains_byte_order_mark_css,
                                         // - - -
                                         metadata_is_news: metadata_return.schemaIsArticle() ||
                                         sniffer.containsAmpNewsCarouselStructuredDataTypeMain ||

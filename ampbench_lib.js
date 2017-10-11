@@ -39,6 +39,7 @@ const util = require('util');
 const inspect_obj = (obj) => {return util.inspect(obj, { showHidden: true, depth: null })};
 const cheerio = require('cheerio');
 const S = require('string');
+const hasBom = require('has-bom');
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // convenient aliases
@@ -519,6 +520,8 @@ class HttpBodySniffer {
                 + ( this._contains_sd.microdata_type.VideoObject
                     ? ' VideoObject (Microdata)' : '' );
 
+            this._contains_byte_order_mark = hasBom(this._body);
+
         }
     }
 
@@ -747,6 +750,11 @@ class HttpBodySniffer {
             this._sd_type_is_amp_news_carousel_support_without_main :
             false;
     }
+    get containsByteOrderMark() {
+        return this.isValidForUse ?
+            this._contains_byte_order_mark :
+            false;
+    }
 }
 
 class HttpBodyParser extends HttpBodySniffer {
@@ -877,9 +885,9 @@ function lib_renderValidationResult(validationResult, validate_url) {
     } else {
         rendered.push(CHECK_FAIL);
     }
-    for (var ii = 0; ii < validationResult.errors.length; ii++) {
-        var error = validationResult.errors[ii];
-        var msg = validate_url + ': ' + 'line ' + error.line + ', col ' + error.col + ': ' + error.message;
+    for (let ii = 0; ii < validationResult.errors.length; ii++) {
+        const error = validationResult.errors[ii];
+        let msg = validate_url + ': ' + 'line ' + error.line + ', col ' + error.col + ': ' + error.message;
         if (error.specUrl) {
             msg += ' (see ' + error.specUrl + ')';
         }
