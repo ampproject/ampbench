@@ -1191,6 +1191,7 @@ function check_url_is_reachable_with_user_agent(fetch_url, user_agent, callback)
     let _ret = {
         url: fetch_url,
         agent: user_agent,
+        http_response_code: 0,
         ok: false,
         status: '',
         result: '',
@@ -1208,7 +1209,8 @@ function check_url_is_reachable_with_user_agent(fetch_url, user_agent, callback)
         fetch(fetch_url, options)
             .then(function(res) {
                 // _log_response(res);
-                if (res.status == 200) {
+                _ret.http_response_code = res.status;
+                if (res.status === 200) {
                     _ret.ok = true;
                     _ret.status = CHECK_PASS;
                     _ret.result = '[HTTP: ' + res.status + '] URL is reachable';
@@ -1356,8 +1358,13 @@ function check_robots_txt(validation_url, callback) {
         // console.log('=> check_robots_txt: result: '  + check_url_is_reachable_return.result);
 
         if (!_ret.ok) { // cannot get to the sites robots.txt
-            check_robots_txt_ua_googlebot_ok = CHECK_FAIL;
-            check_robots_txt_ua_googlebot_smartphone_ok = CHECK_FAIL;
+            if (_ret.http_response_code === 404) { // 404 is OK: https://developers.google.com/search/reference/robots_txt
+                check_robots_txt_ua_googlebot_ok = CHECK_PASS;
+                check_robots_txt_ua_googlebot_smartphone_ok = CHECK_PASS;
+            } else {
+                check_robots_txt_ua_googlebot_ok = CHECK_FAIL;
+                check_robots_txt_ua_googlebot_smartphone_ok = CHECK_FAIL;
+            }
             build_results();
             callback(check_robots_txt_return);
         } else {
