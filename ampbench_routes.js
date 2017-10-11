@@ -674,8 +674,8 @@ app.get('/api2/', (req, res) => {
                 robots_txt_googlebot_smartphone_status: check_robots_txt_return.check_robots_txt_ua_googlebot_smartphone_ok,
                 robots_meta_status: parse_amplinks.check_robots_meta_status,
                 robots_meta_result: parse_amplinks.check_robots_meta_results,
-                x_robots_tag_header_status: parse_amplinks.check_x_robots_tag_header_status,
-                x_robots_tag_header_result: parse_amplinks.check_x_robots_tag_header_results
+                x_robots_tag_header_status: parse_amplinks.check_ims_or_etag_header_status,
+                x_robots_tag_header_result: parse_amplinks.check_ims_or_etag_header_results
             },
             sd_validation: make_api_sd_validation(api_validate_sd_return)
         }

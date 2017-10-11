@@ -214,6 +214,16 @@
                 </tr>
                 <tr>
                     <td class="mdl-data-table__cell--non-numeric">
+                        <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html" target="_blank">
+                            If-Modified-Since and<br>
+                            ETag Headers</a></td>
+                    <td class="mdl-data-table__cell--non-numeric">{{{check_ims_or_etag_header_status_css}}}</td>
+                    <td class="mdl-data-table__cell--non-numeric">{{parse_amplinks.check_ims_or_etag_header.check_ims_or_etag_header_results}}<br>
+                        [{{{parse_amplinks.check_ims_or_etag_header.check_ims_header_status}}}] {{parse_amplinks.check_ims_or_etag_header.check_ims_header_result}}<br>
+                        [{{{parse_amplinks.check_ims_or_etag_header.check_etag_header_status}}}] {{parse_amplinks.check_ims_or_etag_header.check_etag_header_result}}</td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric">
                         <a href="https://webmasters.googleblog.com/2016/03/updating-smartphone-user-agent-of.html" target="_blank">
                             Redirects via User Agent<br>
                             Googlebot Smartphone</a></td>
@@ -225,7 +235,8 @@
                 <tr>
                     <td class="mdl-data-table__cell--non-numeric">
                         <a href="https://en.wikipedia.org/wiki/Byte_order_mark" target="_blank">
-                            Page contains Byte Order Mark(s)?</a></td>
+                            Page contains Byte <br>
+                            Order Mark(s)?</a></td>
                     <td class="mdl-data-table__cell--non-numeric">{{{sniffer_contains_byte_order_mark_css}}}</td>
                     <td class="mdl-data-table__cell--non-numeric">{{{sniffer_contains_byte_order_mark}}}</td>
                 </tr>

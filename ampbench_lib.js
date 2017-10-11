@@ -1564,12 +1564,14 @@ function parse_page_content(http_response) {
         check_robots_meta_result: 'Page content could not be read.',
         check_robots_meta_status: CHECK_FAIL,
         check_x_robots_tag_header_results: 'Response header could not be read.',
-        check_x_robots_tag_header_status: CHECK_FAIL
+        check_x_robots_tag_header_status: CHECK_FAIL,
+        check_ims_or_etag_header: null
     };
 
     let __temp = null;
 
     __return.http_body_sniffer = new HttpBodySniffer(http_response.url, http_response.http_response_body);
+    __return.check_ims_or_etag_header = parse_headers_for_if_modified_since_or_etag(http_response);
 
     if (http_response.statusIsOK() && http_response.bodyIsNotEmpty()) { // page fetch PASS
 
@@ -1589,6 +1591,10 @@ function parse_page_content(http_response) {
         __return.check_robots_meta_result =
             'Robots meta tag could not be read: HTTP fetch failed [' + http_response.http_response_text + ']';
         __return.check_robots_meta_status = CHECK_FAIL;
+
+        __return.check_x_robots_tag_header_results =
+            'X-Robots meta tag could not be read: HTTP fetch failed [' + http_response.http_response_text + ']';
+        __return.check_x_robots_tag_header_status = CHECK_FAIL;
 
     }
 
@@ -1785,7 +1791,7 @@ function parse_headers_for_x_robots_tag(http_response) {
         check_x_robots_tag_header_status: CHECK_FAIL
     };
 
-    if (typeof(http_response.response.headers['x-robots-tag']) == "undefined") {
+    if (typeof(http_response.response.headers['x-robots-tag']) === "undefined") {
         check_x_robots_tag_header.check_x_robots_tag_header_results = 'X-Robots-Tag header check appears to be OK';
         check_x_robots_tag_header.check_x_robots_tag_header_status = CHECK_PASS;
     } else {
@@ -1795,6 +1801,49 @@ function parse_headers_for_x_robots_tag(http_response) {
     }
 
     return check_x_robots_tag_header;
+}
+
+function parse_headers_for_if_modified_since_or_etag(http_response) {
+
+    let check_ims_or_etag_header = {
+        check_ims_or_etag_header_results: 'Response header could not be read.',
+        check_ims_or_etag_header_status: CHECK_FAIL,
+        check_ims_header_result: '',
+        check_ims_header_status: CHECK_FAIL,
+        check_etag_header_result: '',
+        check_etag_header_status: CHECK_FAIL
+    };
+
+    if (typeof(http_response.response.headers['if-modified-since']) === "undefined") {
+        check_ims_or_etag_header.check_ims_header_result = 'Header entry for If-Modified-Since not found';
+        check_ims_or_etag_header.check_ims_header_status = CHECK_WARN;
+    } else {
+        check_ims_or_etag_header.check_ims_header_result = 'Found header entry for If-Modified-Since' +
+            http_response.response.headers['if-modified-since'];
+        check_ims_or_etag_header.check_ims_header_status = CHECK_PASS;
+    }
+
+    if (typeof(http_response.response.headers['etag']) === "undefined") {
+        check_ims_or_etag_header.check_etag_header_result = 'Header entry for ETag not found';
+        check_ims_or_etag_header.check_etag_header_status = CHECK_WARN;
+    } else {
+        check_ims_or_etag_header.check_etag_header_result = 'Found header entry for ETag' +
+            http_response.response.headers['etag'];
+        check_ims_or_etag_header.check_etag_header_status = CHECK_PASS;
+    }
+
+    if (CHECK_WARN === check_ims_or_etag_header.check_ims_header_status ||
+        CHECK_WARN === check_ims_or_etag_header.check_etag_header_status) {
+        check_ims_or_etag_header.check_ims_or_etag_header_results =
+            `[${CHECK_WARN}] Site does not support either "If-Modified-Since" or "ETag" headers: these make amp serving more efficient`;
+        check_ims_or_etag_header.check_ims_or_etag_header_status = CHECK_WARN;
+    } else {
+        check_ims_or_etag_header.check_ims_or_etag_header_results =
+            `[${CHECK_PASS}] Site supports either/or both "If-Modified-Since" and "ETag" headers: these make amp serving more efficient`;
+        check_ims_or_etag_header.check_ims_or_etag_header_status = CHECK_PASS;
+    }
+
+    return check_ims_or_etag_header;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1951,6 +2000,7 @@ exports.parse_page_content = parse_page_content;
 exports.fetch_and_parse_url_for_amplinks = fetch_and_parse_url_for_amplinks;
 exports.parse_body_for_amplinks_and_robots_metatags = parse_body_for_amplinks_and_robots_metatags;
 exports.parse_headers_for_x_robots_tag = parse_headers_for_x_robots_tag;
+exports.parse_headers_for_if_modified_since_or_etag = parse_headers_for_if_modified_since_or_etag;
 exports.review_amp_links = review_amp_links;
 exports.multiline_to_html = multiline_to_html;
 exports.make_url_validate_link = make_url_validate_link;

@@ -409,6 +409,8 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                                         http_response_statusIsOK: http_response.statusIsOK(),
                                         http_response_result: http_response_result,
                                         parse_amplinks: parse_amplinks,
+                                        check_ims_or_etag_header_status_css:
+                                            get_check_status_css(parse_amplinks.check_ims_or_etag_header.check_ims_or_etag_header_status),
                                         canonical_parsed_return: canonical_parsed_return,
                                         response_times: {
                                             status: response_times_status_css,
