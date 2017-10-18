@@ -5,6 +5,11 @@
   "description": "A tool that allows the user to see at a glance, the various third party vendors on the page and whether they have AMP support",
   "version": "1.0",
 
+  "icons": {
+    "16": "amp.png",
+    "48": "amp.png",
+    "128": "amp.png"
+  },
   "browser_action": {
     "default_icon": "amp.png",
     "default_popup": "popup.html"
