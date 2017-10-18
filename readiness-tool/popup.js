@@ -1,5 +1,5 @@
 /**
- * @fileoverview Entry point for ART Chrome extension. 
+ * @fileoverview Entry point for ART Chrome extension.
  * Scans the current page against the vendors in the vendors.json file and
  * specifies them as either supported or not supported.
  */
@@ -44,6 +44,7 @@ window.onload = function onWindowLoad() {
   supportedAds.textContent = supportedAnalytics.textContent =
     notSupportedAds.textContent = notSupportedAnalytics.textContent =
       loadingMessage;
+
   // Gets the DOM of the current web page and converts it to a string
   chrome.tabs.executeScript(null, {
     file: 'getPagesSource.js',
@@ -53,9 +54,10 @@ window.onload = function onWindowLoad() {
 /**
  * Returns all the 3rd party applications found on the website
  * @param {string} html - String containing all HTML on the page
- * @return {Object} 
+ * @return {Object}
  */
 function findDetectedVendors(html) {
+
   fetch('vendors.json').then(function (response) {
       response.json().then(function (data) {
       if (response.ok) {
@@ -68,7 +70,7 @@ function findDetectedVendors(html) {
       }
     });
   })
-  .catch(error => console.error('vendors.json in the readiness tool is invalid.', 
+  .catch(error => console.error('vendors.json in the readiness tool is invalid.',
                                 error));
 }
 
@@ -101,8 +103,8 @@ let FilteredVendorsDef;
 /**
  * Splits all detected vendors into 'supported' and 'not supported'
  * @param {string} htmlString - String containing all HTML on the page
- * @param {!Object} listAllVendors - JSON of all the 3p vendors 
- * @return {Object} 
+ * @param {!Object} listAllVendors - JSON of all the 3p vendors
+ * @return {Object}
  */
 function filteredVendors(htmlString, listAllVendors) {
   /** @type {FilteredVendorsDef} */
@@ -145,7 +147,7 @@ function filteredVendors(htmlString, listAllVendors) {
  * 'filteredVendors'
  * @param {string} regexString - String representation of regular expression
  * @param {!string} htmlString - String containing all HTML on the page
- * @param {FilteredVendorsDef} filteredVendors - Object separating the 3P services by 
+ * @param {FilteredVendorsDef} filteredVendors - Object separating the 3P services by
  * support
  * @param {string} vendorName - name of third party service
  * @param {string} category - the category that the key belongs to
@@ -178,7 +180,7 @@ function addToDict(regexString, htmlString, filteredVendors, vendorName, categor
  * Checks to see if vendorName is unique within the object
  * @param {Object} obj - Object separating the 3p services by support
  * @param {string} vendorName - name of third party service
- * @return {boolean} 
+ * @return {boolean}
  */
 function isVendorNameUnique(obj, vendorName) {
   let count = 0;
@@ -201,7 +203,7 @@ function isVendorNameUnique(obj, vendorName) {
  * TODO (alwalton@): get list of supported ads/analytics programatically
  * Check if vendor is in supported list of vendor names
  * @param {string} vendorName - name of vendor
- * @return {boolean} 
+ * @return {boolean}
  */
 function isSupported(vendorName) {
   const ampSupported = [
@@ -244,11 +246,23 @@ function isSupported(vendorName) {
  * @param {!Array<string>} array - array of vendor names
  * @param {boolean} allowToolTips - check to see if tooltip allowed
  * @param {!Object} listAllVendors - JSON of all 3p vendors
- * @return {e} 
+ * @return {e}
  */
 function makeList(array, allowToolTips, listAllVendors) {
   // Create the list element:
   const list = document.createElement('ul');
+
+
+  if (array.length == 0) {
+
+    // Create the list item:
+    let item = document.createElement('li');
+    // Set its contents:
+    item.appendChild(document.createTextNode("None"));
+    item.className = "empty";
+    list.appendChild(item);
+  }
+
   for (let i = 0; i < array.length; i++) {
     // Create the list item:
     let item = document.createElement('li');
@@ -262,6 +276,8 @@ function makeList(array, allowToolTips, listAllVendors) {
     // Add it to the list:
     list.appendChild(item);
   }
+
+
   // Finally, return the constructed list:
   return list;
 }
