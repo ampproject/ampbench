@@ -172,7 +172,7 @@
     "DoubleClick Floodlight": {
       "category": "Ads",
       "regex": [
-        "https?://fls.doubleclick.net"
+        "https?://.*fls.doubleclick.net"
       ]
     },
     "DoubleClick for Publishers (DFP)": {
@@ -456,7 +456,8 @@
       "category": "Ads",
       "regex": [
         "^//tags\\.tiqcdn\\.com/",
-        "/tealium/utag\\.js$"
+        "/tealium/utag\\.js$",
+        "tiqcdn.com/utag"
       ]
     },
     "Titan": {
