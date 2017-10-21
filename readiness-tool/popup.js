@@ -34,13 +34,6 @@ window.onload = function onWindowLoad() {
     notSupportedAds.textContent = notSupportedAnalytics.textContent =
       loadingMessage;
 
-
-//  // Gets the DOM of the current web page and converts it to a string
-//  chrome.tabs.executeScript(null, {
-//    file: 'getPagesSource.js',
-//  }, function () {});
-
-
 };
 
 chrome.tabs.query({active: true, currentWindow: true}, function (tabs){
@@ -51,10 +44,10 @@ chrome.tabs.query({active: true, currentWindow: true}, function (tabs){
   query['' + currentTab.id] = ''
   query['vendors'] = ''
 
-  chrome.storage.local.get(query, function (data){
+  chrome.storage.local.get(query, function (response){
 
-    data = data['' + currentTab.id]
-    vendors = data['vendors']
+    data = response['' + currentTab.id]
+    vendors = response['vendors']
 
     detectedVendors = data.detectedVendors
 
@@ -130,6 +123,7 @@ function makeList(array, allowToolTips, listAllVendors) {
     // Set its contents:
     item.appendChild(document.createTextNode(array[i]));
     // Tooltip is only allowed for unsupported vendors
+    debugger
     if (allowToolTips && listAllVendors[array[i]].tooltip != null) {
       item.className = 'tooltip';
       item.setAttribute("data-tooltip", listAllVendors[array[i]].tooltip);

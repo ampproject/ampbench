@@ -20,7 +20,7 @@ fetch('vendors.json').then(function (response) {
 
     if (response.ok) {
 
-      alert('setting vendors.json')
+      //alert('setting vendors.json')
       vendors = {'vendors': data.vendors}
       chrome.storage.local.set(vendors)
     }
@@ -38,9 +38,8 @@ fetch('vendors.json').then(function (response) {
  * Listen for a new tab being created.
  */
 chrome.tabs.onCreated.addListener(function(tab) {
+  alert('onCreated')
   handleTab(tab);
-
-
 });
 
 /**
@@ -48,7 +47,12 @@ chrome.tabs.onCreated.addListener(function(tab) {
  */
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   globals.tabToUrl[tabId] = tab.url;
-  handleTab(tab);
+
+  if(changeInfo.status == 'complete') {
+    alert('onUpdated ' + JSON.stringify(changeInfo))
+    handleTab(tab);
+  }
+
 });
 
 /**
@@ -63,8 +67,8 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
  */
 chrome.tabs.onReplaced.addListener(function(addedTabId, removedTabId) {
   window.sessionStorage.removeItem(globals.tabToUrl[removedTabId]);
-  alert('onReplaced: ' + addedTabId)
   chrome.tabs.get(addedTabId, function(tab) {
+    alert('onReplaced')
     handleTab(tab);
   });
 });

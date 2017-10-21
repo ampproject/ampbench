@@ -37,28 +37,6 @@ function findDetectedVendors(html, tabId) {
 
     })
 
-  //fetch('vendors.json').then(function (response) {
-  //    response.json().then(function (data) {
-  //    if (response.ok) {
-  //      let listAllVendors = data.vendors;
-  //      detectedVendors = filteredVendors(html, listAllVendors);
-
-  //      data = {}
-  //      data[tabId] = {'detectedVendors': detectedVendors, 'listAllVendors': listAllVendors}
-  //      chrome.storage.local.set(data)
-
-  //      //alert('showing ..' + JSON.stringify(detectedVendors))
-  //      //console.log('showing')
-  //      //showSupportedVendorsInView(detectedVendors, listAllVendors);
-
-  //      return detectedVendors;
-  //    } else {
-  //      return Promise.reject({status: response.status});
-  //    }
-  //  });
-  //})
-  //.catch(error => console.error('vendors.json in the readiness tool is invalid.',
-                                //error));
 }
 
 /**
