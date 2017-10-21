@@ -27,7 +27,6 @@ function findDetectedVendors(html, tabId) {
         vendors = vendorsData.vendors
 
         detectedVendors = filteredVendors(html, vendors);
-        //alert('detectedVendors .. ' + JSON.stringify(detectedVendors))
 
         console.log('detetctedVendors', detectedVendors)
 

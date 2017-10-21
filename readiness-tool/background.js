@@ -38,7 +38,7 @@ fetch('vendors.json').then(function (response) {
  * Listen for a new tab being created.
  */
 chrome.tabs.onCreated.addListener(function(tab) {
-  alert('onCreated')
+  //alert('onCreated')
   handleTab(tab);
 });
 
@@ -49,7 +49,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   globals.tabToUrl[tabId] = tab.url;
 
   if(changeInfo.status == 'complete') {
-    alert('onUpdated ' + JSON.stringify(changeInfo))
+    //alert('onUpdated ' + JSON.stringify(changeInfo))
     handleTab(tab);
   }
 
