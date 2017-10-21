@@ -14,6 +14,25 @@ function handleTab(tab){
 
 };
 
+function displayLoadingInDOM(tab){
+
+  chrome.runtime.sendMessage({
+      action: 'displayLoading',
+      tabId: tab.id
+  })
+
+};
+
+
+function updateDOM(tab) {
+
+  chrome.runtime.sendMessage({
+      action: 'updateDOM',
+      tabId: tab.id
+  })
+
+}
+
 fetch('vendors.json').then(function (response) {
 
   response.json().then(function (data){
@@ -70,6 +89,8 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
       }
     updateBadge(badge)
 
+    displayLoadingInDOM(tab)
+
   }
 
 });
@@ -87,7 +108,7 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
 chrome.tabs.onReplaced.addListener(function(addedTabId, removedTabId) {
   window.sessionStorage.removeItem(globals.tabToUrl[removedTabId]);
   chrome.tabs.get(addedTabId, function(tab) {
-    alert('onReplaced')
+    //alert('onReplaced')
     handleTab(tab);
   });
 });
@@ -132,5 +153,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse){
 
   }
 
+  else if (request.action == 'updateDOM') {
+
+    updateDOM(sender.tab)
+
+  }
 
 })

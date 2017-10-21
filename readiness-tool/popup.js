@@ -22,24 +22,42 @@ const loadingMessage = 'Loading...';
 /** @const {string} */
 const blankMessage = '';
 
+console.log('storage listener being setup')
 chrome.storage.onChanged.addListener(function(changes, namespace) {
 
   tabId = Object.keys(changes)[0]
 
-  updateDOM(tabId)
+  console.log('storage changed, updating DOM')
+
+  //updateDOM(tabId)
 })
 
-window.onload = function onWindowLoad() {
-  // When page is loaded, display 'Loading...' so the user expects content
+
+function showLoading() {
 
   supportedAds                  = document.getElementById('ads-supported');
   supportedAnalytics            = document.getElementById('analytics-supported');
   notSupportedAds               = document.getElementById('ads-notSupported');
   notSupportedAnalytics         = document.getElementById('analytics-notSupported');
 
+
   supportedAds.textContent = supportedAnalytics.textContent =
     notSupportedAds.textContent = notSupportedAnalytics.textContent =
       loadingMessage;
+
+}
+
+window.onload = function onWindowLoad() {
+  // When page is loaded, display 'Loading...' so the user expects content
+  //
+  //
+  //showLoading()
+
+  supportedAds                  = document.getElementById('ads-supported');
+  supportedAnalytics            = document.getElementById('analytics-supported');
+  notSupportedAds               = document.getElementById('ads-notSupported');
+  notSupportedAnalytics         = document.getElementById('analytics-notSupported');
+
 
 };
 
@@ -69,8 +87,37 @@ function updateDOM(tabId) {
 chrome.tabs.query({active: true, currentWindow: true}, function (tabs){
 
   currentTab = tabs[0]
+  console.log(currentTab.status)
 
-  updateDOM(currentTab.id)
+  if (currentTab.status == 'complete') {
+    console.log('current status is complete, showing DOM')
+    updateDOM(currentTab.id)
+  }
+  else {
+    console.log('current status is something else, showing loading', currentTab.status)
+    showLoading()
+  }
+
+})
+
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
+
+  if (request.action == 'displayLoading') {
+
+    console.log('display loading ..')
+
+    showLoading()
+
+  }
+
+  else if (request.action == 'updateDOM') {
+
+    console.log('updating DOM ..', request.tabId)
+
+    updateDOM(request.tabId)
+
+  }
+
 
 })
 
@@ -82,6 +129,10 @@ chrome.tabs.query({active: true, currentWindow: true}, function (tabs){
  * @param {!Object} listAllVendors - JSON of all 3p vendors
  */
 function showSupportedVendorsInView(detectedVendors, listAllVendors) {
+
+
+
+  console.log(detectedVendors, listAllVendors)
 
   supportedAds.textContent = supportedAnalytics.textContent =
     notSupportedAds.textContent = notSupportedAnalytics.textContent =
@@ -139,7 +190,7 @@ function makeList(array, allowToolTips, listAllVendors) {
     // Set its contents:
     item.appendChild(document.createTextNode(array[i]));
     // Tooltip is only allowed for unsupported vendors
-    debugger
+
     if (allowToolTips && listAllVendors[array[i]].tooltip != null) {
       item.className = 'tooltip';
       item.setAttribute("data-tooltip", listAllVendors[array[i]].tooltip);
@@ -152,4 +203,4 @@ function makeList(array, allowToolTips, listAllVendors) {
   return list;
 }
 
-module.exports = {isSupported, addToDict};
+//module.exports = {isSupported, addToDict};

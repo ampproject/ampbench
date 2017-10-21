@@ -10,7 +10,6 @@
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.action == 'handleTab') {
 
-
     findDetectedVendors(document.documentElement.innerHTML, request.tabId)
 
   }
@@ -70,6 +69,7 @@ function findDetectedVendors(html, tabId) {
         //chrome.browserAction.setBadgeBackgroundColor({ color: badge.color })
     //
     //
+        // pass message to background.js
         payload = {}
         payload['action'] = 'updateBadge'
         payload['badge'] = badge
@@ -78,7 +78,21 @@ function findDetectedVendors(html, tabId) {
         })
 
 
-        chrome.storage.local.set(data)
+        chrome.storage.local.set(data, function(){
+
+            // pass message to background.js (which will be routed to popup)
+            payload = {}
+            payload['action'] = 'updateDOM'
+            chrome.runtime.sendMessage(payload, function (response) {
+
+        })
+
+
+
+
+  })
+
+
 
     })
 
