@@ -22,6 +22,13 @@ const loadingMessage = 'Loading...';
 /** @const {string} */
 const blankMessage = '';
 
+chrome.storage.onChanged.addListener(function(changes, namespace) {
+
+  tabId = Object.keys(changes)[0]
+
+  updateDOM(tabId)
+})
+
 window.onload = function onWindowLoad() {
   // When page is loaded, display 'Loading...' so the user expects content
 
@@ -36,17 +43,17 @@ window.onload = function onWindowLoad() {
 
 };
 
-chrome.tabs.query({active: true, currentWindow: true}, function (tabs){
+function updateDOM(tabId) {
 
-  currentTab = tabs[0]
+  tabId = '' + tabId
 
   query = {}
-  query['' + currentTab.id] = ''
+  query[tabId] = ''
   query['vendors'] = ''
 
   chrome.storage.local.get(query, function (response){
 
-    data = response['' + currentTab.id]
+    data = response[tabId]
     vendors = response['vendors']
 
     detectedVendors = data.detectedVendors
@@ -54,6 +61,16 @@ chrome.tabs.query({active: true, currentWindow: true}, function (tabs){
     showSupportedVendorsInView(detectedVendors, vendors);
 
   })
+
+
+}
+
+
+chrome.tabs.query({active: true, currentWindow: true}, function (tabs){
+
+  currentTab = tabs[0]
+
+  updateDOM(currentTab.id)
 
 })
 
@@ -84,7 +101,6 @@ function showSupportedVendorsInView(detectedVendors, listAllVendors) {
               detectedVendors.notSupported.ads.length +
               detectedVendors.notSupported.analytics.length
 
-  chrome.browserAction.setBadgeText({text:  totalTags.toString()})
 
 }
 

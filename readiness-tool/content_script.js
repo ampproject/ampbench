@@ -9,7 +9,8 @@
  */
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.action == 'handleTab') {
-    console.log(document.location)
+
+
     findDetectedVendors(document.documentElement.innerHTML, request.tabId)
 
   }
@@ -30,8 +31,53 @@ function findDetectedVendors(html, tabId) {
 
         console.log('detetctedVendors', detectedVendors)
 
+       totalTags = detectedVendors.supported.ads.length +
+        detectedVendors.supported.analytics.length +
+        detectedVendors.notSupported.ads.length +
+        detectedVendors.notSupported.analytics.length
+
+        notSupported = detectedVendors.notSupported.ads.length + detectedVendors.notSupported.analytics.length
+        supported = detectedVendors.supported.ads.length + detectedVendors.supported.analytics.length
+
+        if (notSupported == 0 && supported > 0) {
+          color = [122, 186, 122, 255]
+        }
+        else if (notSupported > 0 && supported > 0) {
+          color = [255, 121, 0, 255]
+        }
+        else if (notSupported > 0 && supported == 0) {
+          color = [255, 76, 76, 255]
+        }
+        else {
+          color = [255, 255, 255, 0]
+        }
+
+        badge = {
+            'text': totalTags.toString(),
+            'color': color
+        }
+
+
         data = {}
-        data[tabId] = {'detectedVendors': detectedVendors}
+        data[tabId] = {
+          'detectedVendors': detectedVendors,
+          'badge':  badge
+
+        }
+
+
+        //chrome.browserAction.setBadgeText({text:  badge.text})
+        //chrome.browserAction.setBadgeBackgroundColor({ color: badge.color })
+    //
+    //
+        payload = {}
+        payload['action'] = 'updateBadge'
+        payload['badge'] = badge
+        chrome.runtime.sendMessage(payload, function (response) {
+
+        })
+
+
         chrome.storage.local.set(data)
 
     })
