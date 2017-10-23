@@ -328,8 +328,7 @@
     "Optimizely": {
       "category": "Analytics",
       "regex": [
-        "//cdn\\.optimizely\\.com/js/",
-        "cdn3\\.optimizely\\.com/js/geo2.js"
+        "optimizely\\.com.*\\.js"
       ],
       "tooltip": "Workaround is available. Use amp-experiment."
     },
@@ -418,7 +417,7 @@
     "Sizmek": {
       "category": "Ads",
       "regex": [
-        "https?://.*serving-sys\\.com/",
+        "https?://.*\\.serving-sys\\.com/",
         "(?:<a [^>]*href=\"[^/]*//[^/]*serving-sys\\.com/|<img [^>]*src=\"[^/]*//[^/]*serving-sys\\.com/)"
       ]
     },
