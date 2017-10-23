@@ -3,7 +3,7 @@
 
   "name": "AMP Readiness Tool",
   "description": "See at a glance the various third party vendors on the page and whether they have AMP support.",
-  "version": "2.0",
+  "version": "2.1",
 
   "icons": {
     "16": "amp.png",
