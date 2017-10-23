@@ -114,7 +114,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 
     console.log('updating DOM ..', request.tabId)
 
-    updateDOM(request.tabId)
+    if (request.tabId) {
+      updateDOM(request.tabId)
+    }
 
   }
 
@@ -133,6 +135,10 @@ function showSupportedVendorsInView(detectedVendors, listAllVendors) {
 
 
   console.log(detectedVendors, listAllVendors)
+
+  if (!detectedVendors) {
+    return
+  }
 
   supportedAds.textContent = supportedAnalytics.textContent =
     notSupportedAds.textContent = notSupportedAnalytics.textContent =
