@@ -107,7 +107,7 @@
     "Carbon Ads": {
       "category": "Ads",
       "regex": [
-        "[^\\/]*\\/\\/(?:engine|srv)\\.carbonads\\.com\\/",
+        "\\/(?:engine|srv|cdn)\\.carbonads\\.com\\/",
         "<[a-z]+ [^>]*id=\"carbonads-container\""
       ]
     },
@@ -418,7 +418,7 @@
     "Sizmek": {
       "category": "Ads",
       "regex": [
-        "[^/]*//[^/]*serving-sys\\.com/",
+        "https?://.*serving-sys\\.com/",
         "(?:<a [^>]*href=\"[^/]*//[^/]*serving-sys\\.com/|<img [^>]*src=\"[^/]*//[^/]*serving-sys\\.com/)"
       ]
     },
