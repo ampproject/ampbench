@@ -242,7 +242,7 @@ function isSupported(vendorName) {
     'Google Analytics', 'INFOnline / IVW', 'Krux', 'Linkpulse', 'Lotame',
     'Médiamétrie', 'mParticle', 'Nielsen', 'OEWA', 'Parsely', 'Piano',
     'Quantcast Measurement', 'Segment', 'SOASTA mPulse', 'SimpleReach',
-    'Snowplow Analytics', 'Webtrekk', 'Yandex Metrica'
+    'Snowplow Analytics', 'Webtrekk', 'Yandex Metrica', 'Google Tag Manager'
   , ];
   // If it is NOT in list of supported vendors
   return ampSupported.includes(vendorName);

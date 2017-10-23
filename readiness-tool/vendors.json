@@ -215,6 +215,14 @@
         "google-analytics\\.com\\/(?:ga|urchin|(analytics))\\.js"
       ]
     },
+    "Google Tag Manager": {
+      "category": "Analytics",
+      "regex": [
+        "googletagmanager\\.com/ns\\.html[^>]+></iframe",
+        "google_tag_manager\\[",
+        "^googletag$"
+      ]
+    },
     "Heap": {
       "category": "Analytics",
       "regex": [
