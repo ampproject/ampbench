@@ -194,7 +194,22 @@ function makeList(array, allowToolTips, listAllVendors) {
     // Create the list item:
     let item = document.createElement('li');
     // Set its contents:
-    item.appendChild(document.createTextNode(array[i]));
+    //
+    img = document.createElement('img');
+    img.src = "icons/" + array[i] + '.png'
+    img.style = "width: 15px; position: relative; top: 3px;"
+    item.appendChild(img)
+
+    img = document.createElement('img');
+    img.src = "icons/" + array[i] + '.svg'
+    img.style = "width: 15px; position: relative; top: 3px;"
+    item.appendChild(img)
+
+    text = document.createElement('span')
+    text.innerHTML = array[i]
+    text.style = "margin-left: 5px;"
+    item.appendChild(text)
+
     // Tooltip is only allowed for unsupported vendors
 
     if (allowToolTips && listAllVendors[array[i]].tooltip != null) {
