@@ -244,7 +244,7 @@ function isSupported(vendorName) {
     'Cxense', 'Dynatrace', 'Eulerian Analytics', 'Gemius', 'Google AdWords',
     'Google Analytics', 'INFOnline / IVW', 'Krux', 'Linkpulse', 'Lotame',
     'Médiamétrie', 'mParticle', 'Nielsen', 'OEWA', 'Parsely', 'Piano',
-    'Quantcast Measurement', 'Segment', 'SOASTA mPulse', 'SimpleReach',
+    'Quantcast', 'Segment', 'SOASTA mPulse', 'SimpleReach',
     'Snowplow Analytics', 'Webtrekk', 'Yandex Metrica', 'Google Tag Manager'
   , ];
   // If it is NOT in list of supported vendors

@@ -372,7 +372,7 @@
         "https?://[^/]*\\.pubmatic\\.com"
       ]
     },
-    "Quantcast Measurement": {
+    "Quantcast": {
       "category": "Analytics",
       "regex": [
         "\\.quantserve\\.com/*"
