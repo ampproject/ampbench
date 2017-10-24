@@ -197,17 +197,17 @@ function makeList(array, allowToolTips, listAllVendors) {
     //
     img = document.createElement('img');
     img.src = "icons/" + array[i] + '.png'
-    img.style = "width: 15px; position: relative; top: 3px;"
+    img.style = "width: 15px; position: relative; top: 2px;"
     item.appendChild(img)
 
     img = document.createElement('img');
     img.src = "icons/" + array[i] + '.svg'
-    img.style = "width: 15px; position: relative; top: 3px;"
+    img.style = "width: 15px; position: relative; top: 2px;"
     item.appendChild(img)
 
     text = document.createElement('span')
     text.innerHTML = array[i]
-    text.style = "margin-left: 5px;"
+    text.style = "margin-left: 8px;"
     item.appendChild(text)
 
     // Tooltip is only allowed for unsupported vendors

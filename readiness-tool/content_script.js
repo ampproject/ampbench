@@ -10,7 +10,10 @@
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.action == 'handleTab') {
 
-    findDetectedVendors(document.documentElement.innerHTML, request.tabId)
+
+    html = document.documentElement.innerHTML
+    //console.log("HTML length is ", html.length)
+    findDetectedVendors(html, request.tabId)
 
   }
 

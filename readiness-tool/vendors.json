@@ -172,7 +172,7 @@
     "DoubleClick Floodlight": {
       "category": "Ads",
       "regex": [
-        "https?://.*fls.doubleclick.net"
+        "fls.doubleclick.net"
       ]
     },
     "DoubleClick for Publishers (DFP)": {
@@ -580,6 +580,12 @@
         "\\.scorecardresearch\\.com/beacon\\.js|COMSCORE\\.beacon",
         "<iframe[^>]* (?:id=\"comscore\"|scr=[^>]+comscore)|\\.scorecardresearch\\.com/beacon\\.js|COMSCORE\\.beacon",
         "sb\\.scorecardresearch\\.com"
+      ]
+    },
+    "Google AdWords Remarketing Tag": {
+      "category": "Ads",
+      "regex": [
+        "<script[\\s\\S]*googleads\\.g\\.doubleclick\\.net/pagead/viewthroughconversion[\\s\\S]*script>"
       ]
     }
   }

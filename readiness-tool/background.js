@@ -7,10 +7,21 @@ globals.tabToUrl = {};
 
 function handleTab(tab){
 
-  chrome.tabs.sendMessage(tab.id, {
-      action: 'handleTab',
-      tabId: tab.id
-  })
+
+
+  //
+  // Delay everything by 2seconds, so that
+  // we are sure that javascript is ready to go.
+  //
+
+  setTimeout(callFn, 2000)
+
+  function callFn() {
+      chrome.tabs.sendMessage(tab.id, {
+          action: 'handleTab',
+          tabId: tab.id
+      })
+  }
 
 };
 
