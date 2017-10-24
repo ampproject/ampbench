@@ -6,12 +6,12 @@
   "version": "2.4",
 
   "icons": {
-    "16": "amp.png",
-    "48": "amp.png",
-    "128": "amp.png"
+    "16": "amp-readiness.png",
+    "48": "amp-readiness.png",
+    "128": "amp-readiness.png"
   },
   "browser_action": {
-    "default_icon": "amp.png",
+    "default_icon": "amp-readiness.png",
     "default_popup": "popup.html"
   },
   "background": {

@@ -87,7 +87,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
       'color': [160, 160, 160, 255]
 
       }
-    updateBadge(badge)
+    updateBadge()
 
     handleTab(tab);
   }
@@ -98,7 +98,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
       'color': [160, 160, 160, 255]
 
       }
-    updateBadge(badge)
+    updateBadge()
 
     displayLoadingInDOM(tab)
 
@@ -150,8 +150,16 @@ function updateBadge(badge) {
 
   console.log(badge)
 
-  chrome.browserAction.setBadgeText({text:  badge.text})
-  chrome.browserAction.setBadgeBackgroundColor({ color: badge.color })
+  if (badge) {
+    chrome.browserAction.setBadgeText({text:  badge.text})
+    chrome.browserAction.setBadgeBackgroundColor({ color: badge.color })
+    chrome.browserAction.setIcon({path: 'amp-readiness.png'})
+  }
+  else {
+    chrome.browserAction.setBadgeText({text: ''})
+    chrome.browserAction.setIcon({path: 'amp-readiness-grey.png'})
+  }
+
 
 }
 
