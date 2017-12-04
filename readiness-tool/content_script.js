@@ -1,5 +1,6 @@
 /**
- * @fileoverview Description of this file.
+ * @fileoverview Contains functions that work on the document
+ * such as scanning and parsing the HTML to find supported vendors
  */
 
 /**
@@ -7,12 +8,10 @@
  * @param {!Object} request - Message Object
  * @param {!Object} sender - Message sender defined here
  */
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.action == 'handleTab') {
 
-
     html = document.documentElement.innerHTML
-    //console.log("HTML length is ", html.length)
     findDetectedVendors(html, request.tabId)
 
   }
@@ -26,78 +25,61 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
  */
 function findDetectedVendors(html, tabId) {
 
-  vendors = chrome.storage.local.get('vendors', function(vendorsData){
-        vendors = vendorsData.vendors
+  vendors = chrome.storage.local.get('vendors', function (vendorsData) {
+    vendors = vendorsData.vendors
 
-        detectedVendors = filteredVendors(html, vendors);
+    detectedVendors = filteredVendors(html, vendors);
 
-        console.log('detetctedVendors', detectedVendors)
+    totalTags = detectedVendors.supported.ads.length +
+      detectedVendors.supported.analytics.length +
+      detectedVendors.notSupported.ads.length +
+      detectedVendors.notSupported.analytics.length
 
-       totalTags = detectedVendors.supported.ads.length +
-        detectedVendors.supported.analytics.length +
-        detectedVendors.notSupported.ads.length +
-        detectedVendors.notSupported.analytics.length
+    notSupported = detectedVendors.notSupported.ads.length + detectedVendors.notSupported.analytics.length
+    supported = detectedVendors.supported.ads.length + detectedVendors.supported.analytics.length
 
-        notSupported = detectedVendors.notSupported.ads.length + detectedVendors.notSupported.analytics.length
-        supported = detectedVendors.supported.ads.length + detectedVendors.supported.analytics.length
+    if (notSupported == 0 && supported > 0) {
+      color = [122, 186, 122, 255]
+    } else if (notSupported > 0 && supported > 0) {
+      color = [255, 121, 0, 255]
+    } else if (notSupported > 0 && supported == 0) {
+      color = [255, 76, 76, 255]
+    } else {
+      color = [255, 255, 255, 0]
+    }
 
-        if (notSupported == 0 && supported > 0) {
-          color = [122, 186, 122, 255]
-        }
-        else if (notSupported > 0 && supported > 0) {
-          color = [255, 121, 0, 255]
-        }
-        else if (notSupported > 0 && supported == 0) {
-          color = [255, 76, 76, 255]
-        }
-        else {
-          color = [255, 255, 255, 0]
-        }
+    badge = {
+      'text': totalTags.toString(),
+      'color': color
+    }
 
-        badge = {
-            'text': totalTags.toString(),
-            'color': color
-        }
+    data = {}
+    data[tabId] = {
+      'detectedVendors': detectedVendors,
+      'badge': badge
 
+    }
 
-        data = {}
-        data[tabId] = {
-          'detectedVendors': detectedVendors,
-          'badge':  badge
-
-        }
-
-
-        //chrome.browserAction.setBadgeText({text:  badge.text})
-        //chrome.browserAction.setBadgeBackgroundColor({ color: badge.color })
-    //
-    //
-        // pass message to background.js
-        payload = {}
-        payload['action'] = 'updateBadge'
-        payload['badge'] = badge
-        chrome.runtime.sendMessage(payload, function (response) {
-
-        })
-
-
-        chrome.storage.local.set(data, function(){
-
-            // pass message to background.js (which will be routed to popup)
-            payload = {}
-            payload['action'] = 'updateDOM'
-            chrome.runtime.sendMessage(payload, function (response) {
-
-        })
-
-
-
-
-  })
-
-
+    // pass message to background.js
+    payload = {}
+    payload['action'] = 'updateBadge'
+    payload['badge'] = badge
+    chrome.runtime.sendMessage(payload, function (response) {
 
     })
+
+    chrome.storage.local.set(data, function () {
+
+      // pass message to background.js (which will be routed to popup)
+      payload = {}
+      payload['action'] = 'updateDOM'
+      chrome.runtime.sendMessage(payload, function (response) {
+
+      })
+
+    })
+
+  })
 
 }
 
@@ -156,8 +138,6 @@ function filteredVendors(htmlString, listAllVendors) {
  */
 function addToDict(regexString, htmlString, filteredVendors, vendorName, category) {
 
-  console.log('Checking')
-
   const regX = new RegExp(regexString);
 
   if (regX.test(htmlString)) {
@@ -165,8 +145,6 @@ function addToDict(regexString, htmlString, filteredVendors, vendorName, categor
       switch (category) {
         case 'Analytics':
           if (isSupported(vendorName)) {
-
-
 
             filteredVendors.supported.analytics.push(vendorName);
           } else {
@@ -185,7 +163,6 @@ function addToDict(regexString, htmlString, filteredVendors, vendorName, categor
   }
 }
 
-
 /**
  * Checks to see if vendorName is unique within the object
  * @param {Object} obj - Object separating the 3p services by support
@@ -195,16 +172,16 @@ function addToDict(regexString, htmlString, filteredVendors, vendorName, categor
 function isVendorNameUnique(obj, vendorName) {
   let count = 0;
   if (obj.supported.ads.includes(vendorName)) {
-    count ++;
+    count++;
   }
   if (obj.supported.analytics.includes(vendorName)) {
-    count ++;
+    count++;
   }
   if (obj.notSupported.ads.includes(vendorName)) {
-    count ++;
+    count++;
   }
   if (obj.notSupported.analytics.includes(vendorName)) {
-    count ++;
+    count++;
   }
   return count < 1;
 }
@@ -245,8 +222,8 @@ function isSupported(vendorName) {
     'Google Analytics', 'INFOnline / IVW', 'Krux', 'Linkpulse', 'Lotame',
     'Médiamétrie', 'mParticle', 'Nielsen', 'OEWA', 'Parsely', 'Piano',
     'Quantcast', 'Segment', 'SOASTA mPulse', 'SimpleReach',
-    'Snowplow Analytics', 'Webtrekk', 'Yandex Metrica', 'Google Tag Manager'
-  , ];
+    'Snowplow Analytics', 'Webtrekk', 'Yandex Metrica', 'Google Tag Manager',
+  ];
   // If it is NOT in list of supported vendors
   return ampSupported.includes(vendorName);
 }

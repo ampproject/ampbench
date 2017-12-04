@@ -10,8 +10,7 @@
   <meta charset="UTF-8">
   <title>AMP Readiness Tool</title>
   <style>
-
-		@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,700');
+    @import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,700');
 
     html {
       background-color: #fff;
@@ -47,7 +46,6 @@
       margin-top: 1px;
     }
 
-
     .card-container {
       display: flex;
       flex-direction: row;
@@ -56,13 +54,13 @@
     }
 
     .card {
-	    background: #fff;
-			box-shadow: 0px 3px 20px 0 rgba(0,0,0,0.075);
-			box-sizing: border-box;
-			flex: 0 0 50%;
-			margin: 10px 5px;
-			padding: 10px;
-			position: relative;
+      background: #fff;
+      box-shadow: 0px 3px 20px 0 rgba(0, 0, 0, 0.075);
+      box-sizing: border-box;
+      flex: 0 0 50%;
+      margin: 10px 5px;
+      padding: 10px;
+      position: relative;
     }
 
     .card::before {
@@ -76,13 +74,11 @@
     }
 
     .card-inner {
-			display: inline-flex;
-			flex-direction: column;
-			justify-content: space-between;
-			width: 100%;
+      display: inline-flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 100%;
     }
-
-
 
     .title {
       text-transform: uppercase;
@@ -94,8 +90,7 @@
       margin-top: 10px;
     }
 
-    .title .dot {
-    }
+    .title .dot {}
 
     .title .text {
       margin-top: 2px;
@@ -111,11 +106,9 @@
       color: #e90606;
     }
 
-
     .rows {
       margin-top: 15px;
     }
-
 
     .analytics-row {
       margin-top: 35px;
@@ -152,7 +145,6 @@
       font-size: 12px;
     }
 
-
     footer {
       font-size: 12px;
       float: right;
@@ -168,10 +160,10 @@
       text-decoration: none;
       color: #959595;
     }
+
     footer div a:hover {
       text-decoration: underline;
     }
-
 
     .tooltip {
       text-decoration: underline;
@@ -183,7 +175,6 @@
     .tooltip:before {
       content: '>\0000a0';
     }
-
     /* Tooltip Styles */
     /* Add this attribute to the element that needs a tooltip */
 
@@ -275,8 +266,6 @@
     input:checked+.collapsible+div {
       display: block;
     }
-
-
   </style>
   <!--
             - JavaScript and HTML must be in separate files: see our Content Security
@@ -296,10 +285,10 @@
 
     <div class="card">
       <div class="card-inner">
-        <h3 class="supported title"><span class="dot">⬤ </span>
+        <h3 class="supported title">
+          <span class="dot">⬤ </span>
           <span class="text">Supported</span>
         </h3>
-
 
         <div class="rows">
           <div class="ads-row">
@@ -316,13 +305,12 @@
       </div>
     </div>
 
-
     <div class="card">
       <div class="card-inner">
-        <h3 class="not-supported title"><span class="dot">⬤ </span>
+        <h3 class="not-supported title">
+          <span class="dot">⬤ </span>
           <span class="text">Not Yet Supported</span>
         </h3>
-
 
         <div class="rows">
           <div class="ads-row">
@@ -339,11 +327,14 @@
       </div>
     </div>
 
-
   </div>
   <footer>
-    <div><a href="https://ampproject.org" target="_blank">ampproject.org</a></div>
-    <div><a href="https://github.com/ampproject/amphtml/blob/master/LICENSE" target="_blank">LICENSE</a></div>
+    <div>
+      <a href="https://ampproject.org" target="_blank">ampproject.org</a>
+    </div>
+    <div>
+      <a href="https://github.com/ampproject/amphtml/blob/master/LICENSE" target="_blank">LICENSE</a>
+    </div>
   </footer>
 
 </body>

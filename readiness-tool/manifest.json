@@ -1,10 +1,8 @@
 {
   "manifest_version": 2,
-
   "name": "AMP Readiness Tool",
   "description": "See at a glance the various third party vendors on the page and whether they have AMP support.",
-  "version": "2.4",
-
+  "version": "2.5",
   "options_page": "options.html",
   "icons": {
     "16": "amp-readiness.png",
@@ -16,17 +14,20 @@
     "default_popup": "popup.html"
   },
   "background": {
-    "scripts": ["background.js"]
+    "scripts": [
+      "background.js"
+    ]
   },
   "content_scripts": [
     {
-      "js": ["content_script.js"],
-      "matches": ["<all_urls>"],
+      "js": [
+        "content_script.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ],
       "all_frames": false,
-      "run_at": "document_end",
-      "exclude_globs": [
-        "*google.com/*"
-      ]
+      "run_at": "document_end"
     }
   ],
   "web_accessible_resources": [

@@ -1,7 +1,5 @@
 /**
- * @fileoverview Entry point for ART Chrome extension.
- * Scans the current page against the vendors in the vendors.json file and
- * specifies them as either supported or not supported.
+ * @fileoverview Contains methods that update the DOM of the extension.
  */
 
 /** @const {!Element} */
@@ -22,45 +20,41 @@ const loadingMessage = 'Loading...';
 /** @const {string} */
 const blankMessage = '';
 
-console.log('storage listener being setup')
-chrome.storage.onChanged.addListener(function(changes, namespace) {
+chrome.storage.onChanged.addListener(function (changes, namespace) {
 
   tabId = Object.keys(changes)[0]
 
-  console.log('storage changed, updating DOM')
-
-  //updateDOM(tabId)
 })
 
-
+/**
+ * A utility function to show loading message in the UI
+ */
 function showLoading() {
 
-  supportedAds                  = document.getElementById('ads-supported');
-  supportedAnalytics            = document.getElementById('analytics-supported');
-  notSupportedAds               = document.getElementById('ads-notSupported');
-  notSupportedAnalytics         = document.getElementById('analytics-notSupported');
-
+  supportedAds = document.getElementById('ads-supported');
+  supportedAnalytics = document.getElementById('analytics-supported');
+  notSupportedAds = document.getElementById('ads-notSupported');
+  notSupportedAnalytics = document.getElementById('analytics-notSupported');
 
   supportedAds.textContent = supportedAnalytics.textContent =
     notSupportedAds.textContent = notSupportedAnalytics.textContent =
-      loadingMessage;
+    loadingMessage;
 
 }
 
 window.onload = function onWindowLoad() {
-  // When page is loaded, display 'Loading...' so the user expects content
-  //
-  //
-  //showLoading()
 
-  supportedAds                  = document.getElementById('ads-supported');
-  supportedAnalytics            = document.getElementById('analytics-supported');
-  notSupportedAds               = document.getElementById('ads-notSupported');
-  notSupportedAnalytics         = document.getElementById('analytics-notSupported');
-
+  supportedAds = document.getElementById('ads-supported');
+  supportedAnalytics = document.getElementById('analytics-supported');
+  notSupportedAds = document.getElementById('ads-notSupported');
+  notSupportedAnalytics = document.getElementById('analytics-notSupported');
 
 };
 
+/**
+ * Update the DOM with info of the tab specified via `tabid`
+ * @param {string} tabId - ID of the tab
+ */
 function updateDOM(tabId) {
 
   tabId = '' + tabId
@@ -69,7 +63,7 @@ function updateDOM(tabId) {
   query[tabId] = ''
   query['vendors'] = ''
 
-  chrome.storage.local.get(query, function (response){
+  chrome.storage.local.get(query, function (response) {
 
     data = response[tabId]
     vendors = response['vendors']
@@ -80,39 +74,32 @@ function updateDOM(tabId) {
 
   })
 
-
 }
-
-
-chrome.tabs.query({active: true, currentWindow: true}, function (tabs){
+/**
+ * Listen in on the load-progress of the tab
+ */
+chrome.tabs.query({
+  active: true,
+  currentWindow: true
+}, function (tabs) {
 
   currentTab = tabs[0]
-  console.log(currentTab.status)
 
   if (currentTab.status == 'complete') {
-    console.log('current status is complete, showing DOM')
     updateDOM(currentTab.id)
-  }
-  else {
-    console.log('current status is something else, showing loading', currentTab.status)
+  } else {
     showLoading()
   }
 
 })
 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
   if (request.action == 'displayLoading') {
 
-    console.log('display loading ..')
-
     showLoading()
 
-  }
-
-  else if (request.action == 'updateDOM') {
-
-    console.log('updating DOM ..', request.tabId)
+  } else if (request.action == 'updateDOM') {
 
     if (request.tabId) {
       updateDOM(request.tabId)
@@ -120,10 +107,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 
   }
 
-
 })
-
-
 
 /**
  * Add supported and unsupported applications to the view
@@ -131,10 +115,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
  * @param {!Object} listAllVendors - JSON of all 3p vendors
  */
 function showSupportedVendorsInView(detectedVendors, listAllVendors) {
-
-
-
-  console.log(detectedVendors, listAllVendors)
 
   if (!detectedVendors) {
     return
@@ -154,10 +134,9 @@ function showSupportedVendorsInView(detectedVendors, listAllVendors) {
     true, listAllVendors));
 
   totalTags = detectedVendors.supported.ads.length +
-              detectedVendors.supported.analytics.length +
-              detectedVendors.notSupported.ads.length +
-              detectedVendors.notSupported.analytics.length
-
+    detectedVendors.supported.analytics.length +
+    detectedVendors.notSupported.ads.length +
+    detectedVendors.notSupported.analytics.length
 
 }
 
@@ -166,7 +145,6 @@ let CategorizedVendorsDef;
 
 /** @typedef {{supported: CategorizedVendorsDef, notSupported: CategorizedVendorsDef}} */
 let FilteredVendorsDef;
-
 
 /**
  * Make list of supported/unsupported vendors into an unordered list
@@ -179,7 +157,6 @@ function makeList(array, allowToolTips, listAllVendors) {
   // Create the list element:
   const list = document.createElement('ul');
 
-
   if (array.length == 0) {
 
     // Create the list item:
@@ -191,6 +168,7 @@ function makeList(array, allowToolTips, listAllVendors) {
   }
 
   for (let i = 0; i < array.length; i++) {
+
     // Create the list item:
     let item = document.createElement('li');
     // Set its contents:
@@ -223,5 +201,3 @@ function makeList(array, allowToolTips, listAllVendors) {
   // Finally, return the constructed list:
   return list;
 }
-
-//module.exports = {isSupported, addToDict};
