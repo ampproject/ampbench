@@ -27,7 +27,10 @@
         "<all_urls>"
       ],
       "all_frames": false,
-      "run_at": "document_end"
+      "run_at": "document_end",
+      "exclude_globs": [
+        "*.corp.google.com/*"
+      ]
     }
   ],
   "web_accessible_resources": [
