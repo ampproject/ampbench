@@ -1,5 +1,5 @@
 /**
- * @fileoverview background.js provides a persistant background for the extension
+ * @fileoverview background.js provides a persistent background for the extension
  * which individual extension instances that run on different tabs use to communicate.
  */
 
