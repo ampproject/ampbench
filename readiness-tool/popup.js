@@ -8,47 +8,41 @@ let supportedAds;
 /* @const {!Element} */
 let supportedAnalytics;
 
-/** @const {!Element} */
+/* @const {!Element} */
 let notSupportedAds;
 
-/** @const {!Element} */
+/* @const {!Element} */
 let notSupportedAnalytics;
 
 /* @const {string} */
-const loadingMessage = 'Loading...';
+const loadingMessage = "Loading...";
 
 /** @const {string} */
-const blankMessage = '';
+const blankMessage = "";
 
 chrome.storage.onChanged.addListener(function (changes, namespace) {
-
-  tabId = Object.keys(changes)[0]
-
-})
+  tabId = Object.keys(changes)[0];
+});
 
 /**
  * A utility function to show loading message in the UI
  */
 function showLoading() {
-
-  supportedAds = document.getElementById('ads-supported');
-  supportedAnalytics = document.getElementById('analytics-supported');
-  notSupportedAds = document.getElementById('ads-notSupported');
-  notSupportedAnalytics = document.getElementById('analytics-notSupported');
+  supportedAds = document.getElementById("ads-supported");
+  supportedAnalytics = document.getElementById("analytics-supported");
+  notSupportedAds = document.getElementById("ads-notSupported");
+  notSupportedAnalytics = document.getElementById("analytics-notSupported");
 
   supportedAds.textContent = supportedAnalytics.textContent =
-    notSupportedAds.textContent = notSupportedAnalytics.textContent =
-    loadingMessage;
-
+      notSupportedAds.textContent = notSupportedAnalytics.textContent =
+      loadingMessage;
 }
 
 window.onload = function onWindowLoad() {
-
-  supportedAds = document.getElementById('ads-supported');
-  supportedAnalytics = document.getElementById('analytics-supported');
-  notSupportedAds = document.getElementById('ads-notSupported');
-  notSupportedAnalytics = document.getElementById('analytics-notSupported');
-
+  supportedAds = document.getElementById("ads-supported");
+  supportedAnalytics = document.getElementById("analytics-supported");
+  notSupportedAds = document.getElementById("ads-notSupported");
+  notSupportedAnalytics = document.getElementById("analytics-notSupported");
 };
 
 /**
@@ -56,58 +50,48 @@ window.onload = function onWindowLoad() {
  * @param {string} tabId - ID of the tab
  */
 function updateDOM(tabId) {
+  tabId = "" + tabId;
 
-  tabId = '' + tabId
-
-  query = {}
-  query[tabId] = ''
-  query['vendors'] = ''
+  query = {};
+  query[tabId] = "";
+  query["vendors"] = "";
 
   chrome.storage.local.get(query, function (response) {
+    data = response[tabId];
+    vendors = response["vendors"];
 
-    data = response[tabId]
-    vendors = response['vendors']
-
-    detectedVendors = data.detectedVendors
+    detectedVendors = data.detectedVendors;
 
     showSupportedVendorsInView(detectedVendors, vendors);
-
-  })
-
+  });
 }
 /**
  * Listen in on the load-progress of the tab
  */
 chrome.tabs.query({
-  active: true,
-  currentWindow: true
-}, function (tabs) {
+    active: true,
+    currentWindow: true
+  },
+  function (tabs) {
+    currentTab = tabs[0];
 
-  currentTab = tabs[0]
-
-  if (currentTab.status == 'complete') {
-    updateDOM(currentTab.id)
-  } else {
-    showLoading()
+    if (currentTab.status == "complete") {
+      updateDOM(currentTab.id);
+    } else {
+      showLoading();
+    }
   }
-
-})
+);
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-
-  if (request.action == 'displayLoading') {
-
-    showLoading()
-
-  } else if (request.action == 'updateDOM') {
-
+  if (request.action == "displayLoading") {
+    showLoading();
+  } else if (request.action == "updateDOM") {
     if (request.tabId) {
-      updateDOM(request.tabId)
+      updateDOM(request.tabId);
     }
-
   }
-
-})
+});
 
 /**
  * Add supported and unsupported applications to the view
@@ -115,29 +99,31 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
  * @param {!Object} listAllVendors - JSON of all 3p vendors
  */
 function showSupportedVendorsInView(detectedVendors, listAllVendors) {
-
   if (!detectedVendors) {
-    return
+    return;
   }
 
   supportedAds.textContent = supportedAnalytics.textContent =
-    notSupportedAds.textContent = notSupportedAnalytics.textContent =
-    blankMessage;
-  supportedAds.appendChild(makeList(detectedVendors.supported.ads, false,
-    listAllVendors));
-  supportedAnalytics.appendChild(makeList(detectedVendors.supported.analytics,
-    false, listAllVendors));
-  notSupportedAds.appendChild(makeList(detectedVendors.notSupported.ads, true,
-    listAllVendors));
-  notSupportedAnalytics.appendChild(makeList(
-    detectedVendors.notSupported.analytics,
-    true, listAllVendors));
+      notSupportedAds.textContent = notSupportedAnalytics.textContent =
+      blankMessage;
+  supportedAds.appendChild(
+    makeList(detectedVendors.supported.ads, false, listAllVendors)
+  );
+  supportedAnalytics.appendChild(
+    makeList(detectedVendors.supported.analytics, false, listAllVendors)
+  );
+  notSupportedAds.appendChild(
+    makeList(detectedVendors.notSupported.ads, true, listAllVendors)
+  );
+  notSupportedAnalytics.appendChild(
+    makeList(detectedVendors.notSupported.analytics, true, listAllVendors)
+  );
 
-  totalTags = detectedVendors.supported.ads.length +
+  totalTags =
+    detectedVendors.supported.ads.length +
     detectedVendors.supported.analytics.length +
     detectedVendors.notSupported.ads.length +
-    detectedVendors.notSupported.analytics.length
-
+    detectedVendors.notSupported.analytics.length;
 }
 
 /** @typedef {{ads: !Array<string>, analytics: !Array<string>}} */
@@ -155,12 +141,11 @@ let FilteredVendorsDef;
  */
 function makeList(array, allowToolTips, listAllVendors) {
   // Create the list element:
-  const list = document.createElement('ul');
+  const list = document.createElement("ul");
 
   if (array.length == 0) {
-
     // Create the list item:
-    let item = document.createElement('li');
+    let item = document.createElement("li");
     // Set its contents:
     item.appendChild(document.createTextNode("None"));
     item.className = "empty";
@@ -168,30 +153,29 @@ function makeList(array, allowToolTips, listAllVendors) {
   }
 
   for (let i = 0; i < array.length; i++) {
-
     // Create the list item:
-    let item = document.createElement('li');
+    let item = document.createElement("li");
     // Set its contents:
     //
-    img = document.createElement('img');
-    img.src = "icons/" + array[i] + '.png'
-    img.style = "width: 15px; position: relative; top: 2px;"
-    item.appendChild(img)
+    img = document.createElement("img");
+    img.src = "icons/" + array[i] + ".png";
+    img.style = "width: 15px; position: relative; top: 2px;";
+    item.appendChild(img);
 
-    img = document.createElement('img');
-    img.src = "icons/" + array[i] + '.svg'
-    img.style = "width: 15px; position: relative; top: 2px;"
-    item.appendChild(img)
+    img = document.createElement("img");
+    img.src = "icons/" + array[i] + ".svg";
+    img.style = "width: 15px; position: relative; top: 2px;";
+    item.appendChild(img);
 
-    text = document.createElement('span')
-    text.innerHTML = array[i]
-    text.style = "margin-left: 8px;"
-    item.appendChild(text)
+    text = document.createElement("span");
+    text.innerHTML = array[i];
+    text.style = "margin-left: 8px;";
+    item.appendChild(text);
 
     // Tooltip is only allowed for unsupported vendors
 
     if (allowToolTips && listAllVendors[array[i]].tooltip != null) {
-      item.className = 'tooltip';
+      item.className = "tooltip";
       item.setAttribute("data-tooltip", listAllVendors[array[i]].tooltip);
     }
     // Add it to the list:
