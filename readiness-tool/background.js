@@ -1,10 +1,10 @@
 /**
- * @fileoverview background.js provides a persistent background for the extension
- * which individual extension instances that run on different tabs use to communicate.
+ * @fileoverview background.js provides a persistent
+ * background for the extension which individual extension instances
+ * that run on different tabs use to communicate.
  */
 
-let globals = {};
-
+var globals = {};
 globals.tabToUrl = {};
 
 /**
@@ -51,8 +51,8 @@ function updateDOM(tab) {
 }
 
 /**
- * Load the list of vendors and associated regexes as soon as the extension comes alive.
- * We cache this in chrome local storage.
+ * Load the list of vendors and associated regexes as soon
+ * as the extension comes alive. We cache this in chrome local storage.
  */
 fetch('vendors.json')
   .then(function(response) {
