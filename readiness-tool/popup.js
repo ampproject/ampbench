@@ -156,10 +156,10 @@ function makeList(array, allowToolTips, listAllVendors) {
     img.style = 'width: 15px; position: relative; top: 2px;';
     item.appendChild(img);
 
-    img = document.createElement('img');
-    img.src = 'icons/' + array[i] + '.svg';
-    img.style = 'width: 15px; position: relative; top: 2px;';
-    item.appendChild(img);
+    //img = document.createElement('img');
+    //img.src = 'icons/' + array[i] + '.svg';
+    //img.style = 'width: 15px; position: relative; top: 2px;';
+    //item.appendChild(img);
 
     text = document.createElement('span');
     text.innerHTML = array[i];
