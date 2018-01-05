@@ -1308,6 +1308,7 @@ function check_robots_txt(validation_url, callback) {
         check_robots_txt_status = '',
         check_robots_txt_results = '',
         check_robots_txt_file_url = '',
+        check_robots_txt_file_url_404 = false,
         check_robots_txt_ua_googlebot_ok = '',
         check_robots_txt_ua_googlebot_smartphone_ok = '';
 
@@ -1319,18 +1320,23 @@ function check_robots_txt(validation_url, callback) {
             = build_result_extras
             ? check_robots_txt_results + '[' + build_result_extras + ']'
             : check_robots_txt_results;
-        if (CHECK_PASS === check_url_is_reachable_return.status) {
-            if (CHECK_PASS === check_robots_txt_ua_googlebot_ok &&
-                CHECK_PASS === check_robots_txt_ua_googlebot_smartphone_ok) {
-                check_robots_txt_status = CHECK_PASS;
-            }
+        if (check_robots_txt_file_url_404) {
+            check_robots_txt_status = CHECK_PASS;
         } else {
-            check_robots_txt_status = check_url_is_reachable_return.status;
+            if (CHECK_PASS === check_url_is_reachable_return.status) {
+                if (CHECK_PASS === check_robots_txt_ua_googlebot_ok &&
+                    CHECK_PASS === check_robots_txt_ua_googlebot_smartphone_ok) {
+                    check_robots_txt_status = CHECK_PASS;
+                }
+            } else {
+                check_robots_txt_status = check_url_is_reachable_return.status;
+            }
         }
         check_robots_txt_return = {
             check_robots_txt_status: check_robots_txt_status,
             check_robots_txt_results: check_robots_txt_results,
             check_robots_txt_file_url: check_robots_txt_file_url,
+            check_robots_txt_file_url_404: check_robots_txt_file_url_404,
             check_robots_txt_ua_googlebot_ok: check_robots_txt_ua_googlebot_ok,
             check_robots_txt_ua_googlebot_smartphone_ok: check_robots_txt_ua_googlebot_smartphone_ok,
             check_url_is_reachable_return: check_url_is_reachable_return
@@ -1359,6 +1365,7 @@ function check_robots_txt(validation_url, callback) {
 
         if (!_ret.ok) { // cannot get to the sites robots.txt
             if (_ret.http_response_code === 404) { // 404 is OK: https://developers.google.com/search/reference/robots_txt
+                check_robots_txt_file_url_404 = true;
                 check_robots_txt_ua_googlebot_ok = CHECK_PASS;
                 check_robots_txt_ua_googlebot_smartphone_ok = CHECK_PASS;
             } else {
@@ -1368,6 +1375,7 @@ function check_robots_txt(validation_url, callback) {
             build_results();
             callback(check_robots_txt_return);
         } else {
+            check_robots_txt_file_url_404 = false;
             try {
                 // https://www.npmjs.com/package/robots-parser - - - - - - - - - - - - - - - - - - - -
                 const robots = robots_parser(check_robots_txt_file_url, _ret.body);
