@@ -107,7 +107,7 @@
     "Carbon Ads": {
       "category": "Ads",
       "regex": [
-        "[^\\/]*\\/\\/(?:engine|srv)\\.carbonads\\.com\\/",
+        "\\/(?:engine|srv|cdn)\\.carbonads\\.com\\/",
         "<[a-z]+ [^>]*id=\"carbonads-container\""
       ]
     },
@@ -172,7 +172,7 @@
     "DoubleClick Floodlight": {
       "category": "Ads",
       "regex": [
-        "https?://fls.doubleclick.net"
+        "fls.doubleclick.net"
       ]
     },
     "DoubleClick for Publishers (DFP)": {
@@ -213,6 +213,14 @@
       "category": "Analytics",
       "regex": [
         "google-analytics\\.com\\/(?:ga|urchin|(analytics))\\.js"
+      ]
+    },
+    "Google Tag Manager": {
+      "category": "Analytics",
+      "regex": [
+        "googletagmanager\\.com/ns\\.html[^>]+></iframe",
+        "google_tag_manager\\[",
+        "^googletag$"
       ]
     },
     "Heap": {
@@ -328,8 +336,7 @@
     "Optimizely": {
       "category": "Analytics",
       "regex": [
-        "//cdn\\.optimizely\\.com/js/",
-        "cdn3\\.optimizely\\.com/js/geo2.js"
+        "optimizely\\.com.*\\.js"
       ],
       "tooltip": "Workaround is available. Use amp-experiment."
     },
@@ -365,7 +372,7 @@
         "https?://[^/]*\\.pubmatic\\.com"
       ]
     },
-    "Quantcast Measurement": {
+    "Quantcast": {
       "category": "Analytics",
       "regex": [
         "\\.quantserve\\.com/*"
@@ -418,7 +425,7 @@
     "Sizmek": {
       "category": "Ads",
       "regex": [
-        "[^/]*//[^/]*serving-sys\\.com/",
+        "https?://.*\\.serving-sys\\.com/",
         "(?:<a [^>]*href=\"[^/]*//[^/]*serving-sys\\.com/|<img [^>]*src=\"[^/]*//[^/]*serving-sys\\.com/)"
       ]
     },
@@ -456,7 +463,8 @@
       "category": "Ads",
       "regex": [
         "^//tags\\.tiqcdn\\.com/",
-        "/tealium/utag\\.js$"
+        "/tealium/utag\\.js$",
+        "tiqcdn.com/utag"
       ]
     },
     "Titan": {
@@ -572,6 +580,12 @@
         "\\.scorecardresearch\\.com/beacon\\.js|COMSCORE\\.beacon",
         "<iframe[^>]* (?:id=\"comscore\"|scr=[^>]+comscore)|\\.scorecardresearch\\.com/beacon\\.js|COMSCORE\\.beacon",
         "sb\\.scorecardresearch\\.com"
+      ]
+    },
+    "Google AdWords Remarketing Tag": {
+      "category": "Ads",
+      "regex": [
+        "<script[\\s\\S]*googleads\\.g\\.doubleclick\\.net/pagead/viewthroughconversion[\\s\\S]*script>"
       ]
     }
   }

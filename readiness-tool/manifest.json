@@ -1,17 +1,38 @@
 {
   "manifest_version": 2,
-
   "name": "AMP Readiness Tool",
-  "description": "A tool that allows the user to see at a glance, the various third party vendors on the page and whether they have AMP support",
-  "version": "1.0",
-
+  "description": "See at a glance the various third party vendors on the page and whether they have AMP support.",
+  "version": "2.8",
+  "options_page": "options.html",
+  "icons": {
+    "16": "amp-readiness.png",
+    "48": "amp-readiness.png",
+    "128": "amp-readiness.png"
+  },
   "browser_action": {
-    "default_icon": "amp.png",
+    "default_icon": "amp-readiness.png",
     "default_popup": "popup.html"
   },
   "background": {
-    "scripts": ["getPagesSource.js"]
+    "scripts": [
+      "background.js"
+    ]
   },
+  "content_scripts": [
+    {
+      "js": [
+        "content_script.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ],
+      "all_frames": false,
+      "run_at": "document_end",
+      "exclude_globs": [
+        "*.corp.google.com/*"
+      ]
+    }
+  ],
   "web_accessible_resources": [
     "apps.json"
   ],
@@ -20,6 +41,8 @@
     "<all_urls>",
     "webNavigation",
     "tabs",
-    "https://ajax.googleapis.com/"
+    "https://ajax.googleapis.com/",
+    "storage",
+    "unlimitedStorage"
   ]
 }

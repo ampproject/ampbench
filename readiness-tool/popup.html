@@ -7,104 +7,184 @@
 <html>
 
 <head>
-  <title>Getting Started Extension's Popup</title>
+  <meta charset="UTF-8">
+  <title>AMP Readiness Tool</title>
   <style>
+    @import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,700');
+
     html {
-      background-color: #f5f5f5;
+      background-color: #fff;
       width: 600px;
+      color: #333;
+
+      padding: 10px 10px 0px 10px;
     }
-    
-    header {
-      min-height: 15px;
-      font-family: sans-serif;
-      font-size: 1.5em;
-      font-weight: normal;
-      margin: 20px 0px 0px 0px;
-    }
-    
+
     body {
-      font-family: "Roboto", "Lucida Grande", Tahoma, sans-serif;
+      font-family: "Roboto", sans-serif;
       font-size: 100%;
       min-width: 400px;
     }
-    
-    footer {
-      background-color: #f5f5f5;
-      clear: both;
-      height: 15px;
+
+    header {
+      font-weight: 300;
+      vertical-align: middle;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    #logo {
+      height: 25px;
+      width: 25px;
+    }
+
+    #title {
+      padding: 0px 10px;
+      font-size: 1em;
+      margin-top: 1px;
+    }
+
+    .card-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .card {
+      background: #fff;
+      box-shadow: 0px 3px 20px 0 rgba(0, 0, 0, 0.075);
+      box-sizing: border-box;
+      flex: 0 0 50%;
+      margin: 10px 5px;
       padding: 10px;
+      position: relative;
     }
-    
-    h2 {
-      display: block;
-      float: left;
-      height: 24px;
-      line-height: 24px;
-      padding: 5px 0 0 0;
+
+    .card::before {
+      background: linear-gradient(to right, #1c79c0, #0389ff, #0dd3ff);
+      content: '';
+      left: 0;
+      height: 2px;
+      position: absolute;
+      right: 0;
+      top: -2px;
     }
-    
-    #leftSide {
-      float: left;
-      width: 40%;
-      text-align: left;
-      clear: left;
+
+    .card-inner {
+      display: inline-flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 100%;
     }
-    
-    #rightSide {
+
+    .title {
+      text-transform: uppercase;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: .56px;
+      line-height: 16px;
+      margin-bottom: 5px;
+      margin-top: 10px;
+    }
+
+    .title .dot {}
+
+    .title .text {
+      margin-top: 2px;
+      margin-left: 6px;
+      position: absolute;
+    }
+
+    .supported {
+      color: #34a853;
+    }
+
+    .not-supported {
+      color: #e90606;
+    }
+
+    .rows {
+      margin-top: 15px;
+    }
+
+    .analytics-row {
+      margin-top: 35px;
+    }
+
+    .collapsible {
+      color: #1c79c0;
+      text-transform: uppercase;
+    }
+
+    .expanding-list {
+      color: #959595;
+      font-size: 12px;
+      margin-top: 10px;
+    }
+
+    ul {
+      margin: 5px 0px;
+      padding: 0px;
+
+      font-size: 14px;
+      line-height: 26px;
+      letter-spacing: .56px;
+
+      color: #333;
+    }
+
+    li {
+      list-style: none;
+    }
+
+    li.empty {
+      color: #959595;
+      font-size: 12px;
+    }
+
+    footer {
+      font-size: 12px;
       float: right;
-      text-align: left;
-      width: 40%;
     }
-    
-    span {
+
+    footer div {
+      display: inline-block;
+      margin: 0px 10px 10px;
+      color: #959595;
+    }
+
+    footer div a {
+      text-decoration: none;
+      color: #959595;
+    }
+
+    footer div a:hover {
       text-decoration: underline;
     }
-    
-    ul {
-      font-size: 12px;
-      list-style: none;
-      text-align: left;
-      margin-left: -45px;
-      width: 100%;
-      margin-top: -1px;
-      margin-bottom: -20px;
-    }
-    
-    li {
-      margin: 5px;
-      color: grey;
-    }
-    
-    .supported-title {
-      color: #4BB543;
-      font-size: 14px;
-    }
-    
-    .notSupported-title {
-      color: #ff0033;
-      font-size: 14px;
-    }
-    
+
     .tooltip {
       text-decoration: underline;
       text-decoration-color: red;
       text-decoration-style: dashed;
       text-underline-position: under;
     }
-    
+
     .tooltip:before {
       content: '>\0000a0';
     }
     /* Tooltip Styles */
     /* Add this attribute to the element that needs a tooltip */
-    
+
     [data-tooltip] {
       position: relative;
       z-index: 2;
       cursor: pointer;
     }
     /* Hide the tooltip content by default */
-    
+
     [data-tooltip]:before,
     [data-tooltip]:after {
       visibility: hidden;
@@ -114,7 +194,7 @@
       pointer-events: none;
     }
     /* Position tooltip above the element */
-    
+
     [data-tooltip]:before {
       position: absolute;
       bottom: 150%;
@@ -135,7 +215,7 @@
       line-height: 1.2;
     }
     /* Triangle hack to make tooltip look like a speech bubble */
-    
+
     [data-tooltip]:after {
       position: absolute;
       bottom: 150%;
@@ -151,7 +231,7 @@
       line-height: 0;
     }
     /* Show tooltip content on hover */
-    
+
     [data-tooltip]:hover:before,
     [data-tooltip]:hover:after {
       visibility: visible;
@@ -160,33 +240,32 @@
       opacity: 1;
     }
     /* Expanding lists */
-    
+
     input[type="checkbox"]:not(:checked)+label:after {
       content: '\25BC';
     }
-    
+
     input[type="checkbox"]:checked+label:after,
     input[type="checkbox"].current+label:after {
       content: "\25B2";
     }
-    
+
     label {
       font-size: 14px;
       margin-top: -5px;
     }
-    
+
     input {
       display: none;
     }
-    
+
     input+.collapsible+div {
       display: none;
     }
-    
+
     input:checked+.collapsible+div {
       display: block;
     }
-
   </style>
   <!--
             - JavaScript and HTML must be in separate files: see our Content Security
@@ -199,32 +278,65 @@
 
 <body>
   <header>
-    Third Party Technology Found on This Page
+    <img id="logo" src="amp-readiness.png">
+    <span id="title">AMP Readiness Tool</span>
   </header>
-  <div style="width: 100%;">
-    <div id="leftSide">
-      <h3 class="supported-title">Supported</h3>
-      <input type="checkbox" id="expanding-1" checked />
-      <label class="collapsible" for="expanding-1">Ads </label>
-      <div id="ads-supported" class="expanding-list"></div>
-      <br>
-      <input type="checkbox" id="expanding-2" />
-      <label class="collapsible" for="expanding-2">Analytics </label>
-      <div id="analytics-supported" class="expanding-list"></div>
+  <div class="card-container">
+
+    <div class="card">
+      <div class="card-inner">
+        <h3 class="supported title">
+          <span class="dot">⬤ </span>
+          <span class="text">Supported</span>
+        </h3>
+
+        <div class="rows">
+          <div class="ads-row">
+            <label class="collapsible" for="expanding-1">Ads </label>
+            <div id="ads-supported" class="expanding-list"></div>
+          </div>
+
+          <div class="analytics-row">
+            <label class="collapsible" for="expanding-2">Analytics </label>
+            <div id="analytics-supported" class="expanding-list"></div>
+          </div>
+        </div>
+
+      </div>
     </div>
-    <div id="rightSide">
-      <h3 class="notSupported-title">Not Yet Supported</h3>
-      <input type="checkbox" id="expanding-3" checked />
-      <label class="collapsible" for="expanding-3">Ads </label>
-      <div id="ads-notSupported" class="expanding-list"></div>
-      <br>
-      <input type="checkbox" id="expanding-4" />
-      <label class="collapsible" for="expanding-4">Analytics </label>
-      <div id="analytics-notSupported" class="expanding-list"></div>
+
+    <div class="card">
+      <div class="card-inner">
+        <h3 class="not-supported title">
+          <span class="dot">⬤ </span>
+          <span class="text">Not Yet Supported</span>
+        </h3>
+
+        <div class="rows">
+          <div class="ads-row">
+            <label class="collapsible" for="expanding-3">Ads </label>
+            <div id="ads-notSupported" class="expanding-list"></div>
+          </div>
+
+          <div class="analytics-row">
+            <label class="collapsible" for="expanding-4">Analytics </label>
+            <div id="analytics-notSupported" class="expanding-list"></div>
+          </div>
+        </div>
+
+      </div>
     </div>
+
   </div>
-  <div style="clear:both"></div>
-  <footer> </footer>
+  <footer>
+    <div>
+      <a href="https://ampproject.org" target="_blank">ampproject.org</a>
+    </div>
+    <div>
+      <a href="https://github.com/ampproject/amphtml/blob/master/LICENSE" target="_blank">LICENSE</a>
+    </div>
+  </footer>
+
 </body>
 
 </html>
