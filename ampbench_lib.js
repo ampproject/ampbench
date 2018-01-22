@@ -40,6 +40,10 @@ const inspect_obj = (obj) => {return util.inspect(obj, { showHidden: true, depth
 const cheerio = require('cheerio');
 const S = require('string');
 const hasBom = require('has-bom');
+// const {URL} = require('url');
+const URL = require('url-parse');
+const mime = require('mime-types');
+const punycode = require('punycode');
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // convenient aliases
@@ -1861,21 +1865,78 @@ function parse_headers_for_if_modified_since_or_etag(http_response) {
     return check_ims_or_etag_header;
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// ampbench related utilities
-//
+/**
+ * Returns or fetches AMP Caches information, as documented here:
+ * https://github.com/ampproject/amphtml/issues/7259
+ */
+function get_google_amp_cache_origin_json() {
 
-function make_url_to_google_amp_cache(url) {
-    const AMP_CDN_HTTP  = 'https://cdn.ampproject.org/c/';
-    const AMP_CDN_HTTPS = 'https://cdn.ampproject.org/c/s/';
-    var url_cdn = '';
-    if (url.startsWith('http://')) {
-        url_cdn = AMP_CDN_HTTP + url.substr(7);
-    } else if (url.startsWith('https://')) {
-        url_cdn = AMP_CDN_HTTPS + url.substr(8);
-    }
-    return url_cdn;
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // the following is for documentation only
+    // const CACHES_JSON_URL = 'https://cdn.ampproject.org/caches.json';
+    // return fetch(CACHES_JSON_URL)
+    //     .then(response => response.json())
+    //     .then(json => {
+    //         this._caches = json.caches;
+    //         return this._caches;
+    //     });
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    // hardcode the json object at: https://cdn.ampproject.org/caches.json
+    // avoiding unneccesary fetches and we only care for the Google CDN now
+    const GOOGLE_CACHE_ORIGIN_STR =
+        '{\n' +
+        '  "caches": [\n' +
+        '    {\n' +
+        '      "id": "google",\n' +
+        '      "name": "Google AMP Cache",\n' +
+        '      "docs": "https://developers.google.com/amp/cache/",\n' +
+        '      "updateCacheApiDomainSuffix": "cdn.ampproject.org"\n' +
+        '    }\n' +
+        '  ]\n' +
+        '}';
+
+    // console.log('=> [GOOGLE_CACHE_ORIGIN_STR]: ' + GOOGLE_CACHE_ORIGIN_STR);
+
+    return JSON.parse(GOOGLE_CACHE_ORIGIN_STR);
 }
+
+/**
+ * Translates an url from the origin to the AMP Cache URL format, as documented here:
+ *  https://developers.google.com/amp/cache/overview
+ *  https://ampbyexample.com/advanced/using_the_google_amp_cache/
+ *
+ * @param {String} originUrl the URL to be transformed.
+ * @return {String} the transformed URL.
+ */
+function make_url_to_google_amp_cache(url) {
+    const url_cdn = new URL(url); // see: https://www.npmjs.com/package/url-parse
+    const cache = get_google_amp_cache_origin_json();
+    const originalHostname = url_cdn.hostname;
+    let unicodeHostname = punycode.toUnicode(originalHostname);
+    unicodeHostname = unicodeHostname.replace(/-/g, '--');
+    unicodeHostname = unicodeHostname.replace(/\./g, '-');
+
+    let pathSegment = get_resource_path(url_cdn.pathname);
+    pathSegment += url_cdn.protocol === 'https:' ? '/s/' : '/';
+
+    // url_cdn.set('hostname', punycode.toASCII(unicodeHostname) + '.' + 'cdn.ampproject.org');
+    url_cdn.set('hostname', punycode.toASCII(unicodeHostname) + '.' + cache.caches[0].updateCacheApiDomainSuffix);
+    url_cdn.set('pathname', pathSegment + originalHostname + url_cdn.pathname);
+    return url_cdn.href;
+}
+
+// function make_url_to_google_amp_cache_OBSOLETE(url) {
+//     const AMP_CDN_HTTP  = 'https://cdn.ampproject.org/c/';
+//     const AMP_CDN_HTTPS = 'https://cdn.ampproject.org/c/s/';
+//     var url_cdn = '';
+//     if (url.startsWith('http://')) {
+//         url_cdn = AMP_CDN_HTTP + url.substr(7);
+//     } else if (url.startsWith('https://')) {
+//         url_cdn = AMP_CDN_HTTPS + url.substr(8);
+//     }
+//     return url_cdn;
+// }
 
 function make_url_to_google_amp_viewer(url) {
     const AMP_VIEWER_HTTP  = 'https://www.google.com/amp/';
@@ -1887,6 +1948,25 @@ function make_url_to_google_amp_viewer(url) {
         url_viewer = AMP_VIEWER_HTTPS + url.substr(8);
     }
     return url_viewer;
+}
+
+function get_resource_path(pathname) {
+    const mimetype = mime.lookup(pathname);
+    if (!mimetype) {
+        return '/c';
+    }
+
+    // console.log(mimetype);
+    if (mimetype.indexOf('image/') === 0) {
+        return '/i';
+    }
+
+    if (mimetype.indexOf('font') >= 0) {
+        return '/r';
+    }
+
+    // Default to document
+    return '/c';
 }
 
 function make_url_validate_link(url) {
