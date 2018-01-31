@@ -1851,15 +1851,15 @@ function parse_headers_for_if_modified_since_or_etag(http_response) {
         check_ims_or_etag_header.check_etag_header_status = CHECK_PASS;
     }
 
-    if (CHECK_WARN === check_ims_or_etag_header.check_ims_header_status ||
-        CHECK_WARN === check_ims_or_etag_header.check_etag_header_status) {
-        check_ims_or_etag_header.check_ims_or_etag_header_results =
-            `[${CHECK_WARN}] Site does not support either "If-Modified-Since" or "ETag" headers: these make amp serving more efficient`;
-        check_ims_or_etag_header.check_ims_or_etag_header_status = CHECK_WARN;
-    } else {
+    if (CHECK_PASS === check_ims_or_etag_header.check_ims_header_status ||
+        CHECK_PASS === check_ims_or_etag_header.check_etag_header_status) {
         check_ims_or_etag_header.check_ims_or_etag_header_results =
             `[${CHECK_PASS}] Site supports either/or both "If-Modified-Since" and "ETag" headers: these make amp serving more efficient`;
         check_ims_or_etag_header.check_ims_or_etag_header_status = CHECK_PASS;
+    } else {
+        check_ims_or_etag_header.check_ims_or_etag_header_results =
+            `[${CHECK_WARN}] Site does not support either "If-Modified-Since" or "ETag" headers: these make amp serving more efficient`;
+        check_ims_or_etag_header.check_ims_or_etag_header_status = CHECK_WARN;
     }
 
     return check_ims_or_etag_header;
