@@ -1659,9 +1659,9 @@ function parse_body_for_amplinks(body, http_response) {
             href = {rel: rel, url: href_url};
             if ('canonical' === rel) {
                 // only take the first occurrence
-                __return.canonical_url = '' === __return.canonical_url
+                __return.canonical_url = encodeURI('' === __return.canonical_url
                     ? href_url
-                    : __return.canonical_url;
+                    : __return.canonical_url);
             }
             if ('amphtml' === rel) {
                 // only take the first occurrence
