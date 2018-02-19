@@ -129,6 +129,13 @@ const results_template = fs.readFileSync(__dirname + '/views/results.hbs', 'utf8
 // TODO: WIP20160426 - bulk support routes
 // const multi_url_template = fs.readFileSync(__dirname + '/views/multi_url.hbs', 'utf8');
 
+app.use(function(req, res, next) {
+    if (req.query && req.query.url) {
+        req.query.url = encodeURI(req.query.url);
+    }
+    next();
+});
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // ERRORS
 //
