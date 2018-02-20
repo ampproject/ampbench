@@ -1034,8 +1034,9 @@ function fetch_and_parse_url_for_amplinks(request_url, on_parsed_callback) {
                     __return.url = full_path;
                     __return.canonical_url = __temp.canonical_url;
                     __return.amphtml_url = __temp.amphtml_url;
-                    __return.has_dns_prefetch = __temp.has_dns_prefetch;
-                    __return.status = CHECK_PASS; // status indicates successful fetch and parse, nothing more
+					__return.has_dns_prefetch = __temp.has_dns_prefetch;
+					__return.status = __temp.amphtml_url.indexOf(",") > -1 ? CHECK_WARN : CHECK_PASS;
+
                     on_parsed_callback(http_response, __return); // !!! RETURN to front-end  - - - - - - - - - - - - - - -
                 });
             };
@@ -1664,10 +1665,9 @@ function parse_body_for_amplinks(body, http_response) {
                     : __return.canonical_url);
             }
             if ('amphtml' === rel) {
-                // only take the first occurrence
-                __return.amphtml_url = '' === __return.amphtml_url
+                __return.amphtml_url += '' === __return.amphtml_url
                     ? href_url
-                    : __return.amphtml_url;
+                    : `,${href_url}`;
             }
         }
     });

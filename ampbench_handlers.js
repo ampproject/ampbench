@@ -129,7 +129,7 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                 canonical_parsed_return.result = ''; // make a result field
 
                 let canonical_url_found = canonical_parsed_return.canonical_url,
-                    amphtml_url_found = canonical_parsed_return.amphtml_url,
+                    amphtml_url_found = canonical_parsed_return.amphtml_url.split(','),
                     fetch_duration_amp = http_response.duration_in_milliseconds,
                     fetch_duration_canonical = http_response_canonical.duration_in_milliseconds,
                     fetch_duration_amp_cache = 0, fetch_status_amp_cache = '';
@@ -141,12 +141,15 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                             canonical_parsed_return.canonical_url = benchlib.make_url_href(
                                 canonical_url_found, canonical_url_found);
                         }
-                        if ('' !== amphtml_url_found) {
-                            canonical_parsed_return.result += '[AMP link found in Canonical page]';
-                            if (url_to_validate !== amphtml_url_found) { // amp link not pointing back!!!
+                        if ('' !== amphtml_url_found[0]) {
+							canonical_parsed_return.result += '[AMP link found in Canonical page]';
+                            if (!amphtml_url_found.includes(url_to_validate)) { // amp link not pointing back!!!
                                 canonical_parsed_return.status = CHECK_FAIL;
                                 canonical_parsed_return.result += '[FAIL: AMP link in Canonical page does not refer to the current AMP page]';
-                            } else {
+                            } else if(amphtml_url_found.length > 1) {
+								canonical_parsed_return.status = CHECK_WARN;
+                                canonical_parsed_return.result += '[WARNING: Multiple AMP links found in Canonical page]';
+							} else {
                                 canonical_parsed_return.status = CHECK_PASS;
                                 canonical_parsed_return.result += '[AMP link in Canonical page refers to the current AMP page]';
                             }
