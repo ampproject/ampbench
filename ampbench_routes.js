@@ -468,9 +468,10 @@ const make_api_http_response = (http_response) => {
 
 const make_api_amp_links = (parse_amplinks) => {
     return {
-        canonical_url: parse_amplinks.canonical_url,
-        amphtml_url: parse_amplinks.amphtml_url,
-        amp_uses_feed: parse_amplinks.amp_uses_feed
+        canonical_url:  parse_amplinks.canonical_url,
+        amphtml_url:    parse_amplinks.amphtml_url,
+        amphtml_urls:   parse_amplinks.amphtml_urls,
+        amp_uses_feed:  parse_amplinks.amp_uses_feed
     };
 };
 
@@ -618,6 +619,7 @@ app.get('/api2/', (req, res) => {
     let parse_amplinks = {}; // <== function parse_page_content(http_response):
         // canonical_url: '',
         // amphtml_url: '',
+        // amphtml_urls: '',
         // check_robots_meta_results: 'Page content could not be read.',
         // check_robots_meta_status: CHECK_FAIL,
         // check_x_robots_tag_header_results: 'Response header could not be read.',

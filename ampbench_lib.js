@@ -988,6 +988,7 @@ function fetch_and_parse_url_for_amplinks(request_url, on_parsed_callback) {
         url: request_url,
         canonical_url: '',
         amphtml_url: '',
+        amphtml_urls: [],
         has_dns_prefetch: false
     };
 
@@ -1017,6 +1018,7 @@ function fetch_and_parse_url_for_amplinks(request_url, on_parsed_callback) {
                     __return.url = full_path;
                     __return.canonical_url = '';
                     __return.amphtml_url = '';
+                    __return.amphtml_urls = [];
                     __return.has_dns_prefetch = false;
                     __return.status = CHECK_FAIL;
                     http_response.http_response_body = '';
@@ -1032,10 +1034,11 @@ function fetch_and_parse_url_for_amplinks(request_url, on_parsed_callback) {
                     http_response.http_response_body = body;
                     __temp = parse_body_for_amplinks(body, http_response);
                     __return.url = full_path;
-                    __return.canonical_url = __temp.canonical_url;
-                    __return.amphtml_url = __temp.amphtml_url;
+                    __return.canonical_url =    __temp.canonical_url;
+                    __return.amphtml_url =      __temp.amphtml_url;
+                    __return.amphtml_urls =     __temp.amphtml_urls;
 					__return.has_dns_prefetch = __temp.has_dns_prefetch;
-					__return.status = __temp.amphtml_url.indexOf(",") > -1 ? CHECK_WARN : CHECK_PASS;
+                    __return.status = __temp.amphtml_urls.length > 0 ? CHECK_WARN : CHECK_PASS;
 
                     on_parsed_callback(http_response, __return); // !!! RETURN to front-end  - - - - - - - - - - - - - - -
                 });
@@ -1052,6 +1055,7 @@ function fetch_and_parse_url_for_amplinks(request_url, on_parsed_callback) {
                 __return.url = full_path;
                 __return.canonical_url = '';
                 __return.amphtml_url = '';
+                __return.amphtml_urls = [];
                 __return.has_dns_prefetch = false;
                 __return.status = CHECK_FAIL;
                 on_parsed_callback(http_response, __return); // !!! RETURN to front-end  - - - - - - - - - - - - - - - -
@@ -1062,6 +1066,7 @@ function fetch_and_parse_url_for_amplinks(request_url, on_parsed_callback) {
         __return.url = request_url;
         __return.canonical_url = '';
         __return.amphtml_url = '';
+        __return.amphtml_urls = [];
         __return.has_dns_prefetch = false;
         __return.status = CHECK_FAIL;
         http_response.http_response_body = '';
@@ -1578,6 +1583,7 @@ function parse_page_content(http_response) {
     let __return = {
         canonical_url: '',
         amphtml_url: '',
+        amphtml_urls: [],
         http_body_sniffer: null,
         has_dns_prefetch: false,
         amp_uses_feed: http_response.urlIsGoogleAmpFeed(),
@@ -1598,6 +1604,7 @@ function parse_page_content(http_response) {
         __temp = parse_body_for_amplinks_and_robots_metatags(http_response);
         __return.canonical_url = __temp.canonical_url;
         __return.amphtml_url = __temp.amphtml_url;
+        __return.amphtml_urls = __temp.amphtml_urls;
         __return.has_dns_prefetch = __temp.has_dns_prefetch;
         __return.check_robots_meta_status = __temp.check_robots_meta_status;
         __return.check_robots_meta_result = __temp.check_robots_meta_result;
@@ -1633,6 +1640,7 @@ function parse_body_for_amplinks(body, http_response) {
     let __return = {
         canonical_url: '',
         amphtml_url: '',
+        amphtml_urls: [],
         has_dns_prefetch: false
     };
 
@@ -1665,9 +1673,12 @@ function parse_body_for_amplinks(body, http_response) {
                     : __return.canonical_url);
             }
             if ('amphtml' === rel) {
-                __return.amphtml_url += '' === __return.amphtml_url
+                // only take and keep the first occurrence
+                __return.amphtml_url = '' === __return.amphtml_url
                     ? href_url
-                    : `,${href_url}`;
+                    : __return.amphtml_url;
+                // here save all occurrences
+                __return.amphtml_urls.push(href_url);
             }
         }
     });
@@ -1680,9 +1691,10 @@ function parse_body_for_amplinks_and_robots_metatags(http_response) {
     const
         __links = parse_body_for_amplinks(http_response.http_response_body, http_response);
     const
-        canonical_url = __links.canonical_url,
-        amphtml_url = __links.amphtml_url,
-        has_dns_prefetch = __links.has_dns_prefetch;
+        canonical_url       = __links.canonical_url,
+        amphtml_url         = __links.amphtml_url,
+        amphtml_urls        = __links.amphtml_urls,
+        has_dns_prefetch    = __links.has_dns_prefetch;
 
     let check_robots_meta_status = CHECK_PASS,
         check_robots_meta_result = '';
@@ -1729,10 +1741,11 @@ function parse_body_for_amplinks_and_robots_metatags(http_response) {
     // console.log('=> [check_robots_meta_result: ' + check_robots_meta_result + ']');
 
     return {
-        canonical_url: canonical_url,
-        amphtml_url: amphtml_url,
-        has_dns_prefetch: has_dns_prefetch,
-        amp_uses_feed: (-1 < http_response.url.indexOf('googleusercontent.com/amphtml')),
+        canonical_url:      canonical_url,
+        amphtml_url:        amphtml_url,
+        amphtml_urls:       amphtml_urls,
+        has_dns_prefetch:   has_dns_prefetch,
+        amp_uses_feed:      (-1 < http_response.url.indexOf('googleusercontent.com/amphtml')),
         check_robots_meta_status: check_robots_meta_status,
         check_robots_meta_result: check_robots_meta_result
     };
@@ -1835,7 +1848,7 @@ function parse_headers_for_if_modified_since_or_etag(http_response) {
 
     if (typeof(http_response.response.headers['if-modified-since']) === "undefined") {
         check_ims_or_etag_header.check_ims_header_result = 'Header entry for If-Modified-Since not found';
-        check_ims_or_etag_header.check_ims_header_status = CHECK_WARN;
+        check_ims_or_etag_header.check_ims_header_status = CHECK_INFO;
     } else {
         check_ims_or_etag_header.check_ims_header_result = 'Found header entry for If-Modified-Since' +
             http_response.response.headers['if-modified-since'];
@@ -1844,7 +1857,7 @@ function parse_headers_for_if_modified_since_or_etag(http_response) {
 
     if (typeof(http_response.response.headers['etag']) === "undefined") {
         check_ims_or_etag_header.check_etag_header_result = 'Header entry for ETag not found';
-        check_ims_or_etag_header.check_etag_header_status = CHECK_WARN;
+        check_ims_or_etag_header.check_etag_header_status = CHECK_INFO;
     } else {
         check_ims_or_etag_header.check_etag_header_result = 'Found header entry for ETag' +
             http_response.response.headers['etag'];
@@ -2101,6 +2114,7 @@ exports.multiline_to_html = multiline_to_html;
 exports.make_url_validate_link = make_url_validate_link;
 exports.make_url_validate_href = make_url_validate_href;
 exports.make_url_href = make_url_href;
+exports.make_url_href_list = make_url_href_list;
 exports.str_encode_hard_amp = str_encode_hard_amp;
 exports.str_rtrim_char = str_rtrim_char;
 

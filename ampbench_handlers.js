@@ -129,7 +129,7 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                 canonical_parsed_return.result = ''; // make a result field
 
                 let canonical_url_found = canonical_parsed_return.canonical_url,
-                    amphtml_url_found = canonical_parsed_return.amphtml_url.split(','),
+                    amphtml_url_found = canonical_parsed_return.amphtml_urls,    // could be multiples
                     fetch_duration_amp = http_response.duration_in_milliseconds,
                     fetch_duration_canonical = http_response_canonical.duration_in_milliseconds,
                     fetch_duration_amp_cache = 0, fetch_status_amp_cache = '';
@@ -154,7 +154,8 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                                 canonical_parsed_return.result += '[AMP link in Canonical page refers to the current AMP page]';
                             }
                             canonical_parsed_return.amphtml_url = benchlib.make_url_href(
-                                amphtml_url_found, amphtml_url_found);
+                                amphtml_url_found[0], amphtml_url_found[0]);  // could be multiples, if so take the 1st one
+                            canonical_parsed_return.amphtml_urls = benchlib.make_url_href_list(canonical_parsed_return.amphtml_urls);
                         } else {
                             canonical_parsed_return.status = CHECK_WARN;
                             let _can_result =
