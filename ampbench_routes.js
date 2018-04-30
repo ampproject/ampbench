@@ -23,7 +23,7 @@ const handlers = require('./ampbench_handlers.js');
 
 const VERSION_STRING = '[AMPBENCH:V.1.0]';
 
-function version_msg(msg){
+function version_msg(msg) {
     return VERSION_STRING + '[' + new Date().toISOString() + '] ' + msg;
 }
 
@@ -58,14 +58,14 @@ function consoleLogRequestResponse(req, res) {
 }
 
 function ifdef(v) { // useful for outputting potentially undefined variable values
-    if(v)
+    if (v)
         return v;
     else
         return '';
 }
 
 function format_dashes(dash_count) { // needs: const S = require('string');
-    return ( S(('- ').repeat(dash_count)).s );
+    return (S(('- ').repeat(dash_count)).s);
 }
 
 function print_dashes(dash_count) { // needs: const S = require('string');
@@ -83,19 +83,24 @@ const
     CHECK_WARN = 'WARNING',
     CHECK_NONE = 'UNKNOWN';
 const // http://www.tutorialspoint.com/html/html_colors.htm
-    CHECK_FAIL_CSS = '<span style="color: red; ">'       + CHECK_FAIL + '</span>',
-    CHECK_PASS_CSS = '<span style="color: #41c40f; ">'   + CHECK_PASS + '</span>',
-    CHECK_INFO_CSS = '<span style="color: #c530ac; ">'   + CHECK_INFO + '</span>',
-    CHECK_WARN_CSS = '<span style="color: orange; ">'    + CHECK_WARN + '</span>',
-    CHECK_NONE_CSS = '<span style="color: orange; ">'    + CHECK_NONE + '</span>';
+    CHECK_FAIL_CSS = '<span style="color: red; ">' + CHECK_FAIL + '</span>',
+    CHECK_PASS_CSS = '<span style="color: #41c40f; ">' + CHECK_PASS + '</span>',
+    CHECK_INFO_CSS = '<span style="color: #c530ac; ">' + CHECK_INFO + '</span>',
+    CHECK_WARN_CSS = '<span style="color: orange; ">' + CHECK_WARN + '</span>',
+    CHECK_NONE_CSS = '<span style="color: orange; ">' + CHECK_NONE + '</span>';
 const
     get_check_status_css = (status) => {
-        switch(status) {
-            case CHECK_FAIL: return CHECK_FAIL_CSS;
-            case CHECK_PASS: return CHECK_PASS_CSS;
-            case CHECK_INFO: return CHECK_INFO_CSS;
-            case CHECK_WARN: return CHECK_WARN_CSS;
-            default: return CHECK_NONE_CSS;
+        switch (status) {
+            case CHECK_FAIL:
+                return CHECK_FAIL_CSS;
+            case CHECK_PASS:
+                return CHECK_PASS_CSS;
+            case CHECK_INFO:
+                return CHECK_INFO_CSS;
+            case CHECK_WARN:
+                return CHECK_WARN_CSS;
+            default:
+                return CHECK_NONE_CSS;
         }
     };
 
@@ -110,7 +115,7 @@ const http = require('http');
 const https = require('https');
 const url = require('url');
 const util = require('util');
-const inspect_obj = (obj) => {return util.inspect(obj, { showHidden: true, depth: null })};
+const inspect_obj = (obj) => { return util.inspect(obj, { showHidden: true, depth: null }) };
 const S = require('string');
 
 const express = require('express');
@@ -204,6 +209,9 @@ app.get('/version', (req, res) => {
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 function assert_url(req, res) { // handle bad urls
+    if (req.query && req.query.url) {
+        req.query.url = encodeURI(req.query.url);
+    }
     let url_to_validate = req.query.url || '';
     if (!benchlib.check_url_is_valid(url_to_validate)) {
         console.log(version_msg(
@@ -212,8 +220,7 @@ function assert_url(req, res) { // handle bad urls
             req.path + ' ' + url_to_validate));
         let _err = {
             error: true,
-            error_message:
-                '[ERROR: INVALID URL] Please check the formatting of the requested URL',
+            error_message: '[ERROR: INVALID URL] Please check the formatting of the requested URL',
             error_url: url_to_validate,
             error_request_host: req.hostname,
             error_request_path: req.path,
@@ -346,12 +353,12 @@ app.get('/debug/', (req, res) => {
         res.status(200).send(version_msg('No AMP URL parameter found.'));
     } else {
         _debug_results =
-            '\n==> GET: ' + amp_url + '\n\n' + '{"User-Agent": '
-            + benchlib.UA_AMPBENCH_NAME + '}\n\n' + format_dashes(30) + '\n';
+            '\n==> GET: ' + amp_url + '\n\n' + '{"User-Agent": ' +
+            benchlib.UA_AMPBENCH_NAME + '}\n\n' + format_dashes(30) + '\n';
         // do the request
         request({
             uri: amp_url,
-            headers: {'User-Agent': benchlib.UA_AMPBENCH},
+            headers: { 'User-Agent': benchlib.UA_AMPBENCH },
             rejectUnauthorized: false
         }, function(err, res_debug, body) {
             // console.log(_debug_results);
@@ -371,12 +378,12 @@ app.get('/debug_cli/', (req, res) => {
         res.status(200).send(version_msg('No AMP URL parameter found.'));
     } else {
         _debug_results =
-            '\n==> GET: ' + amp_url + '\n\n' + '{"User-Agent": '
-            + benchlib.UA_AMPBENCH_NAME + '}\n\n' + format_dashes(30) + '\n';
+            '\n==> GET: ' + amp_url + '\n\n' + '{"User-Agent": ' +
+            benchlib.UA_AMPBENCH_NAME + '}\n\n' + format_dashes(30) + '\n';
         // do the request
         request({
             uri: amp_url,
-            headers: {'User-Agent': benchlib.UA_AMPBENCH},
+            headers: { 'User-Agent': benchlib.UA_AMPBENCH },
             rejectUnauthorized: false
         }, function(err, res_debug, body) {
             // console.log(_debug_results);
@@ -400,7 +407,7 @@ app.get('/debug_curl/', (req, res) => {
         // do the request
         request({
             uri: amp_url,
-            headers: {'User-Agent': benchlib.UA_CURL},
+            headers: { 'User-Agent': benchlib.UA_CURL },
             rejectUnauthorized: false
         }, function(err, res_debug, body) {
             // console.log(_debug_results);
@@ -424,7 +431,7 @@ app.get('/debug_curl_cli/', (req, res) => {
         // do the request
         request({
             uri: amp_url,
-            headers: {'User-Agent': benchlib.UA_CURL},
+            headers: { 'User-Agent': benchlib.UA_CURL },
             rejectUnauthorized: false
         }, function(err, res_debug, body) {
             // console.log(_debug_results);
@@ -475,30 +482,30 @@ const make_api_http_response = (http_response) => {
 
 const make_api_amp_links = (parse_amplinks) => {
     return {
-        canonical_url:  parse_amplinks.canonical_url,
-        amphtml_url:    parse_amplinks.amphtml_url,
-        amphtml_urls:   parse_amplinks.amphtml_urls,
-        amp_uses_feed:  parse_amplinks.amp_uses_feed
+        canonical_url: parse_amplinks.canonical_url,
+        amphtml_url: parse_amplinks.amphtml_url,
+        amphtml_urls: parse_amplinks.amphtml_urls,
+        amp_uses_feed: parse_amplinks.amp_uses_feed
     };
 };
 
 const make_api_sd_validation = (api_validate_sd_return) => {
     return {
-        status:             api_validate_sd_return.status,
-        result:             api_validate_sd_return.result,
-        sd_json_error:      api_validate_sd_return.json_error,
-        sd_kind:            api_validate_sd_return.kind,
-        sd_type:            api_validate_sd_return.type,
-        sd_type_is_amp:     api_validate_sd_return.type_is_amp,
-        sd_context:         api_validate_sd_return.context,
-        sd_headline:        api_validate_sd_return.news_headline,
-        sd_author_name:     api_validate_sd_return.author_name,
-        sd_publisher_name:  api_validate_sd_return.publisher_name,
-        sd_date_published:  api_validate_sd_return.date_published,
-        sd_date_modified:   api_validate_sd_return.date_modified,
-        sd_logo_image:      api_validate_sd_return.image,
-        sd_article_image:   api_validate_sd_return.article_image,
-        sd_article:         api_validate_sd_return.article
+        status: api_validate_sd_return.status,
+        result: api_validate_sd_return.result,
+        sd_json_error: api_validate_sd_return.json_error,
+        sd_kind: api_validate_sd_return.kind,
+        sd_type: api_validate_sd_return.type,
+        sd_type_is_amp: api_validate_sd_return.type_is_amp,
+        sd_context: api_validate_sd_return.context,
+        sd_headline: api_validate_sd_return.news_headline,
+        sd_author_name: api_validate_sd_return.author_name,
+        sd_publisher_name: api_validate_sd_return.publisher_name,
+        sd_date_published: api_validate_sd_return.date_published,
+        sd_date_modified: api_validate_sd_return.date_modified,
+        sd_logo_image: api_validate_sd_return.image,
+        sd_article_image: api_validate_sd_return.article_image,
+        sd_article: api_validate_sd_return.article
     };
 };
 
@@ -624,22 +631,22 @@ app.get('/api2/', (req, res) => {
         api_validate_amp_warnings_return = null;
 
     let parse_amplinks = {}; // <== function parse_page_content(http_response):
-        // canonical_url: '',
-        // amphtml_url: '',
-        // amphtml_urls: '',
-        // check_robots_meta_results: 'Page content could not be read.',
-        // check_robots_meta_status: CHECK_FAIL,
-        // check_x_robots_tag_header_results: 'Response header could not be read.',
-        // check_x_robots_tag_header_status: CHECK_FAIL
+    // canonical_url: '',
+    // amphtml_url: '',
+    // amphtml_urls: '',
+    // check_robots_meta_results: 'Page content could not be read.',
+    // check_robots_meta_status: CHECK_FAIL,
+    // check_x_robots_tag_header_results: 'Response header could not be read.',
+    // check_x_robots_tag_header_status: CHECK_FAIL
 
     let check_amplinks = {}; // <== function review_amp_links(parse_amplinks...
-        // check_extra: '',
-        // check_amp_links_canonical_url: '',
-        // check_amp_links_canonical_status: CHECK_NONE,
-        // check_amp_links_canonical_results: '',
-        // check_amp_links_amphtml_url: '',
-        // check_amp_links_amphtml_status: CHECK_NONE,
-        // check_amp_links_amphtml_results: ''
+    // check_extra: '',
+    // check_amp_links_canonical_url: '',
+    // check_amp_links_canonical_status: CHECK_NONE,
+    // check_amp_links_canonical_results: '',
+    // check_amp_links_amphtml_url: '',
+    // check_amp_links_amphtml_status: CHECK_NONE,
+    // check_amp_links_amphtml_results: ''
 
     let check_robots_txt_return = null,
         check_google_amp_cache_return = null;
@@ -746,8 +753,9 @@ class HttpServer {
 }
 
 var __server = null;
-function init_server(server) {  // called from main startup
-    if (null === __server) {    // only once
+
+function init_server(server) { // called from main startup
+    if (null === __server) { // only once
         __server = new HttpServer(server);
     }
     return __server;
