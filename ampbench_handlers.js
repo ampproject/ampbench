@@ -216,10 +216,12 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
 
                                 if (( // a Canonical?
                                         url_to_validate === parse_amplinks.canonical_url &&
-                                        '' !== parse_amplinks.amphtml_url
+                                        '' !== parse_amplinks.amphtml_url &&
+                                        parse_amplinks.amphtml_url !== url_to_validate
                                     ) || (
                                         '' === parse_amplinks.canonical_url &&
-                                        '' !== parse_amplinks.amphtml_url
+                                        '' !== parse_amplinks.amphtml_url &&
+                                        parse_amplinks.amphtml_url !== url_to_validate
                                     )) {
                                     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                                     // CASE 1:
