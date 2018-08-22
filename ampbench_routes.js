@@ -131,6 +131,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const handlebars = require('handlebars');
 const index_template = fs.readFileSync(__dirname + '/views/index.hbs', 'utf8');
 const results_template = fs.readFileSync(__dirname + '/views/results.hbs', 'utf8');
+if (process.env.GTAG_ID) {
+    console.log('Registering gtag: ' + process.env.GTAG_ID);
+    handlebars.registerHelper('gtag_id', function() {
+        return process.env.GTAG_ID;
+    });
+}
 // TODO: WIP20160426 - bulk support routes
 // const multi_url_template = fs.readFileSync(__dirname + '/views/multi_url.hbs', 'utf8');
 
