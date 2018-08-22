@@ -232,9 +232,9 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                                     res.redirect(redirect_url);
 
                                 } else if ( // from a non-Canonical, non-AMP to a redirect which will trigger CASE 1 on seperate request.
-                                url_to_validate !== parse_amplinks.canonical_url &&
-                                '' !== parse_amplinks.canonical_url &&
-                                '' !== parse_amplinks.amphtml_url && !sniffer.containsAmpHtmlLink
+                                    url_to_validate !== parse_amplinks.canonical_url &&
+                                    '' !== parse_amplinks.canonical_url &&
+                                    '' !== parse_amplinks.amphtml_url && !sniffer.containsAmpHtmlLink
                                 ) {
                                     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                                     // CASE 2:
@@ -245,10 +245,10 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                                     res.redirect(redirect_url);
 
                                 } else if ( // from a non-Canonical, non-AMP, and so on ...
-                                url_to_validate !== parse_amplinks.canonical_url &&
-                                '' !== parse_amplinks.canonical_url &&
-                                url_to_validate !== parse_amplinks.amphtml_url &&
-                                '' !== parse_amplinks.amphtml_url
+                                    url_to_validate !== parse_amplinks.canonical_url &&
+                                    '' !== parse_amplinks.canonical_url &&
+                                    url_to_validate !== parse_amplinks.amphtml_url &&
+                                    '' !== parse_amplinks.amphtml_url
                                 ) {
                                     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                                     // CASE 3:
