@@ -313,7 +313,8 @@ class HttpBodySniffer {
                 amphtml_signature:
                     S(this._body).contains('<html ⚡') || S(this._body).contains(' ⚡>') ||
                     S(this._body).contains('<html amp') || S(this._body).contains('<html AMP') ||
-                    S(this._body).contains(' amp>') || S(this._body).contains(' AMP>'),
+                    S(this._body).contains(' amp>') || S(this._body).contains(' AMP>') ||
+                    S(this._body).contains(' amp=') || S(this._body).contains(' AMP='),
                 amphtml_link:
                     S(this._body).contains('link rel="amphtml"'),
                 amphtml_link2:
