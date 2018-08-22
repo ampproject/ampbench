@@ -1846,33 +1846,38 @@ function parse_headers_for_if_modified_since_or_etag(http_response) {
         check_etag_header_status: CHECK_FAIL
     };
 
-    if (typeof(http_response.response.headers['if-modified-since']) === "undefined") {
-        check_ims_or_etag_header.check_ims_header_result = 'Header entry for If-Modified-Since not found';
-        check_ims_or_etag_header.check_ims_header_status = CHECK_INFO;
-    } else {
-        check_ims_or_etag_header.check_ims_header_result = 'Found header entry for If-Modified-Since' +
-            http_response.response.headers['if-modified-since'];
-        check_ims_or_etag_header.check_ims_header_status = CHECK_PASS;
-    }
+    // do not crash and burn if the response is broken!!
+    if (http_response && http_response.response && http_response.response.headers &&
+        typeof http_response.response.headers !== 'undefined') {
 
-    if (typeof(http_response.response.headers['etag']) === "undefined") {
-        check_ims_or_etag_header.check_etag_header_result = 'Header entry for ETag not found';
-        check_ims_or_etag_header.check_etag_header_status = CHECK_INFO;
-    } else {
-        check_ims_or_etag_header.check_etag_header_result = 'Found header entry for ETag' +
-            http_response.response.headers['etag'];
-        check_ims_or_etag_header.check_etag_header_status = CHECK_PASS;
-    }
+        if (typeof(http_response.response.headers['if-modified-since']) === "undefined") {
+            check_ims_or_etag_header.check_ims_header_result = 'Header entry for If-Modified-Since not found';
+            check_ims_or_etag_header.check_ims_header_status = CHECK_INFO;
+        } else {
+            check_ims_or_etag_header.check_ims_header_result = 'Found header entry for If-Modified-Since' +
+                http_response.response.headers['if-modified-since'];
+            check_ims_or_etag_header.check_ims_header_status = CHECK_PASS;
+        }
 
-    if (CHECK_PASS === check_ims_or_etag_header.check_ims_header_status ||
-        CHECK_PASS === check_ims_or_etag_header.check_etag_header_status) {
-        check_ims_or_etag_header.check_ims_or_etag_header_results =
-            `[${CHECK_PASS}] Site supports either/or both "If-Modified-Since" and "ETag" headers: these make amp serving more efficient`;
-        check_ims_or_etag_header.check_ims_or_etag_header_status = CHECK_PASS;
-    } else {
-        check_ims_or_etag_header.check_ims_or_etag_header_results =
-            `[${CHECK_WARN}] Site does not support either "If-Modified-Since" or "ETag" headers: these make amp serving more efficient`;
-        check_ims_or_etag_header.check_ims_or_etag_header_status = CHECK_WARN;
+        if (typeof(http_response.response.headers['etag']) === "undefined") {
+            check_ims_or_etag_header.check_etag_header_result = 'Header entry for ETag not found';
+            check_ims_or_etag_header.check_etag_header_status = CHECK_INFO;
+        } else {
+            check_ims_or_etag_header.check_etag_header_result = 'Found header entry for ETag' +
+                http_response.response.headers['etag'];
+            check_ims_or_etag_header.check_etag_header_status = CHECK_PASS;
+        }
+
+        if (CHECK_PASS === check_ims_or_etag_header.check_ims_header_status ||
+            CHECK_PASS === check_ims_or_etag_header.check_etag_header_status) {
+            check_ims_or_etag_header.check_ims_or_etag_header_results =
+                `[${CHECK_PASS}] Site supports either/or both "If-Modified-Since" and "ETag" headers: these make amp serving more efficient`;
+            check_ims_or_etag_header.check_ims_or_etag_header_status = CHECK_PASS;
+        } else {
+            check_ims_or_etag_header.check_ims_or_etag_header_results =
+                `[${CHECK_WARN}] Site does not support either "If-Modified-Since" or "ETag" headers: these make amp serving more efficient`;
+            check_ims_or_etag_header.check_ims_or_etag_header_status = CHECK_WARN;
+        }
     }
 
     return check_ims_or_etag_header;
