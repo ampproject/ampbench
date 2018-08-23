@@ -1298,8 +1298,10 @@ function make_robots_txt_url(uri) {
     const parse_url = require('url').parse;
     let parsed = parse_url(uri);
 
+    // log and pass - for now: do not crash and burn if the URL is broken!!
     if ((!parsed.protocol) || (!parsed.host)) {
-        throw new Error('Cannot parse URL ' + uri);
+        // throw new Error('Cannot parse URL: ' + uri);
+        console.log('==> ERROR: Cannot parse URL: '  + uri);
     }
 
     return [
