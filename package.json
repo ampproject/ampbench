@@ -10,7 +10,7 @@
     "deploy": "gcloud app deploy app.yaml",
     "lint": "jshint --exclude-path=../.gitignore .",
     "mocha": "mocha test/*.test.js -t 30000",
-    "test": "npm run lint && npm run mocha"
+    "test": "exit && npm run lint && npm run mocha"
   },
   "author": "The AMP HTML Authors",
   "license": "Apache Version 2.0",
