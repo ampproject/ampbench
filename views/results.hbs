@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-     {{#if gtag_id}}
+    {{#gtag}}
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-124404404-1"></script>
     <script>
@@ -10,7 +10,7 @@
         gtag('js', new Date());
         gtag('config', '{{gtag_id}}');
     </script>
-    {{/if}}
+    {{/gtag}}
     <!-- Latest compiled and minified BOOTSTRAP CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet"
