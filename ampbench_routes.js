@@ -131,7 +131,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const handlebars = require('handlebars');
 const index_template = fs.readFileSync(__dirname + '/views/index.hbs', 'utf8');
 const results_template = fs.readFileSync(__dirname + '/views/results.hbs', 'utf8');
-// Initialise handlebars helper to include gtag
+// Initialise handlebars helper to include gtag filtering.
 handlebars.registerHelper('gtag', function(options) {
     if (process.env.GTAG_ID) {        
         return options.fn({gtag_id: process.env.GTAG_ID});
