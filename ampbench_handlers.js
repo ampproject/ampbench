@@ -143,10 +143,11 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                         }
                         if (0 < amphtml_url_found.length) {
 							canonical_parsed_return.result += '[AMP link found in Canonical page]';
-                            if (!amphtml_url_found.includes(url_to_validate) &&
-                                !amphtml_url_found.includes(url_to_validate.slice(0,-1)) &&
-                                !amphtml_url_found.includes(url_to_validate.trim()) &&
-                                !amphtml_url_found.includes(url_to_validate.trimEnd())) { // amp link not pointing back!!!
+                            if (!amphtml_url_found.includes(url_to_validate)) { // amp link not pointing back!!!
+                            // if (!amphtml_url_found.includes(url_to_validate) &&
+                            //     !amphtml_url_found.includes(url_to_validate.slice(0,-1)) &&
+                            //     !amphtml_url_found.includes(url_to_validate.trim()) &&
+                            //     !amphtml_url_found.includes(url_to_validate.trimEnd())) { // amp link not pointing back!!!
                                 canonical_parsed_return.status = CHECK_FAIL;
                                 canonical_parsed_return.result += '[FAIL: AMP link in Canonical page does not refer to the current AMP page]';
                             } else if(amphtml_url_found.length > 1) {
