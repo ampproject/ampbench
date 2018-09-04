@@ -2022,7 +2022,6 @@ function make_url_href_list(urls) {
         }
     }
     return __result;
-
 }
 
 function multiline_to_html(multiline_str) { // convert os.EOL to HTML line-breaks
@@ -2046,7 +2045,7 @@ function str_encode_hard_amp(str) {
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// utils: general
+// utils: general / sometimes also in other modules for good reason
 //
 
 function str_rtrim_char(str, char) {
@@ -2061,8 +2060,8 @@ function unwrap_js_object(obj, maxDepth, prefix){
     var result = '';
     if (!prefix) prefix='';
     for(var key in obj){
-        if (typeof obj[key] == 'object'){
-            if (maxDepth !== undefined && maxDepth <= 1){
+        if (typeof obj[key] === 'object') {
+            if (maxDepth !== undefined && maxDepth <= 1) {
                 result += (prefix + key + '=object [max depth reached]\n');
             } else {
                 result += unwrap_js_object(obj[key], (maxDepth) ? maxDepth - 1: maxDepth, prefix + key + '.');

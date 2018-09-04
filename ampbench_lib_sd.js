@@ -1101,12 +1101,12 @@ function log_js_object(o, prefix) {
     }
 }
 
-function unwrap_js_object(obj, maxDepth, prefix){
+function unwrap_js_object(obj, maxDepth, prefix) {
     var result = '';
     if (!prefix) prefix='';
     for(var key in obj){
-        if (typeof obj[key] == 'object'){
-            if (maxDepth !== undefined && maxDepth <= 1){
+        if (typeof obj[key] === 'object') {
+            if (maxDepth !== undefined && maxDepth <= 1) {
                 result += (prefix + key + '=object [max depth reached]\n');
             } else {
                 result += unwrap_js_object(obj[key], (maxDepth) ? maxDepth - 1: maxDepth, prefix + key + '.');
