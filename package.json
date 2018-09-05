@@ -16,6 +16,7 @@
   "license": "Apache Version 2.0",
   "dependencies": {
     "amphtml-validator": "^1.0.23",
+    "amp-toolbox-cache-url": "^0.1.0",
     "babel-core": "^6.26.3",
     "body-parser": "^1.18.3",
     "cheerio": "^0.20.0",
