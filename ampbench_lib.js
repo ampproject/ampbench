@@ -44,6 +44,7 @@ const hasBom = require('has-bom');
 const URL = require('url-parse');
 const mime = require('mime-types');
 const punycode = require('punycode');
+const createCacheUrl = require('amp-toolbox-cache-url');
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // convenient aliases
@@ -1931,20 +1932,8 @@ function get_google_amp_cache_origin_json() {
  * @return {String} the transformed URL.
  */
 function make_url_to_google_amp_cache(url) {
-    const url_cdn = new URL(url); // see: https://www.npmjs.com/package/url-parse
     const cache = get_google_amp_cache_origin_json();
-    const originalHostname = url_cdn.hostname;
-    let unicodeHostname = punycode.toUnicode(originalHostname);
-    unicodeHostname = unicodeHostname.replace(/-/g, '--');
-    unicodeHostname = unicodeHostname.replace(/\./g, '-');
-
-    let pathSegment = get_resource_path(url_cdn.pathname);
-    pathSegment += url_cdn.protocol === 'https:' ? '/s/' : '/';
-
-    // url_cdn.set('hostname', punycode.toASCII(unicodeHostname) + '.' + 'cdn.ampproject.org');
-    url_cdn.set('hostname', punycode.toASCII(unicodeHostname) + '.' + cache.caches[0].updateCacheApiDomainSuffix);
-    url_cdn.set('pathname', pathSegment + originalHostname + url_cdn.pathname);
-    return url_cdn.href;
+    return createCacheUrl(cache.caches[0].updateCacheApiDomainSuffix, url);
 }
 
 // function make_url_to_google_amp_cache_OBSOLETE(url) {
