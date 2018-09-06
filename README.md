@@ -152,3 +152,18 @@ From within the ampbench source root folder, deplyoment to AWS Elastic Beanstalk
     $ eb init # only initially or when the configuration changes
     $ eb deploy
     
+#### Configuring AMPBench via the environment variables
+
+AMPBench supports configuration of the port to listen on via the `PORT`
+environment variable. e.g.
+
+```
+    PORT=8080 npm start
+````    
+
+AMPBench also supports Google Analytics tracking using gtag configuration. To
+enable this simply define the `GTAG_ID` environment variable. e.g.
+
+```
+    GTAG_ID=UA-123456789-1 npm start
+```
