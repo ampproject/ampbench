@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ithinkihaveacat/ampbench.svg?branch=master)](https://travis-ci.org/ithinkihaveacat/ampbench)
+
 ## AMPBench: AMP URL Validation and Troubleshooting
 
 ### Guides
