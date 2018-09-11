@@ -14,6 +14,7 @@
 'use strict';
 
 const benchlib = require('./ampbench_lib.js');
+// const benchutil = require('./ampbench_util.js');
 const sdlib = require('./ampbench_lib_sd.js');
 const handlers = require('./ampbench_handlers.js');
 
@@ -38,7 +39,7 @@ function consoleLogHostAndRemoteIP(req) {
         req.socket.remoteAddress ||
         req.connection.socket.remoteAddress;
     console.log(
-        '[HOST:' + req.headers.host + '] [REMOTE-IP:' + remote_ip + ']');
+        '[HOST: ' + req.headers.host + '] [REMOTE-IP: ' + remote_ip + ']');
 }
 
 function consoleLogRequest(req, check_http_response, amp_url) {
@@ -46,8 +47,10 @@ function consoleLogRequest(req, check_http_response, amp_url) {
     console.log(version_msg(validator_signature()));
     consoleLogHostAndRemoteIP(req);
     console.log(
-        '[HTTP:' + check_http_response.http_response_code + '] ' +
+        '[HTTP: ' + check_http_response.http_response_code + '] ' +
         req.path + ' ' + amp_url);
+    // console.log(
+    //     '[BARE URL: ' + benchutil.get_bare_url(amp_url) + '] ');
 }
 
 function consoleLogRequestResponse(req, res) {

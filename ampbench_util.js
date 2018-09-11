@@ -13,19 +13,19 @@
 
 'use strict';
 
-// use: import {foo, bar} from 'ampbench_util';
+// use: import {get_bare_url, urls_are_similar} from 'ampbench_util'; !!!2018.09: NOT SUPPORTED BY NODE.JS YET!!!
 
 const S = require('string');
 
 const util = require('util');
-export function inspect_obj(obj) {
+function inspect_obj(obj) {
     return util.inspect(obj, { showHidden: true, depth: null })
 }
 
-export function unwrap_js_object(obj, maxDepth, prefix) {
-    var result = '';
+function unwrap_js_object(obj, maxDepth, prefix) {
+    let result = '';
     if (!prefix) prefix='';
-    for(var key in obj){
+    for(let key in obj){
         if (typeof obj[key] === 'object') {
             if (maxDepth !== undefined && maxDepth <= 1) {
                 result += (prefix + key + '=object [max depth reached]\n');
@@ -39,29 +39,29 @@ export function unwrap_js_object(obj, maxDepth, prefix) {
     return result;
 }
 
-export function log_js_object(o, prefix) {
-    for (var key in o) {
+function log_js_object(o, prefix) {
+    for (let key in o) {
         if (o.hasOwnProperty(key)) {
             console.log(prefix + key + ': ' + o[key]);
         }
     }
 }
 
-export function ifdef(v) { // useful for outputting potentially undefined variable values
+function ifdef(v) { // useful for outputting potentially undefined variable values
     return v ? v : '';
 }
 
 // exports.last_element_of_list = function (list) {
-export function last_element_of_list(list) {
+function last_element_of_list(list) {
     return list[list.length - 1];
 }
 
-export function last_element_of_path (path) {
+function last_element_of_path (path) {
     const path_str = path.toString();
     return path_str.substr(path_str.lastIndexOf('/') + 1);
 }
 
-export function str_rtrim_char(str, char) {
+function str_rtrim_char(str, char) {
     let str_ret = str;
     if (str.charAt(str.length - 1) === char) {
         str_ret = str.substr(0, str.length - 1);
@@ -69,24 +69,23 @@ export function str_rtrim_char(str, char) {
     return str_ret;
 }
 
-export function format_dashes(dash_count) { // needs: const S = require('string');
+function format_dashes(dash_count) { // needs: const S = require('string');
     return (S(('- ').repeat(dash_count)).s);
 }
 
-export function print_dashes(dash_count) { // needs: const S = require('string');
+function print_dashes(dash_count) { // needs: const S = require('string');
     console.log(format_dashes(dash_count));
 }
 
-export function make_url_href(url, title) {
+function make_url_href(url, title) {
     const pref = '<a href="' + url +'" ',
         suff = 'target="_blank">' + title + '</a>';
     return pref + suff;
 }
 
-export function make_url_href_list(urls) {
+function make_url_href_list(urls) {
     const kBR = '<br>';
     let __result = '';
-
     if (urls) {
         if (Array.isArray(urls)) {
             urls.forEach((url) => {
@@ -97,7 +96,7 @@ export function make_url_href_list(urls) {
     return __result;
 }
 
-export function multiline_to_html(multiline_str) { // convert os.EOL to HTML line-breaks
+function multiline_to_html(multiline_str) { // convert os.EOL to HTML line-breaks
     // console.log('=> multiline_str:\n' + multiline_str);
     if (multiline_str) {
         if (-1 !== multiline_str.indexOf(os.EOL)) {
@@ -110,24 +109,40 @@ export function multiline_to_html(multiline_str) { // convert os.EOL to HTML lin
     return '';
 }
 
-export function urls_are_similar(url1, url2) {
-
-    let _url1 = url1.substr(url1.lastIndexOf('http://') + 1);
-        _url1 = url1.substr(url1.lastIndexOf('https://') + 1);
-    let _url2 = url2.substr(url2.lastIndexOf('http://') + 1);
-        _url2 = url2.substr(url2.lastIndexOf('https://') + 1);
-
-    return (
-            _url1 === _url2
-        ||  _url1.trimEnd === _url2.trimEnd()
-        ||  _url1 === _url2.slice(0, -1)
-        ||  _url1 === _url2.trim()
-        ||  _url1 === _url2.trimEnd()
-        ||  _url2 === _url1.slice(0, -1)
-        ||  _url2 === _url1.trim()
-        ||  _url2 === _url1.trimEnd()
-    );
-
+function get_bare_url(url) {
+    // note: https://ilikekillnerds.com/2016/05/removing-character-startend-string-javascript/
+    // test: 'xwp.co' === get_bare_url('https://xwp.co')
+    // test: 'xwp.co' === get_bare_url('https://xwp.co/')
+    let _url = url.trim();
+    if ('/' === _url.slice(-1)) {   // check  last character of the url
+        _url = _url.slice(0, -1);   // remove last character of the url
+    }
+    if (-1 < _url.indexOf('http://')) {
+        _url = _url.substr(7);
+    }
+    if (-1 < _url.indexOf('https://')) {
+        _url = _url.substr(8);
+    }
+    return _url;
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+function urls_are_similar(url1, url2) {
+    // note: https://ilikekillnerds.com/2016/05/removing-character-startend-string-javascript/
+    // test: urls_are_similar('https://xwp.co', 'https://xwp.co/')
+    // test: urls_are_similar('https://xwp.co', 'http://xwp.co')
+    let _url1 = get_bare_url(url1),
+        _url2 = get_bare_url(url2);
+    return ( // compare what is left of the two urls
+        _url1 === _url2
+    );
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// module exports
+//
+
+exports.get_bare_url = get_bare_url;
+exports.urls_are_similar = urls_are_similar;
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
