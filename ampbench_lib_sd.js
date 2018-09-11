@@ -18,7 +18,7 @@ const http_status = require('http-status');
 const cheerio = require('cheerio');
 const microdata = require('microdata-node');
 const util = require('util');
-const inspect_obj = (obj) => {return util.inspect(obj, { showHidden: true, depth: null })};
+const inspect_obj = (obj) => {return util.inspect(obj, { showHidden: true, depth: null });};
 const S = require('string');
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -51,16 +51,16 @@ const
     AMP_SD_TYPES_WEBPAGE = ['WebPage'];
 
 const
-    sd_type_is_amp = type => {
+    sd_type_is_amp = (type) => {
         return AMP_SD_TYPES.indexOf(type) !== -1 ? CHECK_PASS : CHECK_FAIL;
     },
-    sd_type_is_amp_article = type => {
+    sd_type_is_amp_article = (type) => {
         return AMP_SD_TYPES_ARTICLE.indexOf(type) !== -1;
     },
-    sd_type_is_amp_article_companion_type = type => {
+    sd_type_is_amp_article_companion_type = (type) => {
         return AMP_SD_TYPES_ARTICLE_COMPANIONS.indexOf(type) !== -1;
     },
-    sd_type_is_amp_recipe = type => {
+    sd_type_is_amp_recipe = (type) => {
         return AMP_SD_TYPES_RECIPE.indexOf(type) !== -1;
     };
 
@@ -92,19 +92,19 @@ class MetaData {
     }
     print() {
         const puts = console.log;
-        puts('=> metadata.json_error             : '  + this.json_error);
-        puts('=> metadata.kind                   : '  + this.kind);
-        puts('=> metadata.type                   : '  + this.type);
-        puts('=> metadata.type_is_amp            : '  + this.type_is_amp);
-        puts('=> metadata.status                 : '  + this.status);
-        puts('=> metadata.result                 : '  + this.result);
-        puts('=> metadata.context                : '  + this.context);
+        puts('=> metadata.json_error             : ' + this.json_error);
+        puts('=> metadata.kind                   : ' + this.kind);
+        puts('=> metadata.type                   : ' + this.type);
+        puts('=> metadata.type_is_amp            : ' + this.type_is_amp);
+        puts('=> metadata.status                 : ' + this.status);
+        puts('=> metadata.result                 : ' + this.result);
+        puts('=> metadata.context                : ' + this.context);
     }
     print_json() {
         console.log('=> metadata.json_error: ' + this.json_error);
         console.log('=> metadata.json_text:\n' + this.json_text);
         console.log('=> metadata.json: typeof: ' + typeof this.json);
-        console.log('=> metadata.json:\n'  + JSON.stringify(this.json, null, 4));
+        console.log('=> metadata.json:\n' + JSON.stringify(this.json, null, 4));
     }
     print_json_text() {
         console.log('=> metadata.json_text:\n' + this.json_text);
@@ -114,11 +114,11 @@ class MetaData {
 class RecipeMetaData extends MetaData {
     constructor() {
         super();
-        this.name = '';  		    // REQUIRED!!!
+        this.name = ''; // REQUIRED!!!
         this.image = ''; 			// REQUIRED!!!
-        this.author_name = '';	    // recommended / warning
+        this.author_name = ''; // recommended / warning
         this.datePublished = '';	// recommended / warning
-        this.aggregateRating = {    // recommended / warning
+        this.aggregateRating = { // recommended / warning
             ratingValue: '',
             reviewCount: ''
         };
@@ -169,29 +169,29 @@ class ArticleMetaData extends MetaData {
     print() {
         super.print();
         const puts = console.log;
-        puts('=> metadata.news_headline           : '  + this.news_headline);
-        puts('=> metadata.author_name             : '  + this.author_name);
-        puts('=> metadata.publisher_name          : '  + this.publisher_name);
-        puts('=> metadata.date_published          : '  + this.date_published);
-        puts('=> metadata.date_modified           : '  + this.date_modified);
-        puts('=> metadata.image.type              : '  + this.image.type);
-        puts('=> metadata.image.url               : '  + this.image.url);
-        puts('=> metadata.image.url_status        : '  + this.image.url_status);
-        puts('=> metadata.image.file_type         : '  + this.image.file_type);
-        puts('=> metadata.image.width             : '  + this.image.width);
-        puts('=> metadata.image.height            : '  + this.image.height);
-        puts('=> metadata.image.status            : '  + this.image.status);
-        puts('=> metadata.image.result            : '  + this.image.result);
-        puts('=> metadata.article_image.type      : '  + this.image.type);
-        puts('=> metadata.article_image.url       : '  + this.image.url);
-        puts('=> metadata.article_image.url_status: '  + this.image.url_status);
-        puts('=> metadata.article_image.file_type : '  + this.image.file_type);
-        puts('=> metadata.article_image.width     : '  + this.image.width);
-        puts('=> metadata.article_image.height    : '  + this.image.height);
-        puts('=> metadata.article_image.status    : '  + this.image.status);
-        puts('=> metadata.article_image.result    : '  + this.image.result);
-        puts('=> metadata.article.status          : '  + this.article.status);
-        puts('=> metadata.article.result          : '  + this.article.result);
+        puts('=> metadata.news_headline           : ' + this.news_headline);
+        puts('=> metadata.author_name             : ' + this.author_name);
+        puts('=> metadata.publisher_name          : ' + this.publisher_name);
+        puts('=> metadata.date_published          : ' + this.date_published);
+        puts('=> metadata.date_modified           : ' + this.date_modified);
+        puts('=> metadata.image.type              : ' + this.image.type);
+        puts('=> metadata.image.url               : ' + this.image.url);
+        puts('=> metadata.image.url_status        : ' + this.image.url_status);
+        puts('=> metadata.image.file_type         : ' + this.image.file_type);
+        puts('=> metadata.image.width             : ' + this.image.width);
+        puts('=> metadata.image.height            : ' + this.image.height);
+        puts('=> metadata.image.status            : ' + this.image.status);
+        puts('=> metadata.image.result            : ' + this.image.result);
+        puts('=> metadata.article_image.type      : ' + this.image.type);
+        puts('=> metadata.article_image.url       : ' + this.image.url);
+        puts('=> metadata.article_image.url_status: ' + this.image.url_status);
+        puts('=> metadata.article_image.file_type : ' + this.image.file_type);
+        puts('=> metadata.article_image.width     : ' + this.image.width);
+        puts('=> metadata.article_image.height    : ' + this.image.height);
+        puts('=> metadata.article_image.status    : ' + this.image.status);
+        puts('=> metadata.article_image.result    : ' + this.image.result);
+        puts('=> metadata.article.status          : ' + this.article.status);
+        puts('=> metadata.article.result          : ' + this.article.result);
     }
 }
 
@@ -202,7 +202,7 @@ class ArticleMetaData extends MetaData {
 // https://developers.google.com/structured-data/carousels/top-stories#2_make_your_amp_pages_easy_for_google_to_discover
 
 const
-    url_is_valid = url => {
+    url_is_valid = (url) => {
         return benchlib.check_url_is_valid(url) ? CHECK_PASS : CHECK_FAIL;
     };
 
@@ -298,31 +298,31 @@ function sd_publisher_logo_image_is_ok(url, width, height) {
     else {
         // image height - - - - - - - - - - - - - - - - - - - - -
         if (height > 0 && height < 61) {
-            h_stat = {status: CHECK_PASS, result: rule_desc_logo_dims};
+            h_stat = { status: CHECK_PASS, result: rule_desc_logo_dims };
             sd_logo_image_result += '[height OK]';
         }
         else if (height > 60) {
-            h_stat = {status: CHECK_FAIL, result: rule_desc_logo_dims + '[invalid: height > 60]'};
+            h_stat = { status: CHECK_FAIL, result: rule_desc_logo_dims + '[invalid: height > 60]' };
             sd_logo_image_status = CHECK_FAIL;
             sd_logo_image_result += '[invalid: height > 60]';
         }
         else {
-            h_stat = {status: CHECK_FAIL, result: rule_desc_logo_dims + '[invalid: height = 0 or is unavailable]'};
+            h_stat = { status: CHECK_FAIL, result: rule_desc_logo_dims + '[invalid: height = 0 or is unavailable]' };
             sd_logo_image_status = CHECK_FAIL;
             sd_logo_image_result += '[invalid: height = 0 or is unavailable]';
         }
         // image width - - - - - - - - - - - - - - - - - - - - -
         if (width > 0 && width < 601) {
-            w_stat = {status: CHECK_PASS, result: rule_desc_logo_dims};
+            w_stat = { status: CHECK_PASS, result: rule_desc_logo_dims };
             sd_logo_image_result += '[width OK]';
         }
         else if (width > 600) {
-            w_stat = {status: CHECK_FAIL, result: rule_desc_logo_dims + '[invalid: width > 600]'};
+            w_stat = { status: CHECK_FAIL, result: rule_desc_logo_dims + '[invalid: width > 600]' };
             sd_logo_image_status = CHECK_FAIL;
             sd_logo_image_result += '[invalid: width > 600]';
         }
         else {
-            w_stat = {status: CHECK_FAIL, result: rule_desc_logo_dims + '[invalid: width = 0 or is unavailable]'};
+            w_stat = { status: CHECK_FAIL, result: rule_desc_logo_dims + '[invalid: width = 0 or is unavailable]' };
             sd_logo_image_status = CHECK_FAIL;
             sd_logo_image_result += '[invalid: width = 0 or is unavailable]';
         }
@@ -410,7 +410,7 @@ function sd_article_image_is_ok(url, width, height) {
 }
 
 function check_image_urls_are_reachable(logo_url, image_url, callback) {
-    let logo_url_is_reachable_ret  = null,
+    let logo_url_is_reachable_ret = null,
         image_url_is_reachable_ret = null;
     // _ret = {
     //     url: fetch_url,
@@ -447,7 +447,7 @@ function check_body_metadata(body) {
 
 function extract_metadata(body, metadata) {
 
-	let md = extract_metadata_json_ld_article(body, metadata);
+    let md = extract_metadata_json_ld_article(body, metadata);
 
     // console.log('- - extract_metadata - -');
     // console.log('==> metadata.kind  : ' + md.kind);
@@ -535,11 +535,11 @@ function extract_metadata_json_ld_news_types(body) { // cater for multiple ld+js
                         jsonld_script_return = JSON.stringify(jsonld_json);
                     }
                 }
-            } catch(err) { // do nothing - we need to carry on
+            } catch (err) { // do nothing - we need to carry on
                 // console.log('==> ERROR: extract_json_ld: JSON.parse(jsonld_block): ' + err);
             }
         }
-    } catch(err) { // do nothing - we need to carry on
+    } catch (err) { // do nothing - we need to carry on
         // console.log('==> ERROR: extract_json_ld(): ' + err);
     }
     return jsonld_script_return;
@@ -592,10 +592,10 @@ function extract_metadata_json_ld_article(body, metadata) {
                     metadata.image.width = metadata.json.publisher.logo.width;
                     metadata.image.height = metadata.json.publisher.logo.height;
                     let publisher_logo_ok = sd_publisher_logo_image_is_ok(
-                        parse_image_url(metadata.image.url),
-                        metadata.image.width, metadata.image.height);
+                            parse_image_url(metadata.image.url),
+                            metadata.image.width, metadata.image.height);
                     metadata.image.file_type = publisher_logo_ok.sd_logo_image_results.file_type;
-                    metadata.image.status  = publisher_logo_ok.sd_logo_image_status;
+                    metadata.image.status = publisher_logo_ok.sd_logo_image_status;
                     metadata.image.result = publisher_logo_ok.sd_logo_image_result;
                     metadata.image.url_status = publisher_logo_ok.sd_logo_image_url_status;
 
@@ -614,10 +614,10 @@ function extract_metadata_json_ld_article(body, metadata) {
                     metadata.article_image.width = metadata.json.image.width;
                     metadata.article_image.height = metadata.json.image.height;
                     let article_logo_ok = sd_article_image_is_ok(
-                        parse_image_url(metadata.article_image.url),
-                        metadata.article_image.width, metadata.article_image.height);
+                            parse_image_url(metadata.article_image.url),
+                            metadata.article_image.width, metadata.article_image.height);
                     metadata.article_image.file_type = article_logo_ok.sd_logo_image_results.file_type;
-                    metadata.article_image.status  = article_logo_ok.sd_logo_image_status;
+                    metadata.article_image.status = article_logo_ok.sd_logo_image_status;
                     metadata.article_image.result = article_logo_ok.sd_logo_image_result;
                     metadata.article_image.url_status = article_logo_ok.sd_logo_image_url_status;
 
@@ -799,7 +799,7 @@ const unwrap_microdata_json_for_news = (md) => { // scans Microdata json block o
             if (md_block_type) {
                 try { // DO NOT REMOVE!!! we need to carry on regardless of missing or invalid metadata items...
                     switch (md_block_type) {
-                        
+
                         case 'http://schema.org/Article':
                         case 'https://schema.org/Article':
                         case 'http://schema.org/NewsArticle':
@@ -907,7 +907,7 @@ function extract_metadata_microdata_news_types(metadata) { // scan for all news 
 function extract_metadata_microdata(metadata) {
 
     try {
-        if(0 < metadata.json.length) {
+        if (0 < metadata.json.length) {
 
             metadata.kind = SD_MICRODATA;
             metadata.status = CHECK_PASS;
@@ -938,19 +938,19 @@ function extract_metadata_microdata(metadata) {
                     try {
                         // publisher logo image metadata
                         let publisher_logo_ok = sd_publisher_logo_image_is_ok(
-                            parse_image_url(metadata.image.url),
-                            metadata.image.width, metadata.image.height);
+                                parse_image_url(metadata.image.url),
+                                metadata.image.width, metadata.image.height);
                         metadata.image.file_type = publisher_logo_ok.sd_logo_image_results.file_type;
-                        metadata.image.status  = publisher_logo_ok.sd_logo_image_status;
+                        metadata.image.status = publisher_logo_ok.sd_logo_image_status;
                         metadata.image.result = publisher_logo_ok.sd_logo_image_result;
                         metadata.image.url_status = publisher_logo_ok.sd_logo_image_url_status;
 
                         // // article image metadata //!!!TODO!!!20160524
                         let article_logo_ok = sd_article_image_is_ok(
-                            parse_image_url(metadata.article_image.url),
-                            metadata.article_image.width, metadata.article_image.height);
+                                parse_image_url(metadata.article_image.url),
+                                metadata.article_image.width, metadata.article_image.height);
                         metadata.article_image.file_type = article_logo_ok.sd_logo_image_results.file_type;
-                        metadata.article_image.status  = article_logo_ok.sd_logo_image_status;
+                        metadata.article_image.status = article_logo_ok.sd_logo_image_status;
                         metadata.article_image.result = article_logo_ok.sd_logo_image_result;
                         metadata.article_image.url_status = article_logo_ok.sd_logo_image_url_status;
 
@@ -979,12 +979,12 @@ function extract_metadata_microdata(metadata) {
             metadata.result = 'Structured Data markup content appears to be invalid';
             metadata.kind = SD_UNKNOWN;
         }
-    } catch(e) {
+    } catch (e) {
         metadata.status = CHECK_FAIL;
         metadata.result = 'Structured Data markup content appears to be invalid';
         metadata.kind = SD_UNKNOWN;
     }
-	return metadata;
+    return metadata;
 }
 
 const extract_json_ld_items_from_body_if_badly_formed = (body, metadata) => {
@@ -1028,8 +1028,8 @@ const extract_json_ld_items_from_text_if_badly_formed = (metadata) => { // extra
                         metadata.image.height = S(temp).between('"height": ', '\n').s;
                         metadata.image.height = parseInt(metadata.image.height, 10);
                         let publisher_logo_ok = sd_publisher_logo_image_is_ok(
-                            parse_image_url(metadata.image.url),
-                            metadata.image.width, metadata.image.height);
+                                parse_image_url(metadata.image.url),
+                                metadata.image.width, metadata.image.height);
                         metadata.image.file_type = publisher_logo_ok.sd_logo_image_results.file_type;
                         metadata.image.status = publisher_logo_ok.sd_logo_image_status;
                         metadata.image.result = publisher_logo_ok.sd_logo_image_result;
@@ -1048,8 +1048,8 @@ const extract_json_ld_items_from_text_if_badly_formed = (metadata) => { // extra
                         metadata.article_image.height = S(temp).between('"height": ', '\n').s;
                         metadata.article_image.height = parseInt(metadata.article_image.height, 10);
                         let article_logo_ok = sd_article_image_is_ok(
-                            parse_image_url(metadata.article_image.url),
-                            metadata.article_image.width, metadata.article_image.height);
+                                parse_image_url(metadata.article_image.url),
+                                metadata.article_image.width, metadata.article_image.height);
                         metadata.article_image.file_type = article_logo_ok.sd_logo_image_results.file_type;
                         metadata.article_image.status = article_logo_ok.sd_logo_image_status;
                         metadata.article_image.result = article_logo_ok.sd_logo_image_result;
@@ -1085,12 +1085,12 @@ const extract_json_ld_items_from_text_if_badly_formed = (metadata) => { // extra
 //
 
 const last_element_of_list = (list) => {
-	return list[list.length - 1];
+    return list[list.length - 1];
 };
 
 const last_element_of_path = (path) => {
-	const path_str = path.toString();
-	return path_str.substr(path_str.lastIndexOf('/') + 1);
+    const path_str = path.toString();
+    return path_str.substr(path_str.lastIndexOf('/') + 1);
 };
 
 function log_js_object(o, prefix) {
@@ -1103,13 +1103,13 @@ function log_js_object(o, prefix) {
 
 function unwrap_js_object(obj, maxDepth, prefix) {
     var result = '';
-    if (!prefix) prefix='';
-    for(var key in obj){
+    if (!prefix) {prefix = '';}
+    for (var key in obj) {
         if (typeof obj[key] === 'object') {
             if (maxDepth !== undefined && maxDepth <= 1) {
                 result += (prefix + key + '=object [max depth reached]\n');
             } else {
-                result += unwrap_js_object(obj[key], (maxDepth) ? maxDepth - 1: maxDepth, prefix + key + '.');
+                result += unwrap_js_object(obj[key], (maxDepth) ? maxDepth - 1 : maxDepth, prefix + key + '.');
             }
         } else {
             result += (prefix + key + '=' + obj[key] + '\n');

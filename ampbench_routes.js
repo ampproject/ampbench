@@ -39,7 +39,7 @@ function consoleLogHostAndRemoteIP(req) {
         req.socket.remoteAddress ||
         req.connection.socket.remoteAddress;
     console.log(
-        '[HOST: ' + req.headers.host + '] [REMOTE-IP: ' + remote_ip + ']');
+            '[HOST: ' + req.headers.host + '] [REMOTE-IP: ' + remote_ip + ']');
 }
 
 function consoleLogRequest(req, check_http_response, amp_url) {
@@ -47,7 +47,7 @@ function consoleLogRequest(req, check_http_response, amp_url) {
     console.log(version_msg(validator_signature()));
     consoleLogHostAndRemoteIP(req);
     console.log(
-        '[HTTP: ' + check_http_response.http_response_code + '] ' +
+            '[HTTP: ' + check_http_response.http_response_code + '] ' +
         req.path + ' ' + amp_url);
     // console.log(
     //     '[BARE URL: ' + benchutil.get_bare_url(amp_url) + '] ');
@@ -62,9 +62,9 @@ function consoleLogRequestResponse(req, res) {
 
 function ifdef(v) { // useful for outputting potentially undefined variable values
     if (v)
-        return v;
+    {return v;}
     else
-        return '';
+    {return '';}
 }
 
 function format_dashes(dash_count) { // needs: const S = require('string');
@@ -113,12 +113,12 @@ const
 
 const os = require('os');
 const fs = require('fs');
-const path = require("path");
+const path = require('path');
 const http = require('http');
 const https = require('https');
 const url = require('url');
 const util = require('util');
-const inspect_obj = (obj) => { return util.inspect(obj, { showHidden: true, depth: null }) };
+const inspect_obj = (obj) => { return util.inspect(obj, { showHidden: true, depth: null }); };
 const S = require('string');
 
 const express = require('express');
@@ -136,8 +136,8 @@ const index_template = fs.readFileSync(__dirname + '/views/index.hbs', 'utf8');
 const results_template = fs.readFileSync(__dirname + '/views/results.hbs', 'utf8');
 // Initialise handlebars helper to include gtag filtering.
 handlebars.registerHelper('gtag', function(options) {
-    if (process.env.GTAG_ID) {        
-        return options.fn({gtag_id: process.env.GTAG_ID});
+    if (process.env.GTAG_ID) {
+        return options.fn({ gtag_id: process.env.GTAG_ID });
     }
 });
 
@@ -205,7 +205,7 @@ app.use((err, req, res, next) => {
 
 app.get('/', (req, res) => {
     consoleLogRequestResponse(req, res);
-    res.header("Content-Type", "text/html; charset=utf-8");
+    res.header('Content-Type', 'text/html; charset=utf-8');
     res.write(handlebars.compile(index_template)());
     res.end();
 });
@@ -225,7 +225,7 @@ function assert_url(req, res) { // handle bad urls
     let url_to_validate = req.query.url || '';
     if (!benchlib.check_url_is_valid(url_to_validate)) {
         console.log(version_msg(
-            validator_signature() +
+                validator_signature() +
             '[ERROR: INVALID URL] Please check the formatting of the requested URL: ' +
             req.path + ' ' + url_to_validate));
         let _err = {
@@ -266,7 +266,7 @@ app.get('/validate', (req, res) => {
         consoleLogRequest(req, check_http_response, __ret.url);
         // console.log(`### [check_http_response.statusIsOK: ${check_http_response.statusIsOK()}]`);
         // if (check_http_response.statusIsOK()) {
-        res.header("Content-Type", "text/html; charset=utf-8");
+        res.header('Content-Type', 'text/html; charset=utf-8');
         if (__ret) {
             res.write(handlebars.compile(results_template)(__ret));
             res.end();
@@ -293,7 +293,7 @@ app.get('/validate_ua_desktop', (req, res) => {
         let check_http_response = __ret.http_response;
         consoleLogRequest(req, check_http_response, __ret.url);
         // console.log(`### [check_http_response.statusIsOK: ${check_http_response.statusIsOK()}]`);
-        res.header("Content-Type", "text/html; charset=utf-8");
+        res.header('Content-Type', 'text/html; charset=utf-8');
         if (__ret) {
             res.write(handlebars.compile(results_template)(__ret));
             res.end();
@@ -704,7 +704,7 @@ app.get('/api2/', (req, res) => {
                 x_robots_tag_header_result: parse_amplinks.check_ims_or_etag_header_results
             },
             sd_validation: make_api_sd_validation(api_validate_sd_return)
-        }
+        };
     };
 
     let write_api_response = () => {

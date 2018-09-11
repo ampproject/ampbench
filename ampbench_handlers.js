@@ -38,6 +38,7 @@ function validator_signature() {
 // app validation check status constants
 //
 
+/* eslint-disable no-multi-spaces */
 const
     CHECK_FAIL = 'FAIL',
     CHECK_PASS = 'PASS',
@@ -45,14 +46,14 @@ const
     CHECK_WARN = 'WARNING',
     CHECK_NONE = 'UNKNOWN';
 const // http://www.tutorialspoint.com/html/html_colors.htm
-    CHECK_FAIL_CSS = '<span style="color: red; ">'       + CHECK_FAIL + '</span>',
-    CHECK_PASS_CSS = '<span style="color: #41c40f; ">'   + CHECK_PASS + '</span>',
-    CHECK_INFO_CSS = '<span style="color: #c530ac; ">'   + CHECK_INFO + '</span>',
-    CHECK_WARN_CSS = '<span style="color: orange; ">'    + CHECK_WARN + '</span>',
-    CHECK_NONE_CSS = '<span style="color: orange; ">'    + CHECK_NONE + '</span>';
+    CHECK_FAIL_CSS = '<span style="color: red; ">'     + CHECK_FAIL + '</span>',
+    CHECK_PASS_CSS = '<span style="color: #41c40f; ">' + CHECK_PASS + '</span>',
+    CHECK_INFO_CSS = '<span style="color: #c530ac; ">' + CHECK_INFO + '</span>',
+    CHECK_WARN_CSS = '<span style="color: orange; ">'  + CHECK_WARN + '</span>',
+    CHECK_NONE_CSS = '<span style="color: orange; ">'  + CHECK_NONE + '</span>';
 const
     get_check_status_css = (status) => {
-        switch(status) {
+        switch (status) {
             case CHECK_FAIL: return CHECK_FAIL_CSS;
             case CHECK_PASS: return CHECK_PASS_CSS;
             case CHECK_INFO: return CHECK_INFO_CSS;
@@ -60,6 +61,7 @@ const
             default: return CHECK_NONE_CSS;
         }
     };
+/* eslint-enable no-multi-spaces */
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // app imports, main instance and view templates
@@ -67,7 +69,7 @@ const
 
 const os = require('os');
 const fs = require('fs');
-const path = require("path");
+const path = require('path');
 const http = require('http');
 const https = require('https');
 const url = require('url');
@@ -129,7 +131,7 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                 canonical_parsed_return.result = ''; // make a result field
 
                 let canonical_url_found = canonical_parsed_return.canonical_url,
-                    amphtml_url_found = canonical_parsed_return.amphtml_urls,    // could be multiples
+                    amphtml_url_found = canonical_parsed_return.amphtml_urls, // could be multiples
                     fetch_duration_amp = http_response.duration_in_milliseconds,
                     fetch_duration_canonical = http_response_canonical.duration_in_milliseconds,
                     fetch_duration_amp_cache = 0, fetch_status_amp_cache = '';
@@ -139,10 +141,10 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                         canonical_parsed_return.result += '[Canonical URL is reachable]';
                         if ('' !== canonical_url_found) {
                             canonical_parsed_return.canonical_url = benchlib.make_url_href(
-                                canonical_url_found, canonical_url_found);
+                                    canonical_url_found, canonical_url_found);
                         }
                         if (0 < amphtml_url_found.length) {
-							canonical_parsed_return.result += '[AMP link found in Canonical page]';
+                            canonical_parsed_return.result += '[AMP link found in Canonical page]';
                             if (!amphtml_url_found.includes(url_to_validate)) { // amp link not pointing back!!!
                             // if (!amphtml_url_found.includes(url_to_validate) &&
                             //     !amphtml_url_found.includes(url_to_validate.slice(0,-1)) &&
@@ -150,15 +152,15 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                             //     !amphtml_url_found.includes(url_to_validate.trimEnd())) { // amp link not pointing back!!!
                                 canonical_parsed_return.status = CHECK_FAIL;
                                 canonical_parsed_return.result += '[FAIL: AMP link in Canonical page does not refer to the current AMP page]';
-                            } else if(amphtml_url_found.length > 1) {
-								canonical_parsed_return.status = CHECK_WARN;
+                            } else if (amphtml_url_found.length > 1) {
+                                canonical_parsed_return.status = CHECK_WARN;
                                 canonical_parsed_return.result += '[WARNING: Multiple AMP links found in Canonical page]';
-							} else {
+                            } else {
                                 canonical_parsed_return.status = CHECK_PASS;
                                 canonical_parsed_return.result += '[AMP link in Canonical page refers to the current AMP page]';
                             }
                             canonical_parsed_return.amphtml_url = benchlib.make_url_href(
-                                amphtml_url_found[0], amphtml_url_found[0]);  // could be multiples, if so take the 1st one
+                                    amphtml_url_found[0], amphtml_url_found[0]); // could be multiples, if so take the 1st one
                             canonical_parsed_return.amphtml_urls = benchlib.make_url_href_list(canonical_parsed_return.amphtml_urls);
                         } else {
                             canonical_parsed_return.status = CHECK_WARN;
@@ -186,7 +188,7 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
 
                 canonical_parsed_return.status = get_check_status_css(canonical_parsed_return.status);
                 canonical_parsed_return.url = benchlib.make_url_href(
-                    canonical_parsed_return.url, canonical_parsed_return.url);
+                        canonical_parsed_return.url, canonical_parsed_return.url);
 
                 const on_check_robots_txt = (check_robots_txt_return) => {
 
@@ -194,7 +196,7 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
 
                         fetch_duration_amp_cache = check_google_amp_cache_return.duration_in_milliseconds;
                         fetch_status_amp_cache = 0 < fetch_duration_amp_cache ? '' :
-                        '[' + check_google_amp_cache_return.check_google_amp_cache_results + ']';
+                            '[' + check_google_amp_cache_return.check_google_amp_cache_results + ']';
 
                         const on_check_url_metadata = (metadata_return) => {
 
@@ -203,13 +205,13 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                                 article_image_url = metadata_return.article_image.url;
 
                             const on_check_image_urls_are_reachable = (publisher_logo_url_reachable_ret,
-                                                                       article_image_url_reachable_ret) => {
+                                article_image_url_reachable_ret) => {
                                 let amp_url_href = benchlib.make_url_href(url_to_validate, url_to_validate),
                                     amphtml_url_href = '',
                                     // amphtml_url_href = benchlib.make_url_href(amphtml_url, amphtml_url),
                                     canonical_url_href = benchlib.make_url_href(
-                                        parse_amplinks.canonical_url,
-                                        parse_amplinks.canonical_url);
+                                            parse_amplinks.canonical_url,
+                                            parse_amplinks.canonical_url);
 
                                 let url_to_validate_enc = encodeURIComponent(url_to_validate),
                                     redirect_url = '';
@@ -219,14 +221,14 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                                 // - - - -
 
                                 if (( // a Canonical?
-                                        url_to_validate === parse_amplinks.canonical_url &&
+                                    url_to_validate === parse_amplinks.canonical_url &&
                                         '' !== parse_amplinks.amphtml_url &&
                                         parse_amplinks.amphtml_url !== url_to_validate
-                                    ) || (
-                                        '' === parse_amplinks.canonical_url &&
+                                ) || (
+                                    '' === parse_amplinks.canonical_url &&
                                         '' !== parse_amplinks.amphtml_url &&
                                         parse_amplinks.amphtml_url !== url_to_validate
-                                    )) {
+                                )) {
                                     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                                     // CASE 1:
                                     // - - - -
@@ -280,7 +282,7 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                                         if (parse_amplinks.amphtml_url !== url_to_validate) { // *and* the amphtml_link rel link is not the validated URL
                                             check_amp_links_amphtml_results += '[the AMPHTML link also does not point at the current page]';
                                         }
-                                        if (parse_amplinks.canonical_url === url_to_validate) {    // these should *not* be identical here except for standalone!
+                                        if (parse_amplinks.canonical_url === url_to_validate) { // these should *not* be identical here except for standalone!
                                             check_amp_links_canonical_results += '[Canonical equal to AMP: standalone AMP page?]';
                                         }
                                     }
@@ -413,7 +415,7 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                                         user_agent_name: benchlib.get_global_user_agent_name(),
                                         // https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
                                         response_timestamp: new Date().toISOString(), // The timezone is always zero UTC offset, as per suffix "Z"
-                                        amphtml_validator_signature: validator_signature().substr(0, 21+16) + ']', // only show left 16 chars
+                                        amphtml_validator_signature: validator_signature().substr(0, 21 + 16) + ']', // only show left 16 chars
                                         http_response: http_response,
                                         http_response_code: http_response.http_response_code,
                                         http_response_statusIsOK: http_response.statusIsOK(),

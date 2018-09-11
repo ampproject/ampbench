@@ -36,7 +36,7 @@ const valid_url = require('valid-url');
 const wget = require('wget-improved');
 const robots_parser = require('robots-parser');
 const util = require('util');
-const inspect_obj = (obj) => {return util.inspect(obj, { showHidden: true, depth: null })};
+const inspect_obj = (obj) => {return util.inspect(obj, { showHidden: true, depth: null });};
 const cheerio = require('cheerio');
 const S = require('string');
 const hasBom = require('has-bom');
@@ -194,26 +194,26 @@ class HttpResponse {
         return (1 < this.redirects_count);
     }
     print() {
-        puts('=> url                      : '   + this.url);
-        puts('=> url_error                : '   + this.url_error);
-        puts('=> is_https                 : '   + this.is_https);
-        puts('=> http_response_code       : '   + this.http_response_code);
-        puts('=> http_response_text       : '   + this.http_response_text);
-        puts('=> duration_in_milliseconds : '   + this.duration_in_milliseconds);
-        puts('=> wasRedirected            : '   + this.wasRedirected());
-        puts('=> redirects_count          : '   + this.redirects_count);
-        puts('=> redirects_urls           :\n'  + this.redirects_urls.join('\n'));
+        puts('=> url                      : ' + this.url);
+        puts('=> url_error                : ' + this.url_error);
+        puts('=> is_https                 : ' + this.is_https);
+        puts('=> http_response_code       : ' + this.http_response_code);
+        puts('=> http_response_text       : ' + this.http_response_text);
+        puts('=> duration_in_milliseconds : ' + this.duration_in_milliseconds);
+        puts('=> wasRedirected            : ' + this.wasRedirected());
+        puts('=> redirects_count          : ' + this.redirects_count);
+        puts('=> redirects_urls           :\n' + this.redirects_urls.join('\n'));
         // puts('=> redirects_urls (inspect) : '   + util.inspect(this.redirects_urls));
-        puts('=> is_https_cert_authorized : '   + this.is_https_cert_authorized);
-        puts('=> is_https_cert_ssl_error  : '   + this.is_https_cert_ssl_error);
+        puts('=> is_https_cert_authorized : ' + this.is_https_cert_authorized);
+        puts('=> is_https_cert_ssl_error  : ' + this.is_https_cert_ssl_error);
     }
     printWithBody() {
         this.print();
-        puts('=> http_response_body       :\n'  + this.http_response_body);
+        puts('=> http_response_body       :\n' + this.http_response_body);
     }
     printWithCert() {
         this.print();
-        puts('=> is_https_cert_certificate:\n'  + util.inspect(this.is_https_cert_certificate));
+        puts('=> is_https_cert_certificate:\n' + util.inspect(this.is_https_cert_certificate));
     }
     printWithResponse() {
         this.print();
@@ -363,7 +363,7 @@ class HttpBodySniffer {
                 json_ld: '' !== this._json_ld_script,
                 json_ld_schema_org:
                     this.bodyContains('"@context"') && (
-                    this.bodyContains('"http://schema.org/"') ||
+                        this.bodyContains('"http://schema.org/"') ||
                     this.bodyContains('"https://schema.org/"') ),
                 jsonld_type: {
                     Article:
@@ -591,7 +591,7 @@ class HttpBodySniffer {
         if (this.isValidForUse) {
             return this._contains;
         } else {
-            throw 'ERROR: HttpBodySniffer is not valid for use';
+            throw 'ERROR: HttpBodySniffer is not valid for use'; // eslint-disable-line no-throw-literal
         }
     }
     get containsAmpHtmlSignature() {
@@ -629,7 +629,7 @@ class HttpBodySniffer {
                 return this._amphtml_href2.substr(0, 256).trim();
             } else if (this._contains.amphtml_link) {
                 return this._amphtml_href.substr(0, 256).trim();
-            } else return '';
+            } else {return '';}
         }
         return '';
     }
@@ -644,7 +644,7 @@ class HttpBodySniffer {
                 return this._canonical_href2.substr(0, 256).trim();
             } else if (this._contains.canonical_link) {
                 return this._canonical_href.substr(0, 256).trim();
-            } else return '';
+            } else {return '';}
         }
         return '';
     }
@@ -680,8 +680,8 @@ class HttpBodySniffer {
     }
     get containsMixedStructuredDataMarkup() {
         let _ret = {
-                status: false,
-                result: ''
+            status: false,
+            result: ''
         };
         if (this.isValidForUse) {
             _ret.status = this.containsJsonLd && this.containsMicroData;
@@ -775,7 +775,7 @@ class HttpBodyParser extends HttpBodySniffer {
             this._index_of_search = this._body.indexOf(search_text);
             return (-1 < this._index_of_search);
         } else {
-            throw 'ERROR: HttpBodyParser instance is not valid for use';
+            throw 'ERROR: HttpBodyParser instance is not valid for use'; // eslint-disable-line no-throw-literal
         }
     }
 }
@@ -788,18 +788,18 @@ class HttpBodyParser extends HttpBodySniffer {
 // Latest AMP cached validator from: 'https://cdn.ampproject.org/v0/validator.js'
 // https://github.com/ampproject/amphtml/blob/master/validator/nodejs/index.js
 // https://github.com/ampproject/amphtml/blob/master/validator/nodejs/index.js#L286
-const VALIDATOR_JS_URL  = 'https://cdn.ampproject.org/v0/validator.js';
+const VALIDATOR_JS_URL = 'https://cdn.ampproject.org/v0/validator.js';
 const VALIDATOR_JS_FILE = './validator/validator.js';
 
 const amphtml_validator = require('amphtml-validator');
-var   amphtml_validator_instance = null; // cache the instance
+var amphtml_validator_instance = null; // cache the instance
 
 // The signature for the validator.js file that this module is currently using.
 // This gets updated in sync with amphtml_validator_instance.
-var   amphtml_validator_signature = '*unavailable*';
+var amphtml_validator_signature = '*unavailable*';
 
 function lib_amphtml_validator_signature() {
-  return amphtml_validator_signature;
+    return amphtml_validator_signature;
 }
 
 // Computes a SHA256 signature, which is what you'd get if you were to
@@ -811,11 +811,11 @@ function lib_extract_validator_signature(validator_js_contents) {
 
 function lib_fetch_cdn_validator_signature(callback) {
     fetch(VALIDATOR_JS_URL)
-        .then(function(res) {
-            return res.text();
-        }).then(function(validator_js_contents) {
-            callback(lib_extract_validator_signature(validator_js_contents));
-        });
+            .then(function(res) {
+                return res.text();
+            }).then(function(validator_js_contents) {
+                callback(lib_extract_validator_signature(validator_js_contents));
+            });
 }
 
 /**
@@ -829,9 +829,9 @@ function lib_load_validator(opt_force_reload) {
     }
     // amphtml_validator_instance is a module level global, so we cache it and will
     // return it unless opt_force_reload is true.
-    const validator_js_contents = fs.readFileSync(VALIDATOR_JS_FILE).toString()
+    const validator_js_contents = fs.readFileSync(VALIDATOR_JS_FILE).toString();
     amphtml_validator_signature = lib_extract_validator_signature(
-        validator_js_contents);
+            validator_js_contents);
     amphtml_validator_instance = amphtml_validator.newInstance(validator_js_contents);
     return amphtml_validator_instance;
 }
@@ -841,7 +841,7 @@ function lib_load_validator(opt_force_reload) {
  */
 function lib_download_validator(callback_on_complete) {
     const _callback_on_complete = callback_on_complete || null;
-    const source_url  = VALIDATOR_JS_URL;
+    const source_url = VALIDATOR_JS_URL;
     const target_file = VALIDATOR_JS_FILE;
     var options = {
         // see: https://www.npmjs.com/package/wget-improved#download-and-request-method-options
@@ -855,7 +855,7 @@ function lib_download_validator(callback_on_complete) {
     });
     download.on('end', function(output) {
         console.log('[VALIDATOR REFRESH] END: ' + output);
-        lib_load_validator(true);               // reload the validator into memory
+        lib_load_validator(true); // reload the validator into memory
         if (null != _callback_on_complete) {
             _callback_on_complete(amphtml_validator_signature);
         }
@@ -893,7 +893,7 @@ function lib_renderValidationResult(validationResult, validate_url) {
     }
     for (let ii = 0; ii < validationResult.errors.length; ii++) {
         const error = validationResult.errors[ii];
-        let msg = validate_url + ': ' + 'line ' + error.line + ', col ' + error.col + ': ' + error.message;
+        let msg = validate_url + ': line ' + error.line + ', col ' + error.col + ': ' + error.message;
         if (error.specUrl) {
             msg += ' (see ' + error.specUrl + ')';
         }
@@ -934,7 +934,7 @@ function fetch_and_validate_url(validate_url, on_output_callback, as_json) {
                 url_parsed_path = url_parsed.pathname;
 
             if (url_parsed.search) {
-                url_parsed_path = url_parsed.pathname + url_parsed.search
+                url_parsed_path = url_parsed.pathname + url_parsed.search;
             }
 
             const callback = (res) => {
@@ -968,7 +968,7 @@ function fetch_and_validate_url(validate_url, on_output_callback, as_json) {
             const http_options = {
                 host: url_parsed.hostname,
                 path: url_parsed_path,
-                headers: {'User-Agent': UA_AMPBENCH}
+                headers: { 'User-Agent': UA_AMPBENCH }
             };
             let req = http_response.http_client.request(http_options, callback);
             req.on('error', (err) => {
@@ -1005,7 +1005,7 @@ function fetch_and_parse_url_for_amplinks(request_url, on_parsed_callback) {
             url_parsed_path = url_parsed.pathname;
 
         if (url_parsed.search) {
-            url_parsed_path = url_parsed.pathname + url_parsed.search
+            url_parsed_path = url_parsed.pathname + url_parsed.search;
         }
 
         if (full_path.indexOf('http://') === 0 ||
@@ -1036,10 +1036,10 @@ function fetch_and_parse_url_for_amplinks(request_url, on_parsed_callback) {
                     http_response.http_response_body = body;
                     __temp = parse_body_for_amplinks(body, http_response);
                     __return.url = full_path;
-                    __return.canonical_url =    __temp.canonical_url;
-                    __return.amphtml_url =      __temp.amphtml_url;
-                    __return.amphtml_urls =     __temp.amphtml_urls;
-					__return.has_dns_prefetch = __temp.has_dns_prefetch;
+                    __return.canonical_url = __temp.canonical_url;
+                    __return.amphtml_url = __temp.amphtml_url;
+                    __return.amphtml_urls = __temp.amphtml_urls;
+                    __return.has_dns_prefetch = __temp.has_dns_prefetch;
                     __return.status = __temp.amphtml_urls.length > 0 ? CHECK_WARN : CHECK_PASS;
 
                     on_parsed_callback(http_response, __return); // !!! RETURN to front-end  - - - - - - - - - - - - - - -
@@ -1049,7 +1049,7 @@ function fetch_and_parse_url_for_amplinks(request_url, on_parsed_callback) {
             const http_options = {
                 host: url_parsed.hostname,
                 path: url_parsed_path,
-                headers: {'User-Agent': UA_AMPBENCH}
+                headers: { 'User-Agent': UA_AMPBENCH }
             };
             let req = http_response.http_client.request(http_options, callback);
             req.on('error', (err) => {
@@ -1079,8 +1079,8 @@ function fetch_and_parse_url_for_amplinks(request_url, on_parsed_callback) {
 function get_http_redirect_status(http_response) {
     let
         __ret = 2 < http_response.redirects_count ? CHECK_INFO : CHECK_PASS;
-        __ret = 3 < http_response.redirects_count ? CHECK_WARN : __ret;
-        __ret = 5 < http_response.redirects_count ? CHECK_FAIL : __ret;
+    __ret = 3 < http_response.redirects_count ? CHECK_WARN : __ret;
+    __ret = 5 < http_response.redirects_count ? CHECK_FAIL : __ret;
     return __ret;
 
 }
@@ -1101,7 +1101,7 @@ function build_warning_lines_from_validation_output(url, output, filter) {
         FILTER_SIZE_SHORT = '/spec.html#maximum-size',
         FILTER_SIZE = '' === filter.trim() ? FILTER_SIZE_SHORT : filter;
 
-        let amp_val_results_len = output.length,
+    let amp_val_results_len = output.length,
         amp_val_results = 0 < amp_val_results_len ? output.split(os.EOL) : ''; // payload packaged as output.join(os.EOL);
 
     let amp_val_warnings_len = amp_val_results_len - 1,
@@ -1219,41 +1219,41 @@ function check_url_is_reachable_with_user_agent(fetch_url, user_agent, callback)
 
     try {
         fetch(fetch_url, options)
-            .then(function(res) {
+                .then(function(res) {
                 // _log_response(res);
-                _ret.http_response_code = res.status;
-                if (res.status === 200) {
-                    _ret.ok = true;
-                    _ret.status = CHECK_PASS;
-                    _ret.result = '[HTTP: ' + res.status + '] URL is reachable';
-                    _ret.size = res.size;
-                    _ret.err = false; // make it false rather than null
-                } else {
+                    _ret.http_response_code = res.status;
+                    if (res.status === 200) {
+                        _ret.ok = true;
+                        _ret.status = CHECK_PASS;
+                        _ret.result = '[HTTP: ' + res.status + '] URL is reachable';
+                        _ret.size = res.size;
+                        _ret.err = false; // make it false rather than null
+                    } else {
+                        _ret.ok = false;
+                        _ret.status = CHECK_FAIL;
+                        _ret.result = '[HTTP: ' + res.status + ': ' + res.statusText + '][' + fetch_url + '] is reachable but NOT OK (not 200)';
+                        _ret.size = res.size;
+                        _ret.err = true; // make it true rather than null
+                    }
+                    // _log_return(_ret);
+                    // return callback(_ret);
+                    return res.text();
+                })
+                .then(function(body) {
+                    _ret.body = body;
+                    // _log_return(_ret);
+                    return callback(_ret);
+                })
+                .catch((err) => {
                     _ret.ok = false;
                     _ret.status = CHECK_FAIL;
-                    _ret.result = '[HTTP: ' + res.status + ': ' + res.statusText + '][' + fetch_url + '] is reachable but NOT OK (not 200)';
-                    _ret.size = res.size;
-                    _ret.err = true; // make it true rather than null
-                }
-                // _log_return(_ret);
-                // return callback(_ret);
-                return res.text();
-            })
-            .then(function(body) {
-                _ret.body = body;
-                // _log_return(_ret);
-                return callback(_ret);
-            })
-            .catch(err => {
-                _ret.ok = false;
-                _ret.status = CHECK_FAIL;
-                _ret.result = '[HTTP: ' + err.message + '][' + fetch_url + '] is unreachable';
-                _ret.size = -1;
-                _ret.err = err;
-                // _log_return(_ret);
-                return callback(_ret);
-            });
-    } catch(err) {
+                    _ret.result = '[HTTP: ' + err.message + '][' + fetch_url + '] is unreachable';
+                    _ret.size = -1;
+                    _ret.err = err;
+                    // _log_return(_ret);
+                    return callback(_ret);
+                });
+    } catch (err) {
         _ret.ok = false;
         _ret.status = CHECK_FAIL;
         _ret.result = '[HTTP: ' + err.message + '][' + fetch_url + '] is unreachable';
@@ -1302,7 +1302,7 @@ function make_robots_txt_url(uri) {
     // log and pass - for now: do not crash and burn if the URL is broken!!
     if ((!parsed.protocol) || (!parsed.host)) {
         // throw new Error('Cannot parse URL: ' + uri);
-        console.log('==> ERROR: Cannot parse URL: '  + uri);
+        console.log('==> ERROR: Cannot parse URL: ' + uri);
     }
 
     return [
@@ -1332,8 +1332,8 @@ function check_robots_txt(validation_url, callback) {
             'Googlebot-Smartphone [' + check_robots_txt_ua_googlebot_smartphone_ok + '] ';
         check_robots_txt_results
             = build_result_extras
-            ? check_robots_txt_results + '[' + build_result_extras + ']'
-            : check_robots_txt_results;
+                ? check_robots_txt_results + '[' + build_result_extras + ']'
+                : check_robots_txt_results;
         if (check_robots_txt_file_url_404) {
             check_robots_txt_status = CHECK_PASS;
         } else {
@@ -1358,7 +1358,7 @@ function check_robots_txt(validation_url, callback) {
         // console.log('=> [robots.txt] ' + check_robots_txt_file_url);
         // console.log('=> [Googlebot] ' + check_robots_txt_ua_googlebot_ok + ': ' + url);
         // console.log('=> [Googlebot-Smartphone] ' + check_robots_txt_ua_googlebot_smartphone_ok + ': ' + url);
-    };
+    }
 
     function url_is_reachable_callback(_ret) {
         // return object: _ret = {
@@ -1398,23 +1398,23 @@ function check_robots_txt(validation_url, callback) {
                 let site_map_cnt = site_maps.length;
                 site_maps
                     = site_maps[0]
-                    ? 'site maps (' + site_map_cnt + '): ' + site_maps[0]
-                    : null;
+                        ? 'site maps (' + site_map_cnt + '): ' + site_maps[0]
+                        : null;
                 let build_result_extras = site_maps || null;
 
                 // UA_GOOGLEBOT
                 check_robots_txt_ua_googlebot_ok
                     = robots.isAllowed(validation_url, UA_GOOGLEBOT)
-                    ? CHECK_PASS : CHECK_FAIL;
+                        ? CHECK_PASS : CHECK_FAIL;
                 // UA_GOOGLEBOT_SMARTPHONE
                 check_robots_txt_ua_googlebot_smartphone_ok
                     = robots.isAllowed(validation_url, UA_GOOGLEBOT_SMARTPHONE)
-                    ? CHECK_PASS : CHECK_FAIL;
+                        ? CHECK_PASS : CHECK_FAIL;
                 build_results(build_result_extras);
                 callback(check_robots_txt_return);
             } catch (err) {
-                console.log('==> ERROR: check_robots_txt(validation_url): '  + validation_url);
-                console.log('==> ERROR: check_robots_txt(err)           : '  + err);
+                console.log('==> ERROR: check_robots_txt(validation_url): ' + validation_url);
+                console.log('==> ERROR: check_robots_txt(err)           : ' + err);
                 check_robots_txt_ua_googlebot_ok = CHECK_FAIL;
                 check_robots_txt_ua_googlebot_smartphone_ok = CHECK_FAIL;
                 build_results(err);
@@ -1436,8 +1436,8 @@ function check_robots_txt(validation_url, callback) {
 function check_google_amp_cache(url, callback) {
 
     const
-        url_cdn     = make_url_to_google_amp_cache(url),
-        url_viewer  = make_url_to_google_amp_viewer(url);
+        url_cdn = make_url_to_google_amp_cache(url),
+        url_viewer = make_url_to_google_amp_viewer(url);
 
     let check_google_amp_cache_return = {},
         check_google_amp_cache_status = '',
@@ -1448,7 +1448,7 @@ function check_google_amp_cache(url, callback) {
 
     let _stamp_on_begin = new Date(); // set beginning timestamp
 
-    request( { uri: url_cdn, headers: {'User-Agent': UA_AMPBENCH} }, (err, res, body) => {
+    request( { uri: url_cdn, headers: { 'User-Agent': UA_AMPBENCH } }, (err, res, body) => {
         if (!err) {
             if (res.statusCode == 200) {
                 duration_in_milliseconds = new Date() - _stamp_on_begin;
@@ -1486,7 +1486,7 @@ function check_google_amp_cache(url, callback) {
 
 function check_google_amp_viewer(url, callback) {
 
-    const url_viewer  = make_url_to_google_amp_viewer(url);
+    const url_viewer = make_url_to_google_amp_viewer(url);
 
     let check_google_amp_viewer_return = {},
         check_google_amp_viewer_status = '',
@@ -1495,7 +1495,7 @@ function check_google_amp_viewer(url, callback) {
 
     let _stamp_on_begin = new Date(); // set beginning timestamp
 
-    request( { uri: url_viewer, headers: {'User-Agent': UA_AMPBENCH} }, (err, res, body) => {
+    request( { uri: url_viewer, headers: { 'User-Agent': UA_AMPBENCH } }, (err, res, body) => {
         if (!err) {
             if (res.statusCode == 200) {
                 duration_in_milliseconds = new Date() - _stamp_on_begin;
@@ -1544,7 +1544,7 @@ function check_redirects_for_mobile(url, callback) {
 
     const req = request(options, (err, res, body) => {
         href_request = url;
-        if (typeof(res) == "undefined") {
+        if (typeof (res) == 'undefined') {
             check_redirects_status = CHECK_FAIL;
             check_redirects_results = err.message;
             // href_request = req.uri.href;
@@ -1669,7 +1669,7 @@ function parse_body_for_amplinks(body, http_response) {
 
         if ('canonical' === rel || 'amphtml' === rel) {
             href_url = $(link).attr('href');
-            href = {rel: rel, url: href_url};
+            href = { rel: rel, url: href_url };
             if ('canonical' === rel) {
                 // only take the first occurrence
                 __return.canonical_url = encodeURI('' === __return.canonical_url
@@ -1695,10 +1695,10 @@ function parse_body_for_amplinks_and_robots_metatags(http_response) {
     const
         __links = parse_body_for_amplinks(http_response.http_response_body, http_response);
     const
-        canonical_url       = __links.canonical_url,
-        amphtml_url         = __links.amphtml_url,
-        amphtml_urls        = __links.amphtml_urls,
-        has_dns_prefetch    = __links.has_dns_prefetch;
+        canonical_url = __links.canonical_url,
+        amphtml_url = __links.amphtml_url,
+        amphtml_urls = __links.amphtml_urls,
+        has_dns_prefetch = __links.has_dns_prefetch;
 
     let check_robots_meta_status = CHECK_PASS,
         check_robots_meta_result = '';
@@ -1717,7 +1717,7 @@ function parse_body_for_amplinks_and_robots_metatags(http_response) {
     $(metas).each( (i, meta) => {
         // meta_name = ($(meta).attr('name')).toString().toLowerCase();
         meta_name = $(meta).attr('name');
-        meta_name = (typeof(meta_name) == "undefined") ? '' : meta_name.toString().toLowerCase();
+        meta_name = (typeof (meta_name) == 'undefined') ? '' : meta_name.toString().toLowerCase();
         if ('robots' === meta_name ||
             'googlebot' === meta_name ||
             'googlebot-mobile' === meta_name ||
@@ -1745,11 +1745,11 @@ function parse_body_for_amplinks_and_robots_metatags(http_response) {
     // console.log('=> [check_robots_meta_result: ' + check_robots_meta_result + ']');
 
     return {
-        canonical_url:      canonical_url,
-        amphtml_url:        amphtml_url,
-        amphtml_urls:       amphtml_urls,
-        has_dns_prefetch:   has_dns_prefetch,
-        amp_uses_feed:      (-1 < http_response.url.indexOf('googleusercontent.com/amphtml')),
+        canonical_url: canonical_url,
+        amphtml_url: amphtml_url,
+        amphtml_urls: amphtml_urls,
+        has_dns_prefetch: has_dns_prefetch,
+        amp_uses_feed: (-1 < http_response.url.indexOf('googleusercontent.com/amphtml')),
         check_robots_meta_status: check_robots_meta_status,
         check_robots_meta_result: check_robots_meta_result
     };
@@ -1827,7 +1827,7 @@ function parse_headers_for_x_robots_tag(http_response) {
         check_x_robots_tag_header_status: CHECK_FAIL
     };
 
-    if (typeof(http_response.response.headers['x-robots-tag']) === "undefined") {
+    if (typeof (http_response.response.headers['x-robots-tag']) === 'undefined') {
         check_x_robots_tag_header.check_x_robots_tag_header_results = 'X-Robots-Tag header check appears to be OK';
         check_x_robots_tag_header.check_x_robots_tag_header_status = CHECK_PASS;
     } else {
@@ -1854,7 +1854,7 @@ function parse_headers_for_if_modified_since_or_etag(http_response) {
     if (http_response && http_response.response && http_response.response.headers &&
         typeof http_response.response.headers !== 'undefined') {
 
-        if (typeof(http_response.response.headers['if-modified-since']) === "undefined") {
+        if (typeof (http_response.response.headers['if-modified-since']) === 'undefined') {
             check_ims_or_etag_header.check_ims_header_result = 'Header entry for If-Modified-Since not found';
             check_ims_or_etag_header.check_ims_header_status = CHECK_INFO;
         } else {
@@ -1863,7 +1863,7 @@ function parse_headers_for_if_modified_since_or_etag(http_response) {
             check_ims_or_etag_header.check_ims_header_status = CHECK_PASS;
         }
 
-        if (typeof(http_response.response.headers['etag']) === "undefined") {
+        if (typeof (http_response.response.headers['etag']) === 'undefined') {
             check_ims_or_etag_header.check_etag_header_result = 'Header entry for ETag not found';
             check_ims_or_etag_header.check_etag_header_status = CHECK_INFO;
         } else {
@@ -1949,7 +1949,7 @@ function make_url_to_google_amp_cache(url) {
 // }
 
 function make_url_to_google_amp_viewer(url) {
-    const AMP_VIEWER_HTTP  = 'https://www.google.com/amp/';
+    const AMP_VIEWER_HTTP = 'https://www.google.com/amp/';
     const AMP_VIEWER_HTTPS = 'https://www.google.com/amp/s/';
     var url_viewer = '';
     if (url.startsWith('http://')) {
@@ -1988,14 +1988,14 @@ function make_url_validate_href(url, title) {
     // prod: https://ampbench.appspot.com/
     // <a href="https://ampbench.appspot.com/validate?url=" target="_blank">Open in a new tab...</a>
     // const   pref = '<a href="https://ampbench.appspot.com/validate?url=' + url +'" ',
-    const   pref = '<a href="../validate?url=' + url +'" ',
+    const pref = '<a href="../validate?url=' + url + '" ',
         suff = 'target="_blank">' + title + '</a>';
-    return  pref + suff;
+    return pref + suff;
 }
 
 function make_url_href(url, title) {
-    const pref = '<a href="' + url +'" ',
-          suff = 'target="_blank">' + title + '</a>';
+    const pref = '<a href="' + url + '" ',
+        suff = 'target="_blank">' + title + '</a>';
     return pref + suff;
 }
 
@@ -2017,7 +2017,7 @@ function multiline_to_html(multiline_str) { // convert os.EOL to HTML line-break
     // console.log('=> multiline_str:\n' + multiline_str);
     if (multiline_str) {
         if (-1 !== multiline_str.indexOf(os.EOL)) {
-            var h = multiline_str.split(os.EOL).join("<br/>");
+            var h = multiline_str.split(os.EOL).join('<br/>');
             // return '<div><span style="color:black;font-weight:bold">' + h + '</span></div>';
             return ('<div><span style="font-family:Monospace;">' + h + '</span></div>');
         }
@@ -2045,15 +2045,15 @@ function str_rtrim_char(str, char) {
     return str_ret;
 }
 
-function unwrap_js_object(obj, maxDepth, prefix){
+function unwrap_js_object(obj, maxDepth, prefix) {
     var result = '';
-    if (!prefix) prefix='';
-    for(var key in obj){
+    if (!prefix) {prefix = '';}
+    for (var key in obj) {
         if (typeof obj[key] === 'object') {
             if (maxDepth !== undefined && maxDepth <= 1) {
                 result += (prefix + key + '=object [max depth reached]\n');
             } else {
-                result += unwrap_js_object(obj[key], (maxDepth) ? maxDepth - 1: maxDepth, prefix + key + '.');
+                result += unwrap_js_object(obj[key], (maxDepth) ? maxDepth - 1 : maxDepth, prefix + key + '.');
             }
         } else {
             result += (prefix + key + '=' + obj[key] + '\n');
