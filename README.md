@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/ithinkihaveacat/ampbench.svg?branch=master)](https://travis-ci.org/ithinkihaveacat/ampbench)
+[![Build Status](https://travis-ci.org/ampproject/ampbench.svg?branch=master)](https://travis-ci.org/ampproject/ampbench)
 
 ## AMPBench: AMP URL Validation and Troubleshooting
 
