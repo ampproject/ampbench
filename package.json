@@ -8,9 +8,9 @@
     "start": "node ampbench_main.js",
     "monitor": "nodemon --watch . --watch views/index.hbs --watch views/results.hbs --ignore 'validator/*.*'",
     "deploy": "gcloud app deploy app.yaml",
-    "lint": "jshint --exclude-path=../.gitignore .",
+    "lint": "eslint amp*.js",
     "mocha": "mocha test/*.test.js -t 30000",
-    "test": "exit && npm run lint && npm run mocha"
+    "test": "npm run lint"
   },
   "author": "The AMP HTML Authors",
   "license": "Apache Version 2.0",
