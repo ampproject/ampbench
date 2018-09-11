@@ -8,7 +8,7 @@
     "start": "node ampbench_main.js",
     "monitor": "nodemon --watch . --watch views/index.hbs --watch views/results.hbs --ignore 'validator/*.*'",
     "deploy": "gcloud app deploy app.yaml",
-    "lint": "eslint amp*.js",
+    "lint": "eslint --quiet amp*.js",
     "mocha": "mocha test/*.test.js -t 30000",
     "test": "npm run lint"
   },
