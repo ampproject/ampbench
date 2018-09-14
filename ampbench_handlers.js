@@ -11,6 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// @ts-check
 'use strict';
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -19,6 +20,7 @@
 
 const benchlib = require('./ampbench_lib.js');
 const sdlib = require('./ampbench_lib_sd.js');
+const linter = require('amp-story-linter');
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // app version
@@ -408,6 +410,17 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                                     const sniffer_contains_byte_order_mark_css = sniffer.containsByteOrderMark
                                         ? CHECK_WARN_CSS : CHECK_PASS_CSS;
 
+                                    const testContext = {
+                                        headers: {
+                                            "user-agent": user_agent
+                                        },
+                                        url: url_to_validate,
+                                        $: http_response.$
+                                    };
+
+                                    const testAmpStory = linter.testAmpStory(testContext);
+                                    const testThumbnails = linter.testThumbnails(testContext);
+
                                     __ret = {
                                         user_agent: benchlib.get_global_user_agent(),
                                         user_agent_name: benchlib.get_global_user_agent_name(),
@@ -474,6 +487,9 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                                         check_robots_txt_return: check_robots_txt_return,
                                         check_google_amp_cache_status_css: check_google_amp_cache_status_css,
                                         check_google_amp_cache_return: check_google_amp_cache_return,
+                                        variant_is_amp_story: testAmpStory.then(res => res.status !== "FAIL"),
+                                        amp_story_thumbnails: testThumbnails,
+                                        amp_story_thumbnails_status: testThumbnails.then(res => get_check_status_css(res.status)),
                                         // check_redirects_return: check_redirects_return,
                                         http_redirect_status: get_check_status_css(http_redirect_status),
                                         http_redirect_route: http_redirect_route,
@@ -482,7 +498,12 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                                         amp_results: amp_val_warnings.amp_val_results_short
                                     };
 
-                                    on_validate_callback(__ret); // DONE!!!
+                                    // The values of __ret can be promises. Use Promise.all() to resolve these in parallel.
+                                    const keys = Object.keys(__ret);
+                                    const kvPromises = keys.map(k => Promise.resolve(__ret[k]).then(v => [k, v]));
+                                    Promise.all(kvPromises)
+                                        .then(kvs => (kvs.reduce((a, kv) => (a[kv[0]] = kv[1], a), {})))
+                                        .then(ret => on_validate_callback(ret)) // DONE!!!
                                 }
 
                                 // console.log(`### [DANGLING!][http_response.statusIsOK: ${http_response.statusIsOK()}]`);

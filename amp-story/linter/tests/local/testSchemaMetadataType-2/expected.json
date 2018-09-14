@@ -1,0 +1,4 @@
+{
+  "message": "@type is not 'Article' or 'NewsArticle' or 'ReportageNewsArticle'",
+  "status": "WARN"
+}

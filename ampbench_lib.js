@@ -12,6 +12,7 @@
 // limitations under the License.
 
 'use strict';
+// @ts-check
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // imports
@@ -73,6 +74,8 @@ class HttpResponse {
         this.is_https_cert_authorized = null;
         this.is_https_cert_certificate = null;
         this._is_https_cert_ssl_error = '';
+        /** @type {CheerioStatic} */
+        this._$ = null;
         if (url) {
             this._url = url;
             if (check_url_is_valid(this._url)) {
@@ -148,6 +151,16 @@ class HttpResponse {
     }
     get http_response_body() {
         return this._http_response_body;
+    }
+    get $() {
+        if (!this._$) {
+            if (this.http_response_body) {
+                this._$ = cheerio.load(this.http_response_body);
+            } else {
+                this._$ = cheerio.load("");
+            }
+        }
+        return this._$;
     }
     set http_response_body(body) {
         if (body) {
