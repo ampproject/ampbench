@@ -1,0 +1,36 @@
+{
+  "name": "amp-story-linter",
+  "version": "0.0.1",
+  "description": "AMP Story lint and validation tools",
+  "repository": "https://github.com/ampproject/ampbench/amp-story/linter",
+  "license": "Apache-2.0",
+  "author": "Michael Stillwell <mjs@beebo.org>",
+  "dependencies": {
+    "amphtml-validator": "^1.0.23",
+    "cheerio": "^1.0.0-rc.2",
+    "debug": "^4.0.1",
+    "node-fetch": "^2.2.0",
+    "probe-image-size": "^4.0.0",
+    "throat": "^4.1.0"
+  },
+  "engines": {
+    "node": "8.x.x"
+  },
+  "scripts": {
+    "prepare": "$npm_execpath run update-validator && tsc -p tsconfig.json --sourceMap -d --module commonjs",
+    "update-validator": "curl -sS --remote-name-all https://cdn.ampproject.org/v0/validator.js",
+    "test": "$npm_execpath run update-validator && cd tests && tsc && for t in *.js ; do node $t | tap-spec ; done"
+  },
+  "devDependencies": {
+    "@types/cheerio": "^0.22.9",
+    "@types/debug": "0.0.30",
+    "@types/diff": "^3.5.1",
+    "@types/nock": "^9.3.0",
+    "@types/node-fetch": "^2.1.2",
+    "diff": "^3.5.0",
+    "nock": "^9.6.1",
+    "tap-spec": "^5.0.0",
+    "tslint": "^5.11.0",
+    "typescript": "^3.0.3"
+  }
+}
