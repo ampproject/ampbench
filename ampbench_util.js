@@ -13,24 +13,26 @@
 
 'use strict';
 
+/* eslint no-unused-vars: 0 */
+
 // use: import {get_bare_url, urls_are_similar} from 'ampbench_util'; !!!2018.09: NOT SUPPORTED BY NODE.JS YET!!!
 
 const S = require('string');
 
 const util = require('util');
 function inspect_obj(obj) {
-    return util.inspect(obj, { showHidden: true, depth: null })
+    return util.inspect(obj, { showHidden: true, depth: null });
 }
 
 function unwrap_js_object(obj, maxDepth, prefix) {
     let result = '';
-    if (!prefix) prefix='';
-    for(let key in obj){
+    if (!prefix) {prefix = '';}
+    for (let key in obj) {
         if (typeof obj[key] === 'object') {
             if (maxDepth !== undefined && maxDepth <= 1) {
                 result += (prefix + key + '=object [max depth reached]\n');
             } else {
-                result += unwrap_js_object(obj[key], (maxDepth) ? maxDepth - 1: maxDepth, prefix + key + '.');
+                result += unwrap_js_object(obj[key], (maxDepth) ? maxDepth - 1 : maxDepth, prefix + key + '.');
             }
         } else {
             result += (prefix + key + '=' + obj[key] + '\n');
@@ -56,7 +58,7 @@ function last_element_of_list(list) {
     return list[list.length - 1];
 }
 
-function last_element_of_path (path) {
+function last_element_of_path(path) {
     const path_str = path.toString();
     return path_str.substr(path_str.lastIndexOf('/') + 1);
 }
@@ -78,7 +80,7 @@ function print_dashes(dash_count) { // needs: const S = require('string');
 }
 
 function make_url_href(url, title) {
-    const pref = '<a href="' + url +'" ',
+    const pref = '<a href="' + url + '" ',
         suff = 'target="_blank">' + title + '</a>';
     return pref + suff;
 }
@@ -99,8 +101,8 @@ function make_url_href_list(urls) {
 function multiline_to_html(multiline_str) { // convert os.EOL to HTML line-breaks
     // console.log('=> multiline_str:\n' + multiline_str);
     if (multiline_str) {
-        if (-1 !== multiline_str.indexOf(os.EOL)) {
-            var h = multiline_str.split(os.EOL).join("<br/>");
+        if (-1 !== multiline_str.indexOf(os.EOL)) { // eslint-disable-line no-undef
+            var h = multiline_str.split(os.EOL).join('<br/>'); // eslint-disable-line no-undef
             // return '<div><span style="color:black;font-weight:bold">' + h + '</span></div>';
             return ('<div><span style="font-family:Monospace;">' + h + '</span></div>');
         }
@@ -114,8 +116,8 @@ function get_bare_url(url) {
     // test: 'xwp.co' === get_bare_url('https://xwp.co')
     // test: 'xwp.co' === get_bare_url('https://xwp.co/')
     let _url = url.trim();
-    if ('/' === _url.slice(-1)) {   // check  last character of the url
-        _url = _url.slice(0, -1);   // remove last character of the url
+    if ('/' === _url.slice(-1)) { // check  last character of the url
+        _url = _url.slice(0, -1); // remove last character of the url
     }
     if (-1 < _url.indexOf('http://')) {
         _url = _url.substr(7);

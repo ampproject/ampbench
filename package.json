@@ -9,9 +9,9 @@
     "start": "node ampbench_main.js",
     "monitor": "nodemon --watch . --watch views/index.hbs --watch views/results.hbs --ignore 'validator/*.*'",
     "deploy": "gcloud app deploy app.yaml",
-    "lint": "jshint --exclude-path=../.gitignore .",
+    "lint": "eslint --quiet amp*.js",
     "mocha": "mocha test/*.test.js -t 30000",
-    "test": "exit && npm run lint && npm run mocha"
+    "test": "npm run lint"
   },
   "author": "The AMP HTML Authors",
   "license": "Apache Version 2.0",
@@ -22,6 +22,7 @@
     "body-parser": "^1.18.3",
     "cheerio": "^0.20.0",
     "connect-timeout": "^1.7.0",
+    "eslint": "^5.6.0",
     "express": "^4.16.3",
     "file-system": "^2.2.2",
     "follow-redirects": "^0.1.0",
