@@ -157,7 +157,7 @@ class HttpResponse {
             if (this.http_response_body) {
                 this._$ = cheerio.load(this.http_response_body);
             } else {
-                this._$ = cheerio.load("");
+                this._$ = cheerio.load('');
             }
         }
         return this._$;

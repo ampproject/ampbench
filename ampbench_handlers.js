@@ -414,7 +414,7 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
 
                                     const testContext = {
                                         headers: {
-                                            "user-agent": user_agent
+                                            'user-agent': user_agent
                                         },
                                         url: url_to_validate,
                                         $: http_response.$
@@ -489,9 +489,9 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                                         check_robots_txt_return: check_robots_txt_return,
                                         check_google_amp_cache_status_css: check_google_amp_cache_status_css,
                                         check_google_amp_cache_return: check_google_amp_cache_return,
-                                        variant_is_amp_story: testAmpStory.then(res => res.status !== "FAIL"),
+                                        variant_is_amp_story: testAmpStory.then((res) => res.status !== 'FAIL'),
                                         amp_story_thumbnails: testThumbnails,
-                                        amp_story_thumbnails_status: testThumbnails.then(res => get_check_status_css(res.status)),
+                                        amp_story_thumbnails_status: testThumbnails.then((res) => get_check_status_css(res.status)),
                                         // check_redirects_return: check_redirects_return,
                                         http_redirect_status: get_check_status_css(http_redirect_status),
                                         http_redirect_route: http_redirect_route,
@@ -502,10 +502,13 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
 
                                     // The values of __ret can be promises. Use Promise.all() to resolve these in parallel.
                                     const keys = Object.keys(__ret);
-                                    const kvPromises = keys.map(k => Promise.resolve(__ret[k]).then(v => [k, v]));
+                                    const kvPromises = keys.map((k) => Promise.resolve(__ret[k]).then((v) => [k, v]));
                                     Promise.all(kvPromises)
-                                        .then(kvs => (kvs.reduce((a, kv) => (a[kv[0]] = kv[1], a), {})))
-                                        .then(ret => on_validate_callback(ret)) // DONE!!!
+                                            .then((kvs) => (kvs.reduce((a, kv) => {
+                                                a[kv[0]] = kv[1];
+                                                return a;
+                                            }, {})))
+                                            .then((ret) => on_validate_callback(ret));
                                 }
 
                                 // console.log(`### [DANGLING!][http_response.statusIsOK: ${http_response.statusIsOK()}]`);
