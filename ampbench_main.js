@@ -20,7 +20,7 @@
 const routes = require('./ampbench_routes.js');
 
 if (module === require.main) {
-    const server = routes.app.listen(process.env.PORT || 8080, function () {
+    const server = routes.app.listen(process.env.PORT || 8080, function() {
         let __server = routes.init_server(server);
         var host = __server.host;
         var port = __server.port;
