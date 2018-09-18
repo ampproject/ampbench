@@ -1,0 +1,9 @@
+// http://palantir.github.io/tslint/rules/
+{
+  "extends": "tslint:recommended",
+  "rules": {
+    "interface-name": false,
+    // "object-literal-sort-keys": false,
+    "no-console": false
+  }
+}

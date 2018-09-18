@@ -253,6 +253,38 @@
                 </tbody>
             </table>
         </div>
+
+        <div id="id_hdr_story">
+            <h6><a href="https://www.ampproject.org/stories/" target="_blank">AMP Story</a></h6>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-condensed" style="width:98%;">
+                <thead>
+                <tr>
+                    <th class="mdl-data-table__cell--non-numeric">Check</th>
+                    <th class="mdl-data-table__cell--non-numeric">Status</th>
+                    <th class="mdl-data-table__cell--non-numeric">Results</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#variant_is_amp_story}}
+                <tr>
+                <td class="mdl-data-table__cell--non-numeric"><a href="https://github.com/ampproject/amphtml/blob/master/extensions/amp-story/amp-story.md#attributes">Thumbnails okay?</a></td>
+                <td class="mdl-data-table__cell--non-numeric">{{{amp_story_thumbnails_status}}}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{amp_story_thumbnails.message}}</td>
+                </tr>
+                {{/variant_is_amp_story}}
+                {{^variant_is_amp_story}}
+                <tr>
+                <td class="mdl-data-table__cell--non-numeric">URL is not AMP Story</td>
+                <td></td>
+                <td></td>
+                </tr>
+                {{/variant_is_amp_story}}
+                </tbody>
+            </table>
+        </div>
         <div id="id_hdr_validator">
             <h6><a href="https://github.com/ampproject/amphtml/tree/master/validator#amp-html--validator" target="_blank">
                 AMP Validator Output</a></h6>
