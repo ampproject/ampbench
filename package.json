@@ -20,6 +20,7 @@
     "body-parser": "^1.18.3",
     "cheerio": "^0.20.0",
     "connect-timeout": "^1.7.0",
+    "eslint": "^5.6.0",
     "express": "^4.16.3",
     "file-system": "^2.2.2",
     "follow-redirects": "^0.1.0",
