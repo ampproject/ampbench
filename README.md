@@ -26,7 +26,7 @@ AMPBench **is not** an official Google product.
 
 ### Getting the code and running it
 
-Install [Node.js](https://nodejs.org) version 4.X on your system. E.g., [by downloading](https://nodejs.org/en/download/) or [by using a package manager](https://nodejs.org/en/download/package-manager/) or [by using NVM](https://github.com/creationix/nvm).
+Install the [Node.js](https://nodejs.org) [Active LTS version](https://github.com/nodejs/Release) on your system. E.g., [by downloading](https://nodejs.org/en/download/) or [by using a package manager](https://nodejs.org/en/download/package-manager/) or [by using NVM](https://github.com/creationix/nvm).
 
 Now do the following from a terminal command-line session:
     
@@ -49,20 +49,26 @@ Even try this from the command-line:
     $ curl http://localhost:8080/version/
     $ curl http://localhost:8080/raw?url=https://ampbyexample.com/
     $ curl http://localhost:8080/api?url=https://ampbyexample.com/
+    $ curl http://localhost:8080/api1?url=https://ampbyexample.com/
     $ curl http://localhost:8080/api2?url=https://ampbyexample.com/
 
 #### Requesting an AMPHTML Validator reload from the CDN ([https://cdn.ampproject.org/v0/validator.js](https://cdn.ampproject.org/v0/validator.js))
 
-Use the following URL to ask AMPBench to reload the validator code into memory should a different (not only newer; there might have been a rollback) version be available:
+Use the following URL to ask AMPBench to reload the validator code into memory should an AMP validator version update be available:
 
     ../command_force_validator_update
 
-For example:
+For example, for the public hosted AMPBench instance, open:
+
+- [https://ampbench.appspot.com/command_force_validator_update](https://ampbench.appspot.com/command_force_validator_update)
+
+Or for a local development AMPBench instance:
 
 - [http://localhost:8080/command_force_validator_update](http://localhost:8080/command_force_validator_update)
 
-Or:
+Or, from a terminal command line:
 
+    $ curl https://ampbench.appspot.com/command_force_validator_update
     $ curl http://localhost:8080/command_force_validator_update
 
 #### Utilities
