@@ -5,13 +5,14 @@
   "repository": "https://github.com/ampproject/ampbench",
   "private": true,
   "scripts": {
-    "preinstall": "cd amp-story/linter && npm install",
+    "//": "Remove package-lock.json until https://github.com/npm/cli/pull/40 is merged",
+    "preinstall": "rm -f package-lock.json amp-story/linter/package-lock.json && cd amp-story/linter && npm install",
     "start": "node ampbench_main.js",
     "monitor": "nodemon --watch . --watch views/index.hbs --watch views/results.hbs --ignore 'validator/*.*'",
     "deploy": "gcloud app deploy app.yaml",
     "lint": "eslint --quiet amp*.js",
     "mocha": "mocha test/*.test.js -t 30000",
-    "test": "npm run lint"
+    "test": "npm run lint && cd amp-story/linter && npm test"
   },
   "author": "The AMP HTML Authors",
   "license": "Apache Version 2.0",
