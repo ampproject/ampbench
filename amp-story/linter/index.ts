@@ -511,7 +511,7 @@ const testSingleAmpImg = (
     const actualWidth = width;
     const actualRatio = Math.floor(actualWidth * 100 / actualHeight) / 100;
     const expectedRatio = Math.floor(expectedWidth * 100 / expectedHeight) / 100;
-    if (Math.abs(actualRatio - expectedRatio) > 0.01) {
+    if (Math.abs(actualRatio - expectedRatio) > 0.015) {
       const actualString = `${actualWidth}/${actualHeight} = ${actualRatio}`;
       const expectedString = `${expectedWidth}/${expectedHeight} = ${expectedRatio}`;
       return FAIL(`[${src}]: actual ratio [${actualString}] does not match specified [${expectedString}]`);
