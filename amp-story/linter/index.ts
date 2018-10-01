@@ -457,15 +457,18 @@ const testMostlyText: Test = ({$}) => {
 
 const testThumbnails: Test = async (context) => {
   const $ = context.$;
-  async function isSquare(url: string) {
+  async function isSquare(url: string|undefined) {
+    if (!url) { return false; }
     const {width, height} = await getImageSize(context, url);
     return width === height;
   }
-  async function isPortrait(url: string) {
+  async function isPortrait(url: string|undefined) {
+    if (!url) { return false; }
     const {width, height} = await getImageSize(context, url);
     return (width > (0.74 * height)) && (width < (0.76 * height));
   }
-  async function isLandscape(url: string) {
+  async function isLandscape(url: string|undefined) {
+    if (!url) { return false; }
     const {width, height} = await getImageSize(context, url);
     return (height > (0.74 * width)) && (height < (0.76 * width));
   }
@@ -477,25 +480,25 @@ const testThumbnails: Test = async (context) => {
 
   k = "publisher-logo-src";
   v = inlineMetadata[k];
-  if (!v || !(await isSquare(v))) {
+  if (!(await isSquare(v))) {
     errors.push(`[${k}] (${v}) is missing or not square (1:1)`);
   }
 
   k = "poster-portrait-src";
   v = inlineMetadata[k];
-  if (!v || !(await isPortrait(v))) {
+  if (!(await isPortrait(v))) {
     errors.push(`[${k}] (${v}) is missing or not portrait (3:4)`);
   }
 
   k = "poster-square-src";
   v = inlineMetadata[k];
-  if (v && !(await isSquare(v))) {
+  if (!(await isSquare(v))) {
     errors.push(`[${k}] (${v}) is not square (1x1)`);
   }
 
   k = "poster-landscape-src";
   v = inlineMetadata[k];
-  if (v && !(await isLandscape(v))) {
+  if (!(await isLandscape(v))) {
     errors.push(`[${k}] ($v) is not landscape (4:3)`);
   }
 
