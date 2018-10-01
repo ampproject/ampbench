@@ -5,8 +5,7 @@
   "repository": "https://github.com/ampproject/ampbench",
   "private": true,
   "scripts": {
-    "//": "Remove package-lock.json until https://github.com/npm/cli/pull/40 is merged",
-    "preinstall": "rm -f package-lock.json amp-story/linter/package-lock.json && cd amp-story/linter && npm install",
+    "preinstall": "cd amp-story/linter && npm install",
     "start": "node ampbench_main.js",
     "monitor": "nodemon --watch . --watch views/index.hbs --watch views/results.hbs --ignore 'validator/*.*'",
     "deploy": "gcloud app deploy app.yaml",
@@ -17,7 +16,6 @@
   "author": "The AMP HTML Authors",
   "license": "Apache Version 2.0",
   "dependencies": {
-    "amp-story-linter": "file:amp-story/linter",
     "amp-toolbox-cache-url": "^0.1.0",
     "amphtml-validator": "^1.0.23",
     "body-parser": "^1.18.3",
