@@ -669,7 +669,7 @@ if (require.main === module) { // invoked directly?
   body
     .then(b => cheerio.load(b))
     .then($ => testAll({$, headers, url}))
-    .then(console.log)
+    .then(r => console.log(JSON.stringify(r, null, 2)))
     .then(() => process.exit(0))
     .catch((e) => console.error(`error: ${e}`));
 
