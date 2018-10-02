@@ -5,7 +5,7 @@ import {resolve, URL} from "url";
 // tslint:disable-next-line:no-var-requires
 const validator = require("amphtml-validator").newInstance(
   // Let's not fetch over the network on every run.
-  // Use `yarn run update-validator` to update.
+  // Use `npm run update-data` to update.
   // tslint:disable-next-line:no-var-requires
   readFileSync(`${__dirname}/validator.js`).toString(),
 );
@@ -142,6 +142,15 @@ function getInlineMetadata($: CheerioStatic) {
   };
   return inlineMetadata;
 }
+
+const getCorsEndpoints = ($: CheerioStatic) => {
+  return ([] as string[]).concat(
+    $("amp-list[src]").map((_, e) => $(e).attr("src")).get(),
+    $("form[method='GET']").map((_, e) => $(e).attr("action")).get(),
+    $("amp-story amp-story-bookend").attr("src"),
+    $("amp-story").attr("bookend-config-src"),
+  ).filter(s => !!s);
+};
 
 function getImageSize(context: Context, url: string): Promise<{width: number, height: number, [k: string]: any}> {
   return probe(url, { headers: context.headers });
@@ -359,7 +368,7 @@ function canXhrSameOrigin(context: Context, xhrUrl: string) {
   return fetch(addSourceOrigin(xhrUrl, sourceOrigin), {headers})
     .then(isStatusOk)
     .then(isJson)
-    .then(PASS, (e: Error) => FAIL(`can't retrieve bookend: ${e.message} [debug: ${curl}]`));
+    .then(PASS, (e: Error) => FAIL(`can't XHR [${xhrUrl}]: ${e.message} [debug: ${curl}]`));
 }
 
 function canXhrCache(context: Context, xhrUrl: string, cacheSuffix: string) {
@@ -378,7 +387,7 @@ function canXhrCache(context: Context, xhrUrl: string, cacheSuffix: string) {
     .then(isStatusOk)
     .then(isAccessControlHeaders(origin, sourceOrigin))
     .then(isJson)
-    .then(PASS, (e) => FAIL(`can't retrieve bookend: ${e.message} [debug: ${curl}]`));
+    .then(PASS, (e) => FAIL(`can't XHR [${xhrUrl}]: ${e.message} [debug: ${curl}]`));
 }
 
 const testBookendSameOrigin: Test = (context) => {
@@ -549,6 +558,18 @@ const testAmpImg: TestList = async (context) => {
   }).get() as any as Array<Promise<Message>>)).filter(notPass);
 };
 
+const testCorsSameOrigin: TestList = async (context) => {
+  const corsEndpoints = getCorsEndpoints(context.$);
+  return (await Promise.all(corsEndpoints.map(s => canXhrSameOrigin(context, s)))).filter(notPass);
+};
+
+const testCorsCache: TestList = async (context) => {
+  const corsEndpoints = getCorsEndpoints(context.$);
+  const caches = (require("./caches.json").caches as Array<{ cacheDomain: string }>).map(c => c.cacheDomain);
+  console.log(caches);
+  return Promise.all([PASS()]);
+};
+
 const testAll = async (context: Context): Promise<{[key: string]: Message}> => {
   const tests = [
     testValidity,
@@ -567,6 +588,8 @@ const testAll = async (context: Context): Promise<{[key: string]: Message}> => {
     testThumbnails,
     testMetaCharsetFirst,
     testAmpImg,
+    testCorsSameOrigin,
+    testCorsCache,
   ];
   const res = await Promise.all(tests.map(async (testFn) => {
     const v = await testFn(context);
@@ -599,12 +622,15 @@ export {
   testRuntimePreloaded,
   testThumbnails,
   testAmpImg,
+  testCorsSameOrigin,
+  testCorsCache,
   fetchToCurl,
   // "private" functions get prefixed
   getBody as _getBody,
   getSchemaMetadata as _getSchemaMetadata,
   getInlineMetadata as _getInlineMetadata,
   getImageSize as _getImageSize,
+  getCorsEndpoints as _getCorsEndpoints,
 };
 
 if (require.main === module) { // invoked directly?

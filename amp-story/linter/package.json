@@ -17,9 +17,9 @@
     "node": "8.x.x"
   },
   "scripts": {
-    "prepare": "$npm_execpath run update-validator && tsc -p tsconfig.json --sourceMap -d --module commonjs",
-    "update-validator": "curl -sS --remote-name-all https://cdn.ampproject.org/v0/validator.js",
-    "test": "$npm_execpath run update-validator && cd tests && tsc && for t in *.js ; do node $t | tap-spec ; done"
+    "prepare": "$npm_execpath run update-data && tsc -p tsconfig.json --sourceMap -d --module commonjs",
+    "update-data": "curl -sS --remote-name-all https://cdn.ampproject.org/v0/validator.js && curl -sS --remote-name-all https://raw.githubusercontent.com/ampproject/amphtml/master/caches.json",
+    "test": "$npm_execpath run update-data && cd tests && tsc && for t in *.js ; do node $t | tap-spec ; done"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.9",
