@@ -564,11 +564,12 @@ const testCorsSameOrigin: TestList = async (context) => {
 };
 
 const testCorsCache: TestList = async (context) => {
-  const tmp = (a: any, b: any) => [].concat(...a.map((d: any) => b.map((e: any) => [].concat(d, e))));
-  const cartesian = (a: any, b?: any, ...c: any[]): any[] => (b ? cartesian(tmp(a, b), ...c) : a);
+  // From https://stackoverflow.com/a/43053803/11543
+  const cartesian = (a: any, b: any) => [].concat(...a.map((d: any) => b.map((e: any) => [].concat(d, e))));
   const corsEndpoints = getCorsEndpoints(context.$);
   const caches = (require("./caches.json").caches as Array<{ cacheDomain: string }>).map(c => c.cacheDomain);
   const product = cartesian(corsEndpoints, caches);
+  console.log({product});
   return (await Promise.all(
     product.map(([xhrUrl, cacheSuffix]) => canXhrCache(context, xhrUrl, cacheSuffix))
   )).filter(notPass);
