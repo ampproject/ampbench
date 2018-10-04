@@ -1,4 +1,5 @@
 /// <reference path="probe-image-size.d.ts" />
+/// <reference path="amp-toolbox-cache-url.d.ts" />
 
 import {readFileSync} from "fs";
 import {resolve, URL} from "url";
@@ -9,6 +10,7 @@ const validator = require("amphtml-validator").newInstance(
   // tslint:disable-next-line:no-var-requires
   readFileSync(`${__dirname}/validator.js`).toString(),
 );
+import createCacheUrl = require("amp-toolbox-cache-url");
 import * as cheerio from "cheerio";
 import throat = require("throat");
 
@@ -260,20 +262,6 @@ function addSourceOrigin(url: string, sourceOrigin: string) {
   return format(obj);
 }
 
-function buildCacheOrigin(cacheSuffix: string, url: string): string {
-  // console.log({cacheSuffix, url});
-  function convertHost(hostname: string) {
-    return punycode
-      .toASCII(hostname)
-      .replace(/\-/g, "--")
-      .replace(/\./g, "-");
-  }
-  const {parse, format} = require("url"); // use old API to work with node 6+
-  const obj = parse(url);
-  const cacheHost = `${convertHost(obj.host)}.${cacheSuffix}`;
-  return `https://${cacheHost}`;
-}
-
 function isJson(res: Response): Promise<Response> {
   const contentType = (() => {
     if (!res.headers) {
@@ -362,9 +350,12 @@ function canXhrSameOrigin(context: Context, xhrUrl: string) {
     .then(PASS, (e: Error) => FAIL(`can't retrieve bookend: ${e.message} [debug: ${curl}]`));
 }
 
-function canXhrCache(context: Context, xhrUrl: string, cacheSuffix: string) {
+async function canXhrCache(context: Context, xhrUrl: string, cacheSuffix: string) {
   const sourceOrigin = buildSourceOrigin(context.url);
-  const origin = buildCacheOrigin(cacheSuffix, context.url);
+  const url = await createCacheUrl(cacheSuffix, context.url);
+  const {parse} = require("url"); // use old API to work with node 6+
+  const obj = parse(url);
+  const origin = `${obj.protocol}//${obj.host}`;
 
   const headers = Object.assign(
     {},
