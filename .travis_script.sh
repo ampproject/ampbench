@@ -28,7 +28,7 @@ echo
 echo "RUNNING TESTS"
 echo
 
-fetch 'http://jjlocalhost:8080/validate?url=http://www.bbc.com/news/amp/36884290'
+fetch 'http://localhost:8080/validate?url=http://www.bbc.com/news/amp/36884290'
 fetch 'http://localhost:8080/validate?url=https://www.bbc.com/news/amp/36884290'
 fetch 'http://localhost:8080/api2?url=https://www.bbc.com/news/amp/36884290'
 
