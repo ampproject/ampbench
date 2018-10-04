@@ -146,7 +146,6 @@ function getInlineMetadata($: CheerioStatic) {
 const getCorsEndpoints = ($: CheerioStatic) => {
   return ([] as string[]).concat(
     $("amp-list[src]").map((_, e) => $(e).attr("src")).get(),
-    $("form[method='GET']").map((_, e) => $(e).attr("action")).get(),
     $("amp-story amp-story-bookend").attr("src"),
     $("amp-story").attr("bookend-config-src"),
   ).filter(s => !!s);
@@ -261,6 +260,12 @@ const testVideoSize: Test = (context) => {
   });
 };
 
+/**
+ * Adds `__amp_source_origin` query parameter to URL.
+ *
+ * @param url
+ * @param sourceOrigin
+ */
 function addSourceOrigin(url: string, sourceOrigin: string) {
   const {parse, format} = require("url"); // use old API to work with node 6+
   const obj = parse(url, true);
@@ -323,9 +328,10 @@ function isStatusOk(res: Response) {
 function isAccessControlHeaders(origin: string, sourceOrigin: string): (res: Response) => Response {
   return (res) => {
     const h1 = res.headers.get("access-control-allow-origin") || "";
-    if ((h1 !== origin) && (h1 !== "*")) { throw new Error(
-      `access-control-allow-origin header is [${h1}], expected [${origin}]`,
-    );
+    if ((h1 !== origin) && (h1 !== "*")) {
+      throw new Error(
+        `access-control-allow-origin header is [${h1}], expected [${origin}]`,
+      );
     }
     // The AMP docs specify that the AMP-Access-Control-Allow-Source-Origin and
     // Access-Control-Expose-Headers headers must be returned, but this is not
@@ -355,6 +361,7 @@ function buildSourceOrigin(url: string) {
 }
 
 function canXhrSameOrigin(context: Context, xhrUrl: string) {
+  xhrUrl = absoluteUrl(xhrUrl, context.url);
   const sourceOrigin = buildSourceOrigin(context.url);
 
   const headers = Object.assign(
@@ -372,6 +379,7 @@ function canXhrSameOrigin(context: Context, xhrUrl: string) {
 }
 
 function canXhrCache(context: Context, xhrUrl: string, cacheSuffix: string) {
+  xhrUrl = absoluteUrl(xhrUrl, context.url);
   const sourceOrigin = buildSourceOrigin(context.url);
   const origin = buildCacheOrigin(cacheSuffix, context.url);
 
@@ -564,12 +572,11 @@ const testCorsSameOrigin: TestList = async (context) => {
 };
 
 const testCorsCache: TestList = async (context) => {
-  // From https://stackoverflow.com/a/43053803/11543
+  // Cartesian product from https://stackoverflow.com/a/43053803/11543
   const cartesian = (a: any, b: any) => [].concat(...a.map((d: any) => b.map((e: any) => [].concat(d, e))));
   const corsEndpoints = getCorsEndpoints(context.$);
   const caches = (require("./caches.json").caches as Array<{ cacheDomain: string }>).map(c => c.cacheDomain);
   const product = cartesian(corsEndpoints, caches);
-  console.log({product});
   return (await Promise.all(
     product.map(([xhrUrl, cacheSuffix]) => canXhrCache(context, xhrUrl, cacheSuffix))
   )).filter(notPass);

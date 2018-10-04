@@ -431,8 +431,7 @@ withFixture("corsendpoints1", () => assertEqual(
     "https://swift-track.glitch.me/"
   ),
   [
-    "https://ampbyexample.com/json/examples.json",
-    "/components/amp-form/submit-form"
+    "https://ampbyexample.com/json/examples.json"
   ]
 ));
 
@@ -476,14 +475,14 @@ withFixture("cors3", () => assertMatch(
   "application/json"
 ));
 
-withFixture("cors4", () => assertMatch(
+withFixture("cors4", () => assertEqual(
   "testCorsCache - all headers correct",
   runTestList(
     linter.testCorsCache,
     "https://swift-track.glitch.me/"
   ),
-  "fff"
+  []
 ));
 
 console.log("# dummy"); // https://github.com/scottcorgan/tap-spec/issues/63 (sigh)
-console.log(`1..23`);
+console.log(`1..29`);
