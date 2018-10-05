@@ -143,8 +143,13 @@ function getInlineMetadata($: CheerioStatic) {
   return inlineMetadata;
 }
 
-function getImageSize(context: Context, url: string): Promise<{width: number, height: number, [k: string]: any}> {
-  return probe(url, { headers: context.headers });
+function getImageSize(context: Context, url: string):
+  Promise<{width: number, height: number, mime: string, [k: string]: any}> {
+  // probe-image size can't handle encoded streams:
+  // https://github.com/nodeca/probe-image-size/issues/28
+  const headers = Object.assign({}, context.headers);
+  delete headers["accept-encoding"];
+  return probe(absoluteUrl(url, context.url), { headers });
 }
 
 function fetchToCurl(url: string, init: { headers?: { [k: string]: string } } = { headers: {} }) {
@@ -638,7 +643,7 @@ if (require.main === module) { // invoked directly?
       return a;
     }, {});
 
-  // console.log(headers);
+  // console.log({url, headers});
 
   const body = (() => {
     if (url === "-") {
