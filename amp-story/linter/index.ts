@@ -5,7 +5,7 @@ import {resolve, URL} from "url";
 // tslint:disable-next-line:no-var-requires
 const validator = require("amphtml-validator").newInstance(
   // Let's not fetch over the network on every run.
-  // Use `yarn run update-validator` to update.
+  // Use `npm run update-data` to update.
   // tslint:disable-next-line:no-var-requires
   readFileSync(`${__dirname}/validator.js`).toString(),
 );
@@ -152,6 +152,14 @@ function getImageSize(context: Context, url: string):
   return probe(absoluteUrl(url, context.url), { headers });
 }
 
+const getCorsEndpoints = ($: CheerioStatic) => {
+  return ([] as string[]).concat(
+    $("amp-list[src]").map((_, e) => $(e).attr("src")).get(),
+    $("amp-story amp-story-bookend").attr("src"),
+    $("amp-story").attr("bookend-config-src"),
+  ).filter(s => !!s);
+};
+
 function fetchToCurl(url: string, init: { headers?: { [k: string]: string } } = { headers: {} }) {
   const headers = init.headers || {};
 
@@ -257,6 +265,12 @@ const testVideoSize: Test = (context) => {
   });
 };
 
+/**
+ * Adds `__amp_source_origin` query parameter to URL.
+ *
+ * @param url
+ * @param sourceOrigin
+ */
 function addSourceOrigin(url: string, sourceOrigin: string) {
   const {parse, format} = require("url"); // use old API to work with node 6+
   const obj = parse(url, true);
@@ -319,9 +333,10 @@ function isStatusOk(res: Response) {
 function isAccessControlHeaders(origin: string, sourceOrigin: string): (res: Response) => Response {
   return (res) => {
     const h1 = res.headers.get("access-control-allow-origin") || "";
-    if ((h1 !== origin) && (h1 !== "*")) { throw new Error(
-      `access-control-allow-origin header is [${h1}], expected [${origin}]`,
-    );
+    if ((h1 !== origin) && (h1 !== "*")) {
+      throw new Error(
+        `access-control-allow-origin header is [${h1}], expected [${origin}]`,
+      );
     }
     // The AMP docs specify that the AMP-Access-Control-Allow-Source-Origin and
     // Access-Control-Expose-Headers headers must be returned, but this is not
@@ -351,6 +366,7 @@ function buildSourceOrigin(url: string) {
 }
 
 function canXhrSameOrigin(context: Context, xhrUrl: string) {
+  xhrUrl = absoluteUrl(xhrUrl, context.url);
   const sourceOrigin = buildSourceOrigin(context.url);
 
   const headers = Object.assign(
@@ -364,10 +380,11 @@ function canXhrSameOrigin(context: Context, xhrUrl: string) {
   return fetch(addSourceOrigin(xhrUrl, sourceOrigin), {headers})
     .then(isStatusOk)
     .then(isJson)
-    .then(PASS, (e: Error) => FAIL(`can't retrieve bookend: ${e.message} [debug: ${curl}]`));
+    .then(PASS, (e: Error) => FAIL(`can't XHR [${xhrUrl}]: ${e.message} [debug: ${curl}]`));
 }
 
 function canXhrCache(context: Context, xhrUrl: string, cacheSuffix: string) {
+  xhrUrl = absoluteUrl(xhrUrl, context.url);
   const sourceOrigin = buildSourceOrigin(context.url);
   const origin = buildCacheOrigin(cacheSuffix, context.url);
 
@@ -383,7 +400,7 @@ function canXhrCache(context: Context, xhrUrl: string, cacheSuffix: string) {
     .then(isStatusOk)
     .then(isAccessControlHeaders(origin, sourceOrigin))
     .then(isJson)
-    .then(PASS, (e) => FAIL(`can't retrieve bookend: ${e.message} [debug: ${curl}]`));
+    .then(PASS, (e) => FAIL(`can't XHR [${xhrUrl}]: ${e.message} [debug: ${curl}]`));
 }
 
 const testBookendSameOrigin: Test = (context) => {
@@ -554,6 +571,22 @@ const testAmpImg: TestList = async (context) => {
   }).get() as any as Array<Promise<Message>>)).filter(notPass);
 };
 
+const testCorsSameOrigin: TestList = async (context) => {
+  const corsEndpoints = getCorsEndpoints(context.$);
+  return (await Promise.all(corsEndpoints.map(s => canXhrSameOrigin(context, s)))).filter(notPass);
+};
+
+const testCorsCache: TestList = async (context) => {
+  // Cartesian product from https://stackoverflow.com/a/43053803/11543
+  const cartesian = (a: any, b: any) => [].concat(...a.map((d: any) => b.map((e: any) => [].concat(d, e))));
+  const corsEndpoints = getCorsEndpoints(context.$);
+  const caches = (require("./caches.json").caches as Array<{ cacheDomain: string }>).map(c => c.cacheDomain);
+  const product = cartesian(corsEndpoints, caches);
+  return (await Promise.all(
+    product.map(([xhrUrl, cacheSuffix]) => canXhrCache(context, xhrUrl, cacheSuffix))
+  )).filter(notPass);
+};
+
 const testAll = async (context: Context): Promise<{[key: string]: Message}> => {
   const tests = [
     testValidity,
@@ -572,6 +605,8 @@ const testAll = async (context: Context): Promise<{[key: string]: Message}> => {
     testThumbnails,
     testMetaCharsetFirst,
     testAmpImg,
+    testCorsSameOrigin,
+    testCorsCache,
   ];
   const res = await Promise.all(tests.map(async (testFn) => {
     const v = await testFn(context);
@@ -604,12 +639,15 @@ export {
   testRuntimePreloaded,
   testThumbnails,
   testAmpImg,
+  testCorsSameOrigin,
+  testCorsCache,
   fetchToCurl,
   // "private" functions get prefixed
   getBody as _getBody,
   getSchemaMetadata as _getSchemaMetadata,
   getInlineMetadata as _getInlineMetadata,
   getImageSize as _getImageSize,
+  getCorsEndpoints as _getCorsEndpoints,
 };
 
 if (require.main === module) { // invoked directly?
