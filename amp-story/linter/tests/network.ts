@@ -108,7 +108,7 @@ async function assertMatch<T extends object>(
 async function assertFn<T extends object>(
   testName: string,
   actual: T|Promise<T>,
-  expectedFn: (expected: T) => string,
+  expectedFn: (actual: T) => string,
 ) {
   COUNT++;
   const res = expectedFn(await actual);
@@ -208,22 +208,33 @@ withFixture("getinlinemetadata", () => assertEqual(
     },
 ));
 
-withFixture("thumbnails1", () => assertEqual(
+withFixture("thumbnails1", () => assertFn<linter.Message[]>(
   "testThumbnails - correctly sized",
-  runTest(
+  runTestList(
     linter.testThumbnails,
     "https://ampbyexample.com/stories/introduction/amp_story_hello_world/preview/embed/"
   ),
-  PASS
+  (actual) => {
+    return actual.length === 0 ? "" : "expected no errors";
+  }
 ));
 
 withFixture("thumbnails2", () => assertMatch(
   "testThumbnails - publisher-logo-src missing",
-  runTest(
+  runTestList(
     linter.testThumbnails,
     "https://regular-biology.glitch.me/"
   ),
   "publisher-logo-src"
+));
+
+withFixture("thumbnails3", () => assertMatch(
+  "testThumbnails - poster-portrait-src not found",
+  runTestList(
+    linter.testThumbnails,
+    "http://localhost:5000/"
+  ),
+  "404"
 ));
 
 withFixture("testvalidity1", () => assertEqual(

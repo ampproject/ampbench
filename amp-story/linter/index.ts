@@ -26,7 +26,7 @@ const UA_GOOGLEBOT_MOBILE = [
 ].join(" ");
 
 export interface ActualExpected {
-  readonly actual: string;
+  readonly actual: string|undefined;
   readonly expected: string;
 }
 
@@ -117,9 +117,9 @@ const getContentLength = throat(CONCURRENCY,
   },
 );
 
-const absoluteUrl = (s: string, base: string) => {
+const absoluteUrl = (s: string|undefined, base: string|undefined) => {
   if (typeof s !== "string" || typeof base !== "string") {
-    return "";
+    return undefined;
   } else {
     return resolve(base, s);
   }
@@ -248,7 +248,7 @@ const testVideoSize: Test = (context) => {
   const {$} = context;
   return Promise.all($(`amp-video source[type="video/mp4"][src], amp-video[src]`).map(async (i, e) => {
     const url = absoluteUrl($(e).attr("src"), context.url);
-    const length = await getContentLength(context, url);
+    const length = await getContentLength(context, url!);
     return { url, length };
   }).get() as any as Array<Promise<{ url: string, length: number }>>).then((args) => { // TODO(stillers): switch to Map
     return args.reduce((a, v) => {
@@ -411,7 +411,7 @@ const testBookendSameOrigin: Test = (context) => {
   if (!bookendSrc) { return WARN("amp-story-bookend missing"); }
   const bookendUrl = absoluteUrl(bookendSrc, url);
 
-  return canXhrSameOrigin(context, bookendUrl);
+  return canXhrSameOrigin(context, bookendUrl!);
 };
 
 const testBookendCache: Test = (context) => {
@@ -422,7 +422,7 @@ const testBookendCache: Test = (context) => {
   if (!bookendSrc) { return WARN("amp-story-bookend missing"); }
   const bookendUrl = absoluteUrl(bookendSrc, url);
 
-  return canXhrCache(context, bookendUrl, "cdn.ampproject.org");
+  return canXhrCache(context, bookendUrl!, "cdn.ampproject.org");
 };
 
 const testVideoSource: Test = ({$}) => {
@@ -477,51 +477,68 @@ const testMostlyText: Test = ({$}) => {
   }
 };
 
-const testThumbnails: Test = async (context) => {
+const testThumbnails: TestList = async (context) => {
   const $ = context.$;
-  async function isSquare(url: string) {
-    const {width, height} = await getImageSize(context, url);
+  async function isSquare(url: string|undefined) {
+    if (!url) { return false; }
+    const {width, height} = await getImageSize(context, absoluteUrl(url, context.url)!);
     return width === height;
   }
-  async function isPortrait(url: string) {
-    const {width, height} = await getImageSize(context, url);
+  async function isPortrait(url: string|undefined) {
+    if (!url) { return false; }
+    const {width, height} = await getImageSize(context, absoluteUrl(url, context.url)!);
     return (width > (0.74 * height)) && (width < (0.76 * height));
   }
-  async function isLandscape(url: string) {
-    const {width, height} = await getImageSize(context, url);
+  async function isLandscape(url: string|undefined) {
+    if (!url) { return false; }
+    const {width, height} = await getImageSize(context, absoluteUrl(url, context.url)!);
     return (height > (0.74 * width)) && (height < (0.76 * width));
   }
   const inlineMetadata = getInlineMetadata($);
 
-  let k: keyof InlineMetadata;
-  let v: string|undefined;
-  const errors = [];
+  const res: Array<Promise<Message>> = [];
 
-  k = "publisher-logo-src";
-  v = inlineMetadata[k];
-  if (!v || !(await isSquare(v))) {
-    errors.push(`[${k}] (${v}) is missing or not square (1:1)`);
-  }
+  res.push((() => {
+    const k = "publisher-logo-src";
+    const v = inlineMetadata[k];
+    return isSquare(v).then(
+      r => r ? PASS() : FAIL(`[${k}] (${v}) is missing or not square (1:1)`),
+      e => FAIL(`[${k}] (${v}) status not 200`)
+    );
+  })());
 
-  k = "poster-portrait-src";
-  v = inlineMetadata[k];
-  if (!v || !(await isPortrait(v))) {
-    errors.push(`[${k}] (${v}) is missing or not portrait (3:4)`);
-  }
+  res.push((() => {
+    const k = "poster-portrait-src";
+    const v = inlineMetadata[k];
+    return isPortrait(v).then(
+      r => r ? PASS() : FAIL(`[${k}] (${v}) is missing or not portrait (3:4)`),
+      e => FAIL(`[${k}] (${v}) status not 200`)
+    );
+  })());
 
-  k = "poster-square-src";
-  v = inlineMetadata[k];
-  if (v && !(await isSquare(v))) {
-    errors.push(`[${k}] (${v}) is not square (1x1)`);
-  }
+  (() => {
+    const k = "poster-square-src";
+    const v = inlineMetadata[k];
+    if (v) {
+      res.push(isSquare(v).then(
+        r => r ? PASS() : FAIL(`[${k}] (${v}) is not square (1x1)`),
+        e => FAIL(`[${k}] (${v}) status not 200`)
+      ));
+    }
+  })();
 
-  k = "poster-landscape-src";
-  v = inlineMetadata[k];
-  if (v && !(await isLandscape(v))) {
-    errors.push(`[${k}] ($v) is not landscape (4:3)`);
-  }
+  (() => {
+    const k = "poster-landscape-src";
+    const v = inlineMetadata[k];
+    if (v) {
+      res.push(isLandscape(v).then(
+        r => r ? PASS() : FAIL(`[${k}] (${v}) is not landscape (4:3)`),
+        e => FAIL(`[${k}] (${v}) status not 200`)
+      ));
+    }
+  })();
 
-  return (errors.length > 0) ? FAIL(errors.join(", ")) : PASS();
+  return (await Promise.all(res)).filter(notPass);
 };
 
 const testSingleAmpImg = (
@@ -555,13 +572,12 @@ const testSingleAmpImg = (
   const fail = ({statusCode}: {statusCode: number}) => {
     return FAIL(`[${src}] returned status ${statusCode}`);
   };
-  return getImageSize(context, absoluteUrl(src, context.url)).then(success, fail);
+  return getImageSize(context, absoluteUrl(src, context.url)!).then(success, fail);
 
 };
 
 const testAmpImg: TestList = async (context) => {
   const $ = context.$;
-  const url = context.url;
 
   return (await Promise.all($("amp-img").map((_, e) => {
     const src = $(e).attr("src");
@@ -696,7 +712,7 @@ if (require.main === module) { // invoked directly?
   body
     .then(b => cheerio.load(b))
     .then($ => testAll({$, headers, url}))
-    .then(console.log)
+    .then(r => console.log(JSON.stringify(r, null, 2)))
     .then(() => process.exit(0))
     .catch((e) => console.error(`error: ${e}`));
 
