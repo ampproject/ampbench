@@ -663,11 +663,11 @@ export {
 if (require.main === module) { // invoked directly?
 
   if (process.argv.length <= 2) {
-    console.error(`usage: ${basename(process.argv[0])} ${basename(process.argv[1])} URL [copy_as_cURL]`);
+    console.error(`usage: ${basename(process.argv[0])} ${basename(process.argv[1])} URL|copy_as_cURL`);
     process.exit(1);
   }
 
-  const url = process.argv[2];
+  const url = process.argv.filter(s => s.match(/^http/))[0];
 
   function seq(first: number, last: number): number[] {
     if (first < last) {
