@@ -559,8 +559,12 @@ const testSingleAmpImg = (
     }
     return PASS();
   };
-  const fail = ({statusCode}: {statusCode: number}) => {
-    return FAIL(`[${src}] returned status ${statusCode}`);
+  const fail = (e: {statusCode: number}) => {
+    if (e.statusCode === undefined) {
+      return FAIL(`[${src}] ${JSON.stringify(e)}`);
+    } else {
+      return FAIL(`[${src}] returned status ${e.statusCode}`);
+    }
   };
   return getImageSize(context, absoluteUrl(src, context.url)!).then(success, fail);
 
