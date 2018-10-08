@@ -366,7 +366,7 @@ function buildSourceOrigin(url: string) {
 }
 
 function canXhrSameOrigin(context: Context, xhrUrl: string) {
-  xhrUrl = absoluteUrl(xhrUrl, context.url);
+  xhrUrl = absoluteUrl(xhrUrl, context.url)!;
   const sourceOrigin = buildSourceOrigin(context.url);
 
   const headers = Object.assign(
@@ -384,7 +384,7 @@ function canXhrSameOrigin(context: Context, xhrUrl: string) {
 }
 
 function canXhrCache(context: Context, xhrUrl: string, cacheSuffix: string) {
-  xhrUrl = absoluteUrl(xhrUrl, context.url);
+  xhrUrl = absoluteUrl(xhrUrl, context.url)!;
   const sourceOrigin = buildSourceOrigin(context.url);
   const origin = buildCacheOrigin(cacheSuffix, context.url);
 
