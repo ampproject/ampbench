@@ -234,7 +234,7 @@ withFixture("thumbnails3", () => assertMatch(
     linter.testThumbnails,
     "http://localhost:5000/"
   ),
-  "404"
+  "not 200"
 ));
 
 withFixture("testvalidity1", () => assertEqual(
