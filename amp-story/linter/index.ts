@@ -667,7 +667,7 @@ if (require.main === module) { // invoked directly?
     process.exit(1);
   }
 
-  const url = process.argv.filter(s => s.match(/^http/))[0];
+  const url = process.argv[2] === "-" ? "-" : process.argv.filter(s => s.match(/^http/))[0];
 
   function seq(first: number, last: number): number[] {
     if (first < last) {
