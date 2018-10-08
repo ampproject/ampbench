@@ -6,6 +6,7 @@
   "license": "Apache-2.0",
   "author": "Michael Stillwell <mjs@beebo.org>",
   "dependencies": {
+    "amp-toolbox-cache-url": "^0.1.0",
     "amphtml-validator": "^1.0.23",
     "cheerio": "^1.0.0-rc.2",
     "debug": "^4.0.1",
