@@ -1,0 +1,5 @@
+tasks:
+  - command: "npm install && npm test"
+ports:
+  - port: 8080
+    protocol: "http"

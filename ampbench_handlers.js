@@ -20,7 +20,7 @@
 
 const benchlib = require('./ampbench_lib.js');
 const sdlib = require('./ampbench_lib_sd.js');
-const linter = require('amp-story-linter');
+const linter = require('./amp-story/linter');
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // app version

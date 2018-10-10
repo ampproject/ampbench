@@ -1,14 +1,16 @@
 /// <reference path="probe-image-size.d.ts" />
+/// <reference path="amp-toolbox-cache-url.d.ts" />
 
 import {readFileSync} from "fs";
 import {resolve, URL} from "url";
 // tslint:disable-next-line:no-var-requires
 const validator = require("amphtml-validator").newInstance(
   // Let's not fetch over the network on every run.
-  // Use `yarn run update-validator` to update.
+  // Use `npm run update-data` to update.
   // tslint:disable-next-line:no-var-requires
   readFileSync(`${__dirname}/validator.js`).toString(),
 );
+import createCacheUrl = require("amp-toolbox-cache-url");
 import * as cheerio from "cheerio";
 import throat = require("throat");
 
@@ -26,7 +28,7 @@ const UA_GOOGLEBOT_MOBILE = [
 ].join(" ");
 
 export interface ActualExpected {
-  readonly actual: string;
+  readonly actual: string|undefined;
   readonly expected: string;
 }
 
@@ -117,9 +119,9 @@ const getContentLength = throat(CONCURRENCY,
   },
 );
 
-const absoluteUrl = (s: string, base: string) => {
+const absoluteUrl = (s: string|undefined, base: string|undefined) => {
   if (typeof s !== "string" || typeof base !== "string") {
-    return "";
+    return undefined;
   } else {
     return resolve(base, s);
   }
@@ -143,9 +145,22 @@ function getInlineMetadata($: CheerioStatic) {
   return inlineMetadata;
 }
 
-function getImageSize(context: Context, url: string): Promise<{width: number, height: number, [k: string]: any}> {
-  return probe(url, { headers: context.headers });
+function getImageSize(context: Context, url: string):
+  Promise<{width: number, height: number, mime: string, [k: string]: any}> {
+  // probe-image size can't handle encoded streams:
+  // https://github.com/nodeca/probe-image-size/issues/28
+  const headers = Object.assign({}, context.headers);
+  delete headers["accept-encoding"];
+  return probe(absoluteUrl(url, context.url), { headers });
 }
+
+const getCorsEndpoints = ($: CheerioStatic) => {
+  return ([] as string[]).concat(
+    $("amp-list[src]").map((_, e) => $(e).attr("src")).get(),
+    $("amp-story amp-story-bookend").attr("src"),
+    $("amp-story").attr("bookend-config-src"),
+  ).filter(s => !!s);
+};
 
 function fetchToCurl(url: string, init: { headers?: { [k: string]: string } } = { headers: {} }) {
   const headers = init.headers || {};
@@ -235,7 +250,7 @@ const testVideoSize: Test = (context) => {
   const {$} = context;
   return Promise.all($(`amp-video source[type="video/mp4"][src], amp-video[src]`).map(async (i, e) => {
     const url = absoluteUrl($(e).attr("src"), context.url);
-    const length = await getContentLength(context, url);
+    const length = await getContentLength(context, url!);
     return { url, length };
   }).get() as any as Array<Promise<{ url: string, length: number }>>).then((args) => { // TODO(stillers): switch to Map
     return args.reduce((a, v) => {
@@ -252,26 +267,18 @@ const testVideoSize: Test = (context) => {
   });
 };
 
+/**
+ * Adds `__amp_source_origin` query parameter to URL.
+ *
+ * @param url
+ * @param sourceOrigin
+ */
 function addSourceOrigin(url: string, sourceOrigin: string) {
   const {parse, format} = require("url"); // use old API to work with node 6+
   const obj = parse(url, true);
   obj.query.__amp_source_origin = sourceOrigin;
   obj.search = require("querystring").stringify(obj.query);
   return format(obj);
-}
-
-function buildCacheOrigin(cacheSuffix: string, url: string): string {
-  // console.log({cacheSuffix, url});
-  function convertHost(hostname: string) {
-    return punycode
-      .toASCII(hostname)
-      .replace(/\-/g, "--")
-      .replace(/\./g, "-");
-  }
-  const {parse, format} = require("url"); // use old API to work with node 6+
-  const obj = parse(url);
-  const cacheHost = `${convertHost(obj.host)}.${cacheSuffix}`;
-  return `https://${cacheHost}`;
 }
 
 function isJson(res: Response): Promise<Response> {
@@ -314,9 +321,10 @@ function isStatusOk(res: Response) {
 function isAccessControlHeaders(origin: string, sourceOrigin: string): (res: Response) => Response {
   return (res) => {
     const h1 = res.headers.get("access-control-allow-origin") || "";
-    if ((h1 !== origin) && (h1 !== "*")) { throw new Error(
-      `access-control-allow-origin header is [${h1}], expected [${origin}]`,
-    );
+    if ((h1 !== origin) && (h1 !== "*")) {
+      throw new Error(
+        `access-control-allow-origin header is [${h1}], expected [${origin}]`,
+      );
     }
     // The AMP docs specify that the AMP-Access-Control-Allow-Source-Origin and
     // Access-Control-Expose-Headers headers must be returned, but this is not
@@ -346,6 +354,7 @@ function buildSourceOrigin(url: string) {
 }
 
 function canXhrSameOrigin(context: Context, xhrUrl: string) {
+  xhrUrl = absoluteUrl(xhrUrl, context.url)!;
   const sourceOrigin = buildSourceOrigin(context.url);
 
   const headers = Object.assign(
@@ -359,12 +368,15 @@ function canXhrSameOrigin(context: Context, xhrUrl: string) {
   return fetch(addSourceOrigin(xhrUrl, sourceOrigin), {headers})
     .then(isStatusOk)
     .then(isJson)
-    .then(PASS, (e: Error) => FAIL(`can't retrieve bookend: ${e.message} [debug: ${curl}]`));
+    .then(PASS, (e: Error) => FAIL(`can't XHR [${xhrUrl}]: ${e.message} [debug: ${curl}]`));
 }
 
-function canXhrCache(context: Context, xhrUrl: string, cacheSuffix: string) {
+async function canXhrCache(context: Context, xhrUrl: string, cacheSuffix: string) {
   const sourceOrigin = buildSourceOrigin(context.url);
-  const origin = buildCacheOrigin(cacheSuffix, context.url);
+  const url = await createCacheUrl(cacheSuffix, context.url);
+  const {parse} = require("url"); // use old API to work with node 6+
+  const obj = parse(url);
+  const origin = `${obj.protocol}//${obj.host}`;
 
   const headers = Object.assign(
     {},
@@ -378,7 +390,7 @@ function canXhrCache(context: Context, xhrUrl: string, cacheSuffix: string) {
     .then(isStatusOk)
     .then(isAccessControlHeaders(origin, sourceOrigin))
     .then(isJson)
-    .then(PASS, (e) => FAIL(`can't retrieve bookend: ${e.message} [debug: ${curl}]`));
+    .then(PASS, (e) => FAIL(`can't XHR [${xhrUrl}]: ${e.message} [debug: ${curl}]`));
 }
 
 const testBookendSameOrigin: Test = (context) => {
@@ -389,7 +401,7 @@ const testBookendSameOrigin: Test = (context) => {
   if (!bookendSrc) { return WARN("amp-story-bookend missing"); }
   const bookendUrl = absoluteUrl(bookendSrc, url);
 
-  return canXhrSameOrigin(context, bookendUrl);
+  return canXhrSameOrigin(context, bookendUrl!);
 };
 
 const testBookendCache: Test = (context) => {
@@ -400,7 +412,7 @@ const testBookendCache: Test = (context) => {
   if (!bookendSrc) { return WARN("amp-story-bookend missing"); }
   const bookendUrl = absoluteUrl(bookendSrc, url);
 
-  return canXhrCache(context, bookendUrl, "cdn.ampproject.org");
+  return canXhrCache(context, bookendUrl!, "cdn.ampproject.org");
 };
 
 const testVideoSource: Test = ({$}) => {
@@ -455,51 +467,68 @@ const testMostlyText: Test = ({$}) => {
   }
 };
 
-const testThumbnails: Test = async (context) => {
+const testThumbnails: TestList = async (context) => {
   const $ = context.$;
-  async function isSquare(url: string) {
-    const {width, height} = await getImageSize(context, url);
+  async function isSquare(url: string|undefined) {
+    if (!url) { return false; }
+    const {width, height} = await getImageSize(context, absoluteUrl(url, context.url)!);
     return width === height;
   }
-  async function isPortrait(url: string) {
-    const {width, height} = await getImageSize(context, url);
+  async function isPortrait(url: string|undefined) {
+    if (!url) { return false; }
+    const {width, height} = await getImageSize(context, absoluteUrl(url, context.url)!);
     return (width > (0.74 * height)) && (width < (0.76 * height));
   }
-  async function isLandscape(url: string) {
-    const {width, height} = await getImageSize(context, url);
+  async function isLandscape(url: string|undefined) {
+    if (!url) { return false; }
+    const {width, height} = await getImageSize(context, absoluteUrl(url, context.url)!);
     return (height > (0.74 * width)) && (height < (0.76 * width));
   }
   const inlineMetadata = getInlineMetadata($);
 
-  let k: keyof InlineMetadata;
-  let v: string|undefined;
-  const errors = [];
+  const res: Array<Promise<Message>> = [];
 
-  k = "publisher-logo-src";
-  v = inlineMetadata[k];
-  if (!v || !(await isSquare(v))) {
-    errors.push(`[${k}] (${v}) is missing or not square (1:1)`);
-  }
+  res.push((() => {
+    const k = "publisher-logo-src";
+    const v = inlineMetadata[k];
+    return isSquare(v).then(
+      r => r ? PASS() : FAIL(`[${k}] (${v}) is missing or not square (1:1)`),
+      e => FAIL(`[${k}] (${v}) status not 200`)
+    );
+  })());
 
-  k = "poster-portrait-src";
-  v = inlineMetadata[k];
-  if (!v || !(await isPortrait(v))) {
-    errors.push(`[${k}] (${v}) is missing or not portrait (3:4)`);
-  }
+  res.push((() => {
+    const k = "poster-portrait-src";
+    const v = inlineMetadata[k];
+    return isPortrait(v).then(
+      r => r ? PASS() : FAIL(`[${k}] (${v}) is missing or not portrait (3:4)`),
+      e => FAIL(`[${k}] (${v}) status not 200`)
+    );
+  })());
 
-  k = "poster-square-src";
-  v = inlineMetadata[k];
-  if (v && !(await isSquare(v))) {
-    errors.push(`[${k}] (${v}) is not square (1x1)`);
-  }
+  (() => {
+    const k = "poster-square-src";
+    const v = inlineMetadata[k];
+    if (v) {
+      res.push(isSquare(v).then(
+        r => r ? PASS() : FAIL(`[${k}] (${v}) is not square (1x1)`),
+        e => FAIL(`[${k}] (${v}) status not 200`)
+      ));
+    }
+  })();
 
-  k = "poster-landscape-src";
-  v = inlineMetadata[k];
-  if (v && !(await isLandscape(v))) {
-    errors.push(`[${k}] ($v) is not landscape (4:3)`);
-  }
+  (() => {
+    const k = "poster-landscape-src";
+    const v = inlineMetadata[k];
+    if (v) {
+      res.push(isLandscape(v).then(
+        r => r ? PASS() : FAIL(`[${k}] (${v}) is not landscape (4:3)`),
+        e => FAIL(`[${k}] (${v}) status not 200`)
+      ));
+    }
+  })();
 
-  return (errors.length > 0) ? FAIL(errors.join(", ")) : PASS();
+  return (await Promise.all(res)).filter(notPass);
 };
 
 const testSingleAmpImg = (
@@ -511,7 +540,7 @@ const testSingleAmpImg = (
     const actualWidth = width;
     const actualRatio = Math.floor(actualWidth * 100 / actualHeight) / 100;
     const expectedRatio = Math.floor(expectedWidth * 100 / expectedHeight) / 100;
-    if (Math.abs(actualRatio - expectedRatio) > 0.01) {
+    if (Math.abs(actualRatio - expectedRatio) > 0.015) {
       const actualString = `${actualWidth}/${actualHeight} = ${actualRatio}`;
       const expectedString = `${expectedWidth}/${expectedHeight} = ${expectedRatio}`;
       return FAIL(`[${src}]: actual ratio [${actualString}] does not match specified [${expectedString}]`);
@@ -530,16 +559,19 @@ const testSingleAmpImg = (
     }
     return PASS();
   };
-  const fail = ({statusCode}: {statusCode: number}) => {
-    return FAIL(`[${src}] returned status ${statusCode}`);
+  const fail = (e: {statusCode: number}) => {
+    if (e.statusCode === undefined) {
+      return FAIL(`[${src}] ${JSON.stringify(e)}`);
+    } else {
+      return FAIL(`[${src}] returned status ${e.statusCode}`);
+    }
   };
-  return getImageSize(context, absoluteUrl(src, context.url)).then(success, fail);
+  return getImageSize(context, absoluteUrl(src, context.url)!).then(success, fail);
 
 };
 
 const testAmpImg: TestList = async (context) => {
   const $ = context.$;
-  const url = context.url;
 
   return (await Promise.all($("amp-img").map((_, e) => {
     const src = $(e).attr("src");
@@ -547,6 +579,22 @@ const testAmpImg: TestList = async (context) => {
     const expectedWidth = parseInt($(e).attr("width"), 10);
     return testSingleAmpImg(context, { src, expectedHeight, expectedWidth });
   }).get() as any as Array<Promise<Message>>)).filter(notPass);
+};
+
+const testCorsSameOrigin: TestList = async (context) => {
+  const corsEndpoints = getCorsEndpoints(context.$);
+  return (await Promise.all(corsEndpoints.map(s => canXhrSameOrigin(context, s)))).filter(notPass);
+};
+
+const testCorsCache: TestList = async (context) => {
+  // Cartesian product from https://stackoverflow.com/a/43053803/11543
+  const cartesian = (a: any, b: any) => [].concat(...a.map((d: any) => b.map((e: any) => [].concat(d, e))));
+  const corsEndpoints = getCorsEndpoints(context.$);
+  const caches = (require("./caches.json").caches as Array<{ cacheDomain: string }>).map(c => c.cacheDomain);
+  const product = cartesian(corsEndpoints, caches);
+  return (await Promise.all(
+    product.map(([xhrUrl, cacheSuffix]) => canXhrCache(context, xhrUrl, cacheSuffix))
+  )).filter(notPass);
 };
 
 const testAll = async (context: Context): Promise<{[key: string]: Message}> => {
@@ -567,6 +615,8 @@ const testAll = async (context: Context): Promise<{[key: string]: Message}> => {
     testThumbnails,
     testMetaCharsetFirst,
     testAmpImg,
+    testCorsSameOrigin,
+    testCorsCache,
   ];
   const res = await Promise.all(tests.map(async (testFn) => {
     const v = await testFn(context);
@@ -599,22 +649,25 @@ export {
   testRuntimePreloaded,
   testThumbnails,
   testAmpImg,
+  testCorsSameOrigin,
+  testCorsCache,
   fetchToCurl,
   // "private" functions get prefixed
   getBody as _getBody,
   getSchemaMetadata as _getSchemaMetadata,
   getInlineMetadata as _getInlineMetadata,
   getImageSize as _getImageSize,
+  getCorsEndpoints as _getCorsEndpoints,
 };
 
 if (require.main === module) { // invoked directly?
 
   if (process.argv.length <= 2) {
-    console.error(`usage: ${basename(process.argv[0])} ${basename(process.argv[1])} URL [copy_as_cURL]`);
+    console.error(`usage: ${basename(process.argv[0])} ${basename(process.argv[1])} URL|copy_as_cURL`);
     process.exit(1);
   }
 
-  const url = process.argv[2];
+  const url = process.argv[2] === "-" ? "-" : process.argv.filter(s => s.match(/^http/))[0];
 
   function seq(first: number, last: number): number[] {
     if (first < last) {
@@ -638,7 +691,7 @@ if (require.main === module) { // invoked directly?
       return a;
     }, {});
 
-  // console.log(headers);
+  // console.log({url, headers});
 
   const body = (() => {
     if (url === "-") {
@@ -653,7 +706,7 @@ if (require.main === module) { // invoked directly?
   body
     .then(b => cheerio.load(b))
     .then($ => testAll({$, headers, url}))
-    .then(console.log)
+    .then(r => console.log(JSON.stringify(r, null, 2)))
     .then(() => process.exit(0))
     .catch((e) => console.error(`error: ${e}`));
 

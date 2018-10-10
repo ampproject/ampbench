@@ -11,12 +11,11 @@
     "deploy": "gcloud app deploy app.yaml",
     "lint": "eslint --quiet amp*.js",
     "mocha": "mocha test/*.test.js -t 30000",
-    "test": "npm run lint"
+    "test": "npm run lint && cd amp-story/linter && npm test"
   },
   "author": "The AMP HTML Authors",
   "license": "Apache Version 2.0",
   "dependencies": {
-    "amp-story-linter": "file:amp-story/linter",
     "amp-toolbox-cache-url": "^0.1.0",
     "amphtml-validator": "^1.0.23",
     "body-parser": "^1.18.3",

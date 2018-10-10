@@ -12,6 +12,7 @@ import { _getBody as getBody } from "..";
 import { _getSchemaMetadata as getSchemaMetadata } from "..";
 import { _getInlineMetadata as getInlineMetadata } from "..";
 import { _getImageSize as getImageSize } from "..";
+import { _getCorsEndpoints as getCorsEndpoints } from "..";
 import * as linter from "..";
 
 import throat = require("throat");
@@ -63,8 +64,9 @@ async function assertEqual<T extends object>(
   if (res && res.length === 1) {
     console.log(`ok ${COUNT} - ${testName}`);
   } else {
-    const s = JSON.stringify(await Promise.resolve(actual));
-    console.log(`not ok ${COUNT} - ${testName} actual: ${s}`);
+    const as = JSON.stringify(await Promise.resolve(actual));
+    const es = JSON.stringify(await Promise.resolve(expected));
+    console.log(`not ok ${COUNT} - ${testName} actual: ${as}, expected: ${es}`);
   }
   return res;
 }
@@ -80,8 +82,9 @@ async function assertNotEqual<T extends object>(
     await Promise.resolve(actual)
   );
   if (res && res.length === 1) {
-    const s = JSON.stringify(await Promise.resolve(actual));
-    console.log(`not ok ${COUNT} - ${testName} actual: ${s}`);
+    const as = JSON.stringify(await Promise.resolve(actual));
+    const es = JSON.stringify(await Promise.resolve(expected));
+    console.log(`not ok ${COUNT} - ${testName} actual: ${as}, expected: ${es}`);
   } else {
     console.log(`ok ${COUNT} - ${testName}`);
   }
@@ -105,7 +108,7 @@ async function assertMatch<T extends object>(
 async function assertFn<T extends object>(
   testName: string,
   actual: T|Promise<T>,
-  expectedFn: (expected: T) => string,
+  expectedFn: (actual: T) => string,
 ) {
   COUNT++;
   const res = expectedFn(await actual);
@@ -205,22 +208,33 @@ withFixture("getinlinemetadata", () => assertEqual(
     },
 ));
 
-withFixture("thumbnails1", () => assertEqual(
+withFixture("thumbnails1", () => assertFn<linter.Message[]>(
   "testThumbnails - correctly sized",
-  runTest(
+  runTestList(
     linter.testThumbnails,
     "https://ampbyexample.com/stories/introduction/amp_story_hello_world/preview/embed/"
   ),
-  PASS
+  (actual) => {
+    return actual.length === 0 ? "" : "expected no errors";
+  }
 ));
 
 withFixture("thumbnails2", () => assertMatch(
   "testThumbnails - publisher-logo-src missing",
-  runTest(
+  runTestList(
     linter.testThumbnails,
     "https://regular-biology.glitch.me/"
   ),
   "publisher-logo-src"
+));
+
+withFixture("thumbnails3", () => assertMatch(
+  "testThumbnails - poster-portrait-src not found",
+  runTestList(
+    linter.testThumbnails,
+    "http://localhost:5000/"
+  ),
+  "not 200"
 ));
 
 withFixture("testvalidity1", () => assertEqual(
@@ -421,5 +435,65 @@ withFixture("ampimg3", () => assertFn<linter.Message[]>(
   }
 ));
 
+withFixture("corsendpoints1", () => assertEqual(
+  "getCorsEndpoints - all endpoints extracted (AMP)",
+  runCheerioFn(
+    getCorsEndpoints,
+    "https://swift-track.glitch.me/"
+  ),
+  [
+    "https://ampbyexample.com/json/examples.json"
+  ]
+));
+
+withFixture("corsendpoints2", () => assertEqual(
+  "getCorsEndpoints - all endpoints extracted (AMP Story)",
+  runCheerioFn(
+    getCorsEndpoints,
+    "https://ampbyexample.com/stories/introduction/amp_story_hello_world/preview/embed/"
+  ),
+  [
+    "https://ampbyexample.com/json/bookend.json",
+  ]
+));
+
+withFixture("cors1", () => assertFn<linter.Message[]>(
+  "testCors - all headers correct",
+  runTestList(
+    linter.testCorsSameOrigin,
+    "https://swift-track.glitch.me/"
+  ),
+  (res) => {
+    return res.length === 0 ? "" : `expected 0 failures, got ${JSON.stringify(res)}`;
+  }
+));
+
+withFixture("cors2", () => assertMatch(
+  "testCors - endpoint is 404",
+  runTestList(
+    linter.testCorsSameOrigin,
+    "https://swift-track.glitch.me/"
+  ),
+  "404"
+));
+
+withFixture("cors3", () => assertMatch(
+  "testCors - endpoint not application/json",
+  runTestList(
+    linter.testCorsSameOrigin,
+    "https://swift-track.glitch.me/"
+  ),
+  "application/json"
+));
+
+withFixture("cors4", () => assertEqual(
+  "testCorsCache - all headers correct",
+  runTestList(
+    linter.testCorsCache,
+    "https://swift-track.glitch.me/"
+  ),
+  []
+));
+
 console.log("# dummy"); // https://github.com/scottcorgan/tap-spec/issues/63 (sigh)
-console.log(`1..23`);
+console.log(`1..30`);
