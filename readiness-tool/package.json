@@ -1,21 +1,5 @@
 {
-  "name": "chrome-readiness-tool",
-  "version": "1.0.0",
-  "description": "Shows third party services that exist on the page and whether they are supported by AMP",
-  "author": "The AMP HTML Authors",
-  "bin": {
-    "module-name": "./bin/module-name"
-  },
-  "scripts": {},
-  "main": "lib/foo.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ampproject/ampbench"
-  },
   "dependencies": {
-    "builtwith": "^1.0.1"
-  },
-  "devDependencies": {},
-  "analyze": true,
-  "license": "Apache 2"
+    "webextension-polyfill": "^0.2.1"
+  }
 }

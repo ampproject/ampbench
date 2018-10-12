@@ -1,48 +1,70 @@
 {
-  "manifest_version": 2,
-  "name": "AMP Readiness Tool",
-  "description": "See at a glance the various third party vendors on the page and whether they have AMP support.",
-  "version": "2.8",
-  "options_page": "options.html",
-  "icons": {
-    "16": "amp-readiness.png",
-    "48": "amp-readiness.png",
-    "128": "amp-readiness.png"
-  },
-  "browser_action": {
-    "default_icon": "amp-readiness.png",
-    "default_popup": "popup.html"
-  },
-  "background": {
-    "scripts": [
-      "background.js"
-    ]
-  },
-  "content_scripts": [
-    {
-      "js": [
-        "content_script.js"
-      ],
-      "matches": [
-        "<all_urls>"
-      ],
-      "all_frames": false,
-      "run_at": "document_end",
-      "exclude_globs": [
-        "*.corp.google.com/*"
-      ]
-    }
-  ],
-  "web_accessible_resources": [
-    "apps.json"
-  ],
-  "permissions": [
-    "activeTab",
-    "<all_urls>",
-    "webNavigation",
-    "tabs",
-    "https://ajax.googleapis.com/",
-    "storage",
-    "unlimitedStorage"
-  ]
+	"name": "AMP Readiness Tool",
+	"short_name": "AMP Readiness Tool",
+	"author": "Jeffrey Jose and Phillip Kriegel",
+	"homepage_url": "https://github.com/ampproject/ampbench/tree/master/readiness-tool",
+	"description": "Identify web technologies that are relevant to AMP",
+	"version": "3.1.0",
+	"default_locale": "en",
+	"manifest_version": 2,
+	"icons": {
+		"16": "images/amp-readiness.png",
+		"48": "images/amp-readiness.png",
+		"128": "images/amp-readiness.png"
+	},
+	"page_action": {
+		"default_icon": "images/amp-readiness.png",
+		"default_title": "AMP Readiness Tool",
+		"default_popup": "html/popup.html"
+	},
+	"background": {
+		"page": "html/background.html"
+
+	},
+	"content_scripts": [
+		{
+			"matches": [
+				"http://*/*",
+				"https://*/*"
+			],
+			"js": [
+				"node_modules/webextension-polyfill/dist/browser-polyfill.js",
+				"js/content.js"
+			],
+			"run_at": "document_idle"
+		},
+		{
+			"matches": [
+        "http://*/*",
+				"https://*/*"
+			],
+			"exclude_matches": [
+				"https://*.modirum.com/*",
+				"https://www.alphaecommerce.gr/*"
+			],
+			"js": [
+				"js/lib/iframe.js"
+			],
+			"run_at": "document_start",
+			"all_frames": true
+		}
+	],
+	"web_accessible_resources": [
+		"js/inject.js"
+	],
+	"options_page": "html/options.html",
+	"options_ui": {
+		"page": "html/options.html",
+		"open_in_tab": false
+	},
+	"permissions": [
+    "cookies",
+		"storage",
+		"tabs",
+		"webRequest",
+		"webNavigation",
+		"http://*/*",
+		"https://*/*"
+	],
+	"content_security_policy": "script-src 'self'; object-src 'self'"
 }
