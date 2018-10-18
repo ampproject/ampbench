@@ -406,6 +406,7 @@
     "technologyTooltips": {
         "Optimizely": "Client side A/B testing simply isn't possible. Try server side testing and amp-experiment",
         "jQuery": "jQuery is a very common JS library that is used for convenience, but doesn't offer anything AMP JS can't",
-        "GoSquared": "If you aren't using the chat feature of GoSquared, then it is possible to integrate GoSquared Analytics within AMP. A chat feature would have to be reserved for another part of your site. Currently not possible within an AMP page"
+        "GoSquared": "If you aren't using the chat feature of GoSquared, then it is possible to integrate GoSquared Analytics within AMP. A chat feature would have to be reserved for another part of your site. Currently not possible within an AMP page",
+        "reCaptcha": "reCaptcha will have native support in AMP by the end of Q1, 2019. Please reference ampproject/amphtml issue 2273 in GitHub for any updates."
     }
 }
