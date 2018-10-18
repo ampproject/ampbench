@@ -383,7 +383,8 @@
         "Raychat",
         "Tawk.to",
         "UserLike",
-        "Zendesk Chat"
+        "Zendesk Chat",
+        "reCAPTCHA"
     ],
     "conversionCategoryTooltips": {
         "1": "AMP pages need to be built within the template system of a CMS, or be built stand alone outside of the CMS. To create AMPs that look and feel like your non-AMPs with a CMS will require coding on your part. Plugins aren't likely to convert everything automatically, and could give sub-par results.",
@@ -405,8 +406,8 @@
     },
     "technologyTooltips": {
         "Optimizely": "Client side A/B testing simply isn't possible. Try server side testing and amp-experiment",
-        "jQuery": "jQuery is a very common JS library that is used for convenience, but doesn't offer anything AMP JS can't",
+        "jQuery": "jQuery is a very common JS library that is used for convenience, but doesn't enable anything that can't be accomplished with AMP JS",
         "GoSquared": "If you aren't using the chat feature of GoSquared, then it is possible to integrate GoSquared Analytics within AMP. A chat feature would have to be reserved for another part of your site. Currently not possible within an AMP page",
-        "reCaptcha": "reCaptcha will have native support in AMP by the end of Q1, 2019. Please reference ampproject/amphtml issue 2273 in GitHub for any updates."
+        "reCAPTCHA": "reCaptcha will have native support in AMP by the end of Q1, 2019. Please reference ampproject/amphtml issue 2273 in GitHub for any updates."
     }
 }
