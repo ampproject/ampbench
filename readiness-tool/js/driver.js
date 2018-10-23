@@ -97,10 +97,9 @@ fetch('https://raw.githubusercontent.com/philkrie/ampbench/master/readiness-tool
 
         wappalyzer.supported_apps = json_ext.supported;
         wappalyzer.incompatible_apps = json_ext.incompatible;
-        wappalyzer.cat_tooltips = json_ext.categoryTooltips;
-        wappalyzer.tech_tooltips = json_ext.technologyTooltips;
-        console.log(wappalyzer.tech_tooltips);
-        
+        wappalyzer.conv_cat_tooltips = json_ext.conversionCategoryTooltips;
+        wappalyzer.incom_cat_tooltips = json_ext.incompatibleCategoryTooltips;
+        wappalyzer.tech_tooltips = json_ext.technologyTooltips;        
     })
     .catch(error => wappalyzer.log(`GET extended_apps.json: ${error}`, 'driver', 'error'));
   })
@@ -213,7 +212,8 @@ browser.webRequest.onCompleted.addListener((request) => {
           pinnedCategory: options.pinnedCategory,
           supported_apps: wappalyzer.supported_apps,
           incompatible_apps: wappalyzer.incompatible_apps,
-          cat_tooltips: wappalyzer.cat_tooltips,
+          conv_cat_tooltips: wappalyzer.conv_cat_tooltips,
+          incom_cat_tooltips: wappalyzer.incom_cat_tooltips,
           tech_tooltips: wappalyzer.tech_tooltips
         };
 

@@ -202,8 +202,8 @@ function appsToDomTemplate(response) {
                   browser.i18n.getMessage(`categoryName${cat}`),
                 ], [
                   'span', {
-                    class: `${categoryHasTooltip(cat, response.cat_tooltips) ? 'tooltip question-mark':''}`,
-                    data_tooltip_left: `${categoryHasTooltip(cat, response.cat_tooltips) ? response.cat_tooltips[cat]:''}`,
+                    class: `${categoryHasTooltip(cat, response.conv_cat_tooltips) ? 'tooltip question-mark':'no-tooltip'}`,
+                    data_tooltip_left: `${categoryHasTooltip(cat, response.conv_cat_tooltips) ? response.conv_cat_tooltips[cat]:''}`,
                   },
                   "    (?)"
                 ]
@@ -231,7 +231,15 @@ function appsToDomTemplate(response) {
                     href: `https://www.wappalyzer.com/categories/${response.categories[cat].name}`,
                   },
                   browser.i18n.getMessage(`categoryName${cat}`),
-                ], 
+                ], [
+                  [
+                    'span', {
+                      class: `${categoryHasTooltip(cat, response.incom_cat_tooltips) ? 'tooltip question-mark':'no-tooltip'}`,
+                      data_tooltip_left: `${categoryHasTooltip(cat, response.incom_cat_tooltips) ? response.incom_cat_tooltips[cat]:''}`,
+                    },
+                    "    (?)"
+                  ]
+                ],
               ], [
                 'div', {
                   class: 'detected__apps',

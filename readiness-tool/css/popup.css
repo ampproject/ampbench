@@ -358,6 +358,10 @@ footer div a:hover {
   text-decoration: underline;
 }
 
+.no-tooltip {
+  visibility: hidden;
+}
+
 .tooltip {
   text-decoration: underline;
   text-decoration-color: red;
