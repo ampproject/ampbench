@@ -28,7 +28,10 @@ const http = require('follow-redirects').http;
 const https = require('follow-redirects').https;
 require('follow-redirects').maxRedirects = 15; // 3X the default!!! we want to know when there *really* is many
 const url = require('url');
-const request = require('request');
+const request = ({ uri, headers }) => {
+    console.log(fetchToCurl(uri, { headers }));
+    return require('request')({ uri, headers, timeout: 3000 });
+};
 const fetch = require('node-fetch');
 // https://github.com/wdavidw/node-http-status/blob/master/lib/index.js
 const http_status = require('http-status');
@@ -52,6 +55,12 @@ const createCacheUrl = require('amp-toolbox-cache-url');
 //
 
 const puts = console.log;
+
+function fetchToCurl(url, init = { headers: {} }) {
+    const headers = init.headers || {};
+    const h = Object.keys(headers).map((k) => `-H '${k}: ${headers[k]}'`).join(' ');
+    return `DEBUG: curl -sS -D - -o /dev/null ${h} '${url}'`;
+}
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // HTTP response class
@@ -981,8 +990,10 @@ function fetch_and_validate_url(validate_url, on_output_callback, as_json) {
             const http_options = {
                 host: url_parsed.hostname,
                 path: url_parsed_path,
-                headers: { 'User-Agent': UA_AMPBENCH }
+                headers: { 'User-Agent': UA_AMPBENCH },
+                timeout: 3,
             };
+            console.log(fetchToCurl(`https://${http_options.host}${http_options.path}`, { headers: http_options.headers }));
             let req = http_response.http_client.request(http_options, callback);
             req.on('error', (err) => {
                 http_response.is_https_cert_ssl_error = err;
@@ -1062,8 +1073,10 @@ function fetch_and_parse_url_for_amplinks(request_url, on_parsed_callback) {
             const http_options = {
                 host: url_parsed.hostname,
                 path: url_parsed_path,
-                headers: { 'User-Agent': UA_AMPBENCH }
+                headers: { 'User-Agent': UA_AMPBENCH },
+                timeout: 3,
             };
+            console.log(fetchToCurl(`https://${http_options.host}${http_options.path}`, { headers: http_options.headers }));
             let req = http_response.http_client.request(http_options, callback);
             req.on('error', (err) => {
                 http_response.is_https_cert_ssl_error = err;
@@ -1227,10 +1240,12 @@ function check_url_is_reachable_with_user_agent(fetch_url, user_agent, callback)
 
     const options = {
         method: 'GET',
-        headers: { 'user-agent': user_agent }
+        headers: { 'user-agent': user_agent },
+        timeout: 3000,
     };
 
     try {
+        console.log(fetchToCurl(fetch_url, options));
         fetch(fetch_url, options)
                 .then(function(res) {
                 // _log_response(res);

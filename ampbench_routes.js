@@ -251,6 +251,12 @@ app.post('/valid_ua_desktop', (req, res) => {
 });
 
 app.get('/validate', (req, res) => {
+    const t = 15000;
+    res.setTimeout(t, () => {
+        console.log(`Backend timed out; couldn't complete checks in ${t}ms`);
+        res.status(200).send(version_msg('No data was retrieved from AMP validation service.'));
+        res.end();
+    });
     const user_agent = benchlib.UA_MOBILE_ANDROID_CHROME_52; // mobile ua
     const user_agent_name = 'MOBILE'; // mobile ua
     assert_url(req, res); // handle bad url
