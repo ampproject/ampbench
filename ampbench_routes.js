@@ -17,6 +17,7 @@ const benchlib = require('./ampbench_lib.js');
 // const benchutil = require('./ampbench_util.js');
 const sdlib = require('./ampbench_lib_sd.js');
 const handlers = require('./ampbench_handlers.js');
+const requestIp = require('request-ip');
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // app version
@@ -33,11 +34,7 @@ function validator_signature() {
 }
 
 function consoleLogHostAndRemoteIP(req) {
-    let remote_ip =
-        req.headers['x-forwarded-for'] ||
-        req.connection.remoteAddress ||
-        req.socket.remoteAddress ||
-        req.connection.socket.remoteAddress;
+    let remote_ip = requestIp.getClientIp(req);
     console.log(
             '[HOST: ' + req.headers.host + '] [REMOTE-IP: ' + remote_ip + ']');
 }
