@@ -28,10 +28,7 @@ const http = require('follow-redirects').http;
 const https = require('follow-redirects').https;
 require('follow-redirects').maxRedirects = 15; // 3X the default!!! we want to know when there *really* is many
 const url = require('url');
-const request = ({ uri, headers }) => {
-    console.log(fetchToCurl(uri, { headers }));
-    return require('request')({ uri, headers, timeout: 3000 });
-};
+const request = require('request');
 const fetch = require('node-fetch');
 // https://github.com/wdavidw/node-http-status/blob/master/lib/index.js
 const http_status = require('http-status');
@@ -55,12 +52,6 @@ const createCacheUrl = require('amp-toolbox-cache-url');
 //
 
 const puts = console.log;
-
-function fetchToCurl(url, init = { headers: {} }) {
-    const headers = init.headers || {};
-    const h = Object.keys(headers).map((k) => `-H '${k}: ${headers[k]}'`).join(' ');
-    return `DEBUG: curl -sS -D - -o /dev/null ${h} '${url}'`;
-}
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // HTTP response class
@@ -991,14 +982,16 @@ function fetch_and_validate_url(validate_url, on_output_callback, as_json) {
                 host: url_parsed.hostname,
                 path: url_parsed_path,
                 headers: { 'User-Agent': UA_AMPBENCH },
-                timeout: 3,
+                timeout: 3000,
             };
             console.log(fetchToCurl(`https://${http_options.host}${http_options.path}`, { headers: http_options.headers }));
             let req = http_response.http_client.request(http_options, callback);
-            req.on('error', (err) => {
+            const handler = (err) => {
                 http_response.is_https_cert_ssl_error = err;
                 on_output_callback(http_response, [CHECK_FAIL]); // !!! RETURN to front-end  - - - - - - - - - - - - - -
-            });
+            };
+            req.on('timeout', handler);
+            req.on('error', handler);
             req.end();
         }
     } else {
@@ -1074,11 +1067,11 @@ function fetch_and_parse_url_for_amplinks(request_url, on_parsed_callback) {
                 host: url_parsed.hostname,
                 path: url_parsed_path,
                 headers: { 'User-Agent': UA_AMPBENCH },
-                timeout: 3,
+                timeout: 3000,
             };
             console.log(fetchToCurl(`https://${http_options.host}${http_options.path}`, { headers: http_options.headers }));
             let req = http_response.http_client.request(http_options, callback);
-            req.on('error', (err) => {
+            const handler = (err) => {
                 http_response.is_https_cert_ssl_error = err;
                 __return.url = full_path;
                 __return.canonical_url = '';
@@ -1087,7 +1080,9 @@ function fetch_and_parse_url_for_amplinks(request_url, on_parsed_callback) {
                 __return.has_dns_prefetch = false;
                 __return.status = CHECK_FAIL;
                 on_parsed_callback(http_response, __return); // !!! RETURN to front-end  - - - - - - - - - - - - - - - -
-            });
+            };
+            req.on('timeout', handler);
+            req.on('error', handler);
             req.end();
         }
     } else {
