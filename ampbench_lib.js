@@ -984,7 +984,6 @@ function fetch_and_validate_url(validate_url, on_output_callback, as_json) {
                 headers: { 'User-Agent': UA_AMPBENCH },
                 timeout: 3000,
             };
-            console.log(fetchToCurl(`https://${http_options.host}${http_options.path}`, { headers: http_options.headers }));
             let req = http_response.http_client.request(http_options, callback);
             const handler = (err) => {
                 http_response.is_https_cert_ssl_error = err;
@@ -1069,7 +1068,6 @@ function fetch_and_parse_url_for_amplinks(request_url, on_parsed_callback) {
                 headers: { 'User-Agent': UA_AMPBENCH },
                 timeout: 3000,
             };
-            console.log(fetchToCurl(`https://${http_options.host}${http_options.path}`, { headers: http_options.headers }));
             let req = http_response.http_client.request(http_options, callback);
             const handler = (err) => {
                 http_response.is_https_cert_ssl_error = err;
@@ -1240,7 +1238,6 @@ function check_url_is_reachable_with_user_agent(fetch_url, user_agent, callback)
     };
 
     try {
-        console.log(fetchToCurl(fetch_url, options));
         fetch(fetch_url, options)
                 .then(function(res) {
                 // _log_response(res);
