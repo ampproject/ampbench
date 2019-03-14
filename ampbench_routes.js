@@ -17,6 +17,7 @@ const benchlib = require('./ampbench_lib.js');
 // const benchutil = require('./ampbench_util.js');
 const sdlib = require('./ampbench_lib_sd.js');
 const handlers = require('./ampbench_handlers.js');
+const requestIp = require('request-ip');
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // app version
@@ -33,11 +34,7 @@ function validator_signature() {
 }
 
 function consoleLogHostAndRemoteIP(req) {
-    let remote_ip =
-        req.headers['x-forwarded-for'] ||
-        req.connection.remoteAddress ||
-        req.socket.remoteAddress ||
-        req.connection.socket.remoteAddress;
+    let remote_ip = requestIp.getClientIp(req);
     console.log(
             '[HOST: ' + req.headers.host + '] [REMOTE-IP: ' + remote_ip + ']');
 }
@@ -251,6 +248,12 @@ app.post('/valid_ua_desktop', (req, res) => {
 });
 
 app.get('/validate', (req, res) => {
+    const t = 15000;
+    res.setTimeout(t, () => {
+        console.log(`Backend timed out; couldn't complete checks in ${t}ms`);
+        res.status(200).send(version_msg('No data was retrieved from AMP validation service.'));
+        res.end();
+    });
     const user_agent = benchlib.UA_MOBILE_ANDROID_CHROME_52; // mobile ua
     const user_agent_name = 'MOBILE'; // mobile ua
     assert_url(req, res); // handle bad url

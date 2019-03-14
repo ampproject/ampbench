@@ -981,13 +981,16 @@ function fetch_and_validate_url(validate_url, on_output_callback, as_json) {
             const http_options = {
                 host: url_parsed.hostname,
                 path: url_parsed_path,
-                headers: { 'User-Agent': UA_AMPBENCH }
+                headers: { 'User-Agent': UA_AMPBENCH },
+                timeout: 3000,
             };
             let req = http_response.http_client.request(http_options, callback);
-            req.on('error', (err) => {
+            const handler = (err) => {
                 http_response.is_https_cert_ssl_error = err;
                 on_output_callback(http_response, [CHECK_FAIL]); // !!! RETURN to front-end  - - - - - - - - - - - - - -
-            });
+            };
+            req.on('timeout', handler);
+            req.on('error', handler);
             req.end();
         }
     } else {
@@ -1062,10 +1065,11 @@ function fetch_and_parse_url_for_amplinks(request_url, on_parsed_callback) {
             const http_options = {
                 host: url_parsed.hostname,
                 path: url_parsed_path,
-                headers: { 'User-Agent': UA_AMPBENCH }
+                headers: { 'User-Agent': UA_AMPBENCH },
+                timeout: 3000,
             };
             let req = http_response.http_client.request(http_options, callback);
-            req.on('error', (err) => {
+            const handler = (err) => {
                 http_response.is_https_cert_ssl_error = err;
                 __return.url = full_path;
                 __return.canonical_url = '';
@@ -1074,7 +1078,9 @@ function fetch_and_parse_url_for_amplinks(request_url, on_parsed_callback) {
                 __return.has_dns_prefetch = false;
                 __return.status = CHECK_FAIL;
                 on_parsed_callback(http_response, __return); // !!! RETURN to front-end  - - - - - - - - - - - - - - - -
-            });
+            };
+            req.on('timeout', handler);
+            req.on('error', handler);
             req.end();
         }
     } else {
@@ -1227,7 +1233,8 @@ function check_url_is_reachable_with_user_agent(fetch_url, user_agent, callback)
 
     const options = {
         method: 'GET',
-        headers: { 'user-agent': user_agent }
+        headers: { 'user-agent': user_agent },
+        timeout: 3000,
     };
 
     try {
