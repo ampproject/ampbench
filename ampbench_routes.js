@@ -137,7 +137,7 @@ handlebars.registerHelper('gtag', function(options) {
     }
 });
 
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
     benchlib.lib_init_validator(next);
 });
 

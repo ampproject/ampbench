@@ -795,7 +795,7 @@ class HttpBodyParser extends HttpBodySniffer {
 
 const amphtml_validator = require('amphtml-validator');
 var amphtml_validator_instance = null; // cache the instance
-var amphtml_validator_instance_time = Date.now() - (61*60*1000); // 61 minutes ago
+var amphtml_validator_instance_time = Date.now() - (61 * 60 * 1000); // 61 minutes ago
 
 /**
  * @returns {!Object} validatorInstance
@@ -805,19 +805,19 @@ function lib_load_validator(opt_force_reload) { // force reload now redundant
 }
 
 function lib_init_validator(next) {
-  if (amphtml_validator_instance_time < (Date.now() - (60*60*1000))) {
-    amphtml_validator_instance = null;
-  }
-  if (amphtml_validator_instance === null) {
-    console.log('[VALIDATOR REFRESH]: validator not found or out of date, loading new validator');
-    amphtml_validator_instance = amphtml_validator.getInstance().then((instance) => {
-      amphtml_validator_instance = instance;
-      amphtml_validator_instance_time = Date.now();
-      next();
-    });
-  } else {
-    next();
-  }
+    if (amphtml_validator_instance_time < (Date.now() - (60 * 60 * 1000))) {
+        amphtml_validator_instance = null;
+    }
+    if (amphtml_validator_instance === null) {
+        console.log('[VALIDATOR REFRESH]: validator not found or out of date, loading new validator');
+        amphtml_validator_instance = amphtml_validator.getInstance().then((instance) => {
+            amphtml_validator_instance = instance;
+            amphtml_validator_instance_time = Date.now();
+            next();
+        });
+    } else {
+        next();
+    }
 }
 
 /**
