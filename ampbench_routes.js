@@ -41,7 +41,6 @@ function consoleLogHostAndRemoteIP(req) {
 
 function consoleLogRequest(req, check_http_response, amp_url) {
     print_dashes(80);
-    console.log(version_msg(validator_signature()));
     consoleLogHostAndRemoteIP(req);
     console.log(
             '[HTTP: ' + check_http_response.http_response_code + '] ' +
@@ -136,6 +135,10 @@ handlebars.registerHelper('gtag', function(options) {
     if (process.env.GTAG_ID) {
         return options.fn({ gtag_id: process.env.GTAG_ID });
     }
+});
+
+app.use(function (req, res, next) {
+    benchlib.lib_init_validator(next);
 });
 
 // TODO: WIP20160426 - bulk support routes
@@ -454,17 +457,7 @@ app.get('/debug_curl_cli/', (req, res) => {
 // library into a running AMPBench instance
 app.get('/command_force_validator_update', (req, res) => {
     print_dashes(80);
-    console.log(version_msg(validator_signature()));
-    let __res = '[VALIDATOR REFRESH] BEFORE: ' + validator_signature();
-    const on_refresh_complete = (amphtml_validator_signature) => {
-        __res += ' AFTER: ' + amphtml_validator_signature;
-        console.log(__res);
-        let check_http_response = new benchlib.HttpResponse(req.url);
-        check_http_response.setResponse(res);
-        consoleLogRequest(req, check_http_response, req.url);
-        res.status(200).send(__res);
-    };
-    benchlib.lib_refresh_validator_if_stale(on_refresh_complete);
+    res.status(200).send('Command not necessary; the validator is now automatically refreshed every 60 minutes');
 });
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

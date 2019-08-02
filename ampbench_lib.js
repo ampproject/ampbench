@@ -793,100 +793,31 @@ class HttpBodyParser extends HttpBodySniffer {
     }
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// AMP validator: Official Node.js API
-// https://github.com/ampproject/amphtml/tree/master/validator/nodejs#nodejs-api-beta
-//
-
-// Latest AMP cached validator from: 'https://cdn.ampproject.org/v0/validator.js'
-// https://github.com/ampproject/amphtml/blob/master/validator/nodejs/index.js
-// https://github.com/ampproject/amphtml/blob/master/validator/nodejs/index.js#L286
-const VALIDATOR_JS_URL = 'https://cdn.ampproject.org/v0/validator.js';
-const VALIDATOR_JS_FILE = './validator/validator.js';
-
 const amphtml_validator = require('amphtml-validator');
 var amphtml_validator_instance = null; // cache the instance
-
-// The signature for the validator.js file that this module is currently using.
-// This gets updated in sync with amphtml_validator_instance.
-var amphtml_validator_signature = '*unavailable*';
-
-function lib_amphtml_validator_signature() {
-    return amphtml_validator_signature;
-}
-
-// Computes a SHA256 signature, which is what you'd get if you were to
-// run the sha256sum Linux command on the validator.js file. This is used to
-// distinguish releases of the validator.js file.
-function lib_extract_validator_signature(validator_js_contents) {
-    return crypto.createHash('sha256').update(validator_js_contents).digest('hex');
-}
-
-function lib_fetch_cdn_validator_signature(callback) {
-    fetch(VALIDATOR_JS_URL)
-            .then(function(res) {
-                return res.text();
-            }).then(function(validator_js_contents) {
-                callback(lib_extract_validator_signature(validator_js_contents));
-            });
-}
+var amphtml_validator_instance_time = Date.now() - (61*60*1000); // 61 minutes ago
 
 /**
- * Loads the AMPHTML JavaScript validator as per 'https://cdn.ampproject.org/v0/validator.js'
  * @returns {!Object} validatorInstance
  */
-function lib_load_validator(opt_force_reload) {
-    let _force_reload = opt_force_reload || false;
-    if (!_force_reload && amphtml_validator_instance !== null) {
-        return amphtml_validator_instance;
-    }
-    // amphtml_validator_instance is a module level global, so we cache it and will
-    // return it unless opt_force_reload is true.
-    const validator_js_contents = fs.readFileSync(VALIDATOR_JS_FILE).toString();
-    amphtml_validator_signature = lib_extract_validator_signature(
-            validator_js_contents);
-    amphtml_validator_instance = amphtml_validator.newInstance(validator_js_contents);
+function lib_load_validator(opt_force_reload) { // force reload now redundant
     return amphtml_validator_instance;
 }
 
-/**
- * Downloads the AMPHTML JavaScript validator from 'https://cdn.ampproject.org/v0/validator.js'
- */
-function lib_download_validator(callback_on_complete) {
-    const _callback_on_complete = callback_on_complete || null;
-    const source_url = VALIDATOR_JS_URL;
-    const target_file = VALIDATOR_JS_FILE;
-    var options = {
-        // see: https://www.npmjs.com/package/wget-improved#download-and-request-method-options
-    };
-    var download = wget.download(source_url, target_file, options);
-    download.on('error', function(err) {
-        console.log('[VALIDATOR REFRESH] ERROR: ' + err);
+function lib_init_validator(next) {
+  if (amphtml_validator_instance_time < (Date.now() - (60*60*1000))) {
+    amphtml_validator_instance = null;
+  }
+  if (amphtml_validator_instance === null) {
+    console.log('[VALIDATOR REFRESH]: validator not found or out of date, loading new validator');
+    amphtml_validator_instance = amphtml_validator.getInstance().then((instance) => {
+      amphtml_validator_instance = instance;
+      amphtml_validator_instance_time = Date.now();
+      next();
     });
-    download.on('start', function() {
-        console.log('[VALIDATOR REFRESH] START: Beginning download to disk...');
-    });
-    download.on('end', function(output) {
-        console.log('[VALIDATOR REFRESH] END: ' + output);
-        lib_load_validator(true); // reload the validator into memory
-        if (null != _callback_on_complete) {
-            _callback_on_complete(amphtml_validator_signature);
-        }
-    });
-}
-
-/**
- * Downloads the AMPHTML JavaScript validator and reloads it into memory with opt_force_reload = true
- * if a different (not only newer; might be a rollback) version is available.
- */
-function lib_refresh_validator_if_stale(callback_on_complete) {
-    lib_fetch_cdn_validator_signature( (validator_signature_cdn) => {
-        if (validator_signature_cdn !== amphtml_validator_signature) {
-            lib_download_validator(callback_on_complete);
-        } else {
-            callback_on_complete(amphtml_validator_signature);
-        }
-    });
+  } else {
+    next();
+  }
 }
 
 /**
@@ -2090,12 +2021,8 @@ function print_dashes(dash_count) { // needs: const S = require('string');
 // module exports
 //
 
-exports.lib_amphtml_validator_signature = lib_amphtml_validator_signature;
-exports.VALIDATOR_JS_URL = VALIDATOR_JS_URL;
-exports.VALIDATOR_JS_FILE = VALIDATOR_JS_FILE;
-exports.lib_download_validator = lib_download_validator;
+exports.lib_init_validator = lib_init_validator;
 exports.lib_load_validator = lib_load_validator;
-exports.lib_refresh_validator_if_stale = lib_refresh_validator_if_stale;
 exports.set_global_user_agent = set_global_user_agent;
 exports.get_global_user_agent = get_global_user_agent;
 exports.set_global_user_agent_name = set_global_user_agent_name;
