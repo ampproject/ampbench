@@ -32,10 +32,6 @@ function version_msg(msg) {
     return VERSION_STRING + '[' + new Date().toISOString() + '] ' + msg;
 }
 
-function validator_signature() {
-    return '[validator-signature:' + benchlib.lib_amphtml_validator_signature() + ']';
-}
-
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // app validation check status constants
 //
@@ -428,7 +424,6 @@ function validate(route, user_agent, user_agent_name, req, res, on_validate_call
                                         user_agent_name: benchlib.get_global_user_agent_name(),
                                         // https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
                                         response_timestamp: new Date().toISOString(), // The timezone is always zero UTC offset, as per suffix "Z"
-                                        amphtml_validator_signature: validator_signature().substr(0, 21 + 16) + ']', // only show left 16 chars
                                         http_response: http_response,
                                         http_response_code: http_response.http_response_code,
                                         http_response_statusIsOK: http_response.statusIsOK(),

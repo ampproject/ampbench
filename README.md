@@ -52,25 +52,6 @@ Even try this from the command-line:
     $ curl http://localhost:8080/api1?url=https://ampbyexample.com/
     $ curl http://localhost:8080/api2?url=https://ampbyexample.com/
 
-#### Requesting an AMPHTML Validator reload from the CDN ([https://cdn.ampproject.org/v0/validator.js](https://cdn.ampproject.org/v0/validator.js))
-
-Use the following URL to ask AMPBench to reload the validator code into memory should an AMP validator version update be available:
-
-    ../command_force_validator_update
-
-For example, for the public hosted AMPBench instance, open:
-
-- [https://ampbench.appspot.com/command_force_validator_update](https://ampbench.appspot.com/command_force_validator_update)
-
-Or for a local development AMPBench instance:
-
-- [http://localhost:8080/command_force_validator_update](http://localhost:8080/command_force_validator_update)
-
-Or, from a terminal command line:
-
-    $ curl https://ampbench.appspot.com/command_force_validator_update
-    $ curl http://localhost:8080/command_force_validator_update
-
 #### Utilities
 
 AMPBench includes some useful debug utility commands that can in some cases help with troubleshooting, such as when a full validation fails on a URL by returning unexpected server responses. 
