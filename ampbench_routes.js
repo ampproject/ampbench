@@ -141,6 +141,12 @@ app.use(function(req, res, next) {
     benchlib.lib_init_validator(next);
 });
 
+app.use(function(req, res, next) {
+    // Issue deprecation warning, see https://tools.ietf.org/html/rfc7234#section-5.5
+    res.setHeader('Warning', '299 - "ampbench will be shut down on 2020-01-31, see https://github.com/ampproject/ampbench/issues/126"');
+    next();
+});
+
 // TODO: WIP20160426 - bulk support routes
 // const multi_url_template = fs.readFileSync(__dirname + '/views/multi_url.hbs', 'utf8');
 
