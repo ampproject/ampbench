@@ -2,6 +2,10 @@
 
 ## AMPBench: AMP URL Validation and Troubleshooting
 
+IMPORTANT: The hosted version of ampbench at <https://ampbench.appspot.com/>
+will be shut down on January 31st, 2020. For more information, please see [issue
+#126](https://github.com/ampproject/ampbench/issues/126).
+
 ### Guides
 
 [Walkthrough article: Debug AMP pages with AMPBench, an open source app from the AMP Project.](https://medium.com/@greyling/ampbench-an-amp-url-validation-and-troubleshooting-application-d33ee83df604)
