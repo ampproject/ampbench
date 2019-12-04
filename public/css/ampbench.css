@@ -2,3 +2,12 @@ body {
     background-color: #f3f3f3;
 }
 
+.mdl-components__warning {
+    width: 100%;
+    max-width: 640px;
+    margin: 20px auto;
+    background-color: #FFF9C4;
+    padding: 16px;
+    border-radius: 2px;
+    color: #212121
+}
