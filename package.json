@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "preinstall": "cd amp-story/linter && npm install",
-    "start": "node ampbench_main.js",
+    "start": "node redirect-all.js",
     "monitor": "nodemon --watch . --watch views/index.hbs --watch views/results.hbs --ignore 'validator/*.*'",
     "deploy": "gcloud app deploy app.yaml",
     "lint": "eslint --quiet amp*.js",

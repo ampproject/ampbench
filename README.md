@@ -2,9 +2,15 @@
 
 ## AMPBench: AMP URL Validation and Troubleshooting
 
-IMPORTANT: The hosted version of ampbench at <https://ampbench.appspot.com/>
-will be shut down on January 31st, 2020. For more information, please see [issue
-#126](https://github.com/ampproject/ampbench/issues/126).
+### Status
+
+The hosted version of ampbench was shut down in February 2020. For the rationale
+and alternatives, see [issue
+\#126](https://github.com/ampproject/ampbench/issues/126).
+
+There are no plans to remove the source code from its canonical location at
+<https://github.com/ampproject/ampbench,> but if it is important to you, we
+recommend making a copy.
 
 ### Guides
 
