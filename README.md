@@ -42,10 +42,8 @@ Now do the following from a terminal command-line session:
     
     $ git clone https://github.com/ampproject/ampbench.git
     $ cd ampbench
-    $ npm update
-    $ nodemon
-    # or:
-    $ npm start
+    $ npm install
+    $ node ampbench_main.js
     
 Also try navigating to these links from your web browser:
 
